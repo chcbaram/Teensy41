@@ -24,6 +24,8 @@ extern "C" {
 #include "swtimer.h"
 #include "vcp.h"
 #include "uart.h"
+#include "clocks.h"
+#include "psram.h"
 
 
 void hwInit(void);

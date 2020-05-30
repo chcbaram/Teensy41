@@ -35,6 +35,21 @@ BOARD_InitPins:
 - options: {callFromInitBoot: 'true', coreID: core0, enableClock: 'true'}
 - pin_list:
   - {pin_num: D8, peripheral: GPIO2, signal: 'gpio_io, 03', pin_signal: GPIO_B0_03, direction: OUTPUT, gpio_init_state: 'true'}
+  - {pin_num: F1, peripheral: FLEXSPI2, signal: FLEXSPI_A_SS1_B, pin_signal: GPIO_EMC_22, software_input_on: Enable, pull_up_down_config: Pull_Up_47K_Ohm, speed: MHZ_200,
+    slew_rate: Fast}
+  - {pin_num: D3, peripheral: FLEXSPI2, signal: FLEXSPI_A_SS0_B, pin_signal: GPIO_EMC_24, software_input_on: Enable, pull_up_down_config: Pull_Up_47K_Ohm, speed: MHZ_200,
+    slew_rate: Fast}
+  - {pin_num: D2, peripheral: FLEXSPI2, signal: FLEXSPI_A_SCLK, pin_signal: GPIO_EMC_25, software_input_on: Enable, pull_up_down_config: Pull_Up_47K_Ohm, speed: MHZ_200,
+    slew_rate: Fast}
+  - {pin_num: E1, peripheral: FLEXSPI2, signal: FLEXSPI_A_DATA3, pin_signal: GPIO_EMC_29, software_input_on: Enable, pull_up_down_config: Pull_Up_47K_Ohm, speed: MHZ_200,
+    slew_rate: Fast}
+  - {pin_num: A2, peripheral: FLEXSPI2, signal: FLEXSPI_A_DATA1, pin_signal: GPIO_EMC_27, software_input_on: Enable, pull_up_down_config: Pull_Up_47K_Ohm, pull_keeper_select: Keeper,
+    speed: MHZ_200, slew_rate: Fast}
+  - {pin_num: D1, peripheral: FLEXSPI2, signal: FLEXSPI_A_DATA2, pin_signal: GPIO_EMC_28, software_input_on: Enable, pull_up_down_config: Pull_Up_47K_Ohm, speed: MHZ_200,
+    slew_rate: Fast}
+  - {pin_num: B3, peripheral: FLEXSPI2, signal: FLEXSPI_A_DATA0, pin_signal: GPIO_EMC_26, software_input_on: Enable, pull_up_down_config: Pull_Up_47K_Ohm, speed: MHZ_200,
+    slew_rate: Fast}
+  - {pin_num: G2, peripheral: FLEXSPI2, signal: FLEXSPI_A_DQS, pin_signal: GPIO_EMC_23, software_input_on: Enable, speed: MHZ_200, slew_rate: Fast}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 
@@ -59,10 +74,114 @@ void BOARD_InitPins(void) {
   IOMUXC_SetPinMux(
       IOMUXC_GPIO_B0_03_GPIO2_IO03,           /* GPIO_B0_03 is configured as GPIO2_IO03 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_EMC_22_FLEXSPI2_A_SS1_B,    /* GPIO_EMC_22 is configured as FLEXSPI2_A_SS1_B */
+      1U);                                    /* Software Input On Field: Force input path of pad GPIO_EMC_22 */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_EMC_23_FLEXSPI2_A_DQS,      /* GPIO_EMC_23 is configured as FLEXSPI2_A_DQS */
+      1U);                                    /* Software Input On Field: Force input path of pad GPIO_EMC_23 */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_EMC_24_FLEXSPI2_A_SS0_B,    /* GPIO_EMC_24 is configured as FLEXSPI2_A_SS0_B */
+      1U);                                    /* Software Input On Field: Force input path of pad GPIO_EMC_24 */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_EMC_25_FLEXSPI2_A_SCLK,     /* GPIO_EMC_25 is configured as FLEXSPI2_A_SCLK */
+      1U);                                    /* Software Input On Field: Force input path of pad GPIO_EMC_25 */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_EMC_26_FLEXSPI2_A_DATA00,   /* GPIO_EMC_26 is configured as FLEXSPI2_A_DATA00 */
+      1U);                                    /* Software Input On Field: Force input path of pad GPIO_EMC_26 */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_EMC_27_FLEXSPI2_A_DATA01,   /* GPIO_EMC_27 is configured as FLEXSPI2_A_DATA01 */
+      1U);                                    /* Software Input On Field: Force input path of pad GPIO_EMC_27 */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_EMC_28_FLEXSPI2_A_DATA02,   /* GPIO_EMC_28 is configured as FLEXSPI2_A_DATA02 */
+      1U);                                    /* Software Input On Field: Force input path of pad GPIO_EMC_28 */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_EMC_29_FLEXSPI2_A_DATA03,   /* GPIO_EMC_29 is configured as FLEXSPI2_A_DATA03 */
+      1U);                                    /* Software Input On Field: Force input path of pad GPIO_EMC_29 */
   IOMUXC_GPR->GPR27 = ((IOMUXC_GPR->GPR27 &
     (~(IOMUXC_GPR_GPR27_GPIO_MUX2_GPIO_SEL_MASK))) /* Mask bits to zero which are setting */
       | IOMUXC_GPR_GPR27_GPIO_MUX2_GPIO_SEL(0x00U) /* GPIO2 and GPIO7 share same IO MUX function, GPIO_MUX2 selects one GPIO function: 0x00U */
     );
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_EMC_22_FLEXSPI2_A_SS1_B,    /* GPIO_EMC_22 PAD functional properties : */
+      0x50F1U);                               /* Slew Rate Field: Fast Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: max(200MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Keeper
+                                                 Pull Up / Down Config. Field: 47K Ohm Pull Up
+                                                 Hyst. Enable Field: Hysteresis Disabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_EMC_23_FLEXSPI2_A_DQS,      /* GPIO_EMC_23 PAD functional properties : */
+      0x10F1U);                               /* Slew Rate Field: Fast Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: max(200MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Keeper
+                                                 Pull Up / Down Config. Field: 100K Ohm Pull Down
+                                                 Hyst. Enable Field: Hysteresis Disabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_EMC_24_FLEXSPI2_A_SS0_B,    /* GPIO_EMC_24 PAD functional properties : */
+      0x50F1U);                               /* Slew Rate Field: Fast Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: max(200MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Keeper
+                                                 Pull Up / Down Config. Field: 47K Ohm Pull Up
+                                                 Hyst. Enable Field: Hysteresis Disabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_EMC_25_FLEXSPI2_A_SCLK,     /* GPIO_EMC_25 PAD functional properties : */
+      0x50F1U);                               /* Slew Rate Field: Fast Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: max(200MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Keeper
+                                                 Pull Up / Down Config. Field: 47K Ohm Pull Up
+                                                 Hyst. Enable Field: Hysteresis Disabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_EMC_26_FLEXSPI2_A_DATA00,   /* GPIO_EMC_26 PAD functional properties : */
+      0x50F1U);                               /* Slew Rate Field: Fast Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: max(200MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Keeper
+                                                 Pull Up / Down Config. Field: 47K Ohm Pull Up
+                                                 Hyst. Enable Field: Hysteresis Disabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_EMC_27_FLEXSPI2_A_DATA01,   /* GPIO_EMC_27 PAD functional properties : */
+      0x50F1U);                               /* Slew Rate Field: Fast Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: max(200MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Keeper
+                                                 Pull Up / Down Config. Field: 47K Ohm Pull Up
+                                                 Hyst. Enable Field: Hysteresis Disabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_EMC_28_FLEXSPI2_A_DATA02,   /* GPIO_EMC_28 PAD functional properties : */
+      0x50F1U);                               /* Slew Rate Field: Fast Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: max(200MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Keeper
+                                                 Pull Up / Down Config. Field: 47K Ohm Pull Up
+                                                 Hyst. Enable Field: Hysteresis Disabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_EMC_29_FLEXSPI2_A_DATA03,   /* GPIO_EMC_29 PAD functional properties : */
+      0x50F1U);                               /* Slew Rate Field: Fast Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: max(200MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Keeper
+                                                 Pull Up / Down Config. Field: 47K Ohm Pull Up
+                                                 Hyst. Enable Field: Hysteresis Disabled */
 }
 
 /***********************************************************************************************************************

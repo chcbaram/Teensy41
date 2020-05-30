@@ -36,7 +36,11 @@ void hwInit(void)
   cmdifInit();
   ledInit();
 
+
   vcpInit();
   uartInit();
   uartOpen(_DEF_UART1, 57600);
+
+  clocksInit();
+  psramInit();
 }

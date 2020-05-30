@@ -16,6 +16,8 @@
 
 #define _USE_HW_MICROS
 #define _USE_HW_VCP
+#define _USE_HW_CLOCKS
+#define _USE_HW_PSRAM
 
 
 #define _USE_HW_LED
