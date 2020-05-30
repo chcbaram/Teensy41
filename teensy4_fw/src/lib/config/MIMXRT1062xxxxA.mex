@@ -120,15 +120,15 @@
                   <clock_output id="FLEXIO2_CLK_ROOT.outFreq" value="30 MHz" locked="false" accuracy=""/>
                   <clock_output id="FLEXSPI2_CLK_ROOT.outFreq" value="264 MHz" locked="false" accuracy=""/>
                   <clock_output id="FLEXSPI_CLK_ROOT.outFreq" value="120 MHz" locked="false" accuracy=""/>
-                  <clock_output id="GPT1_ipg_clk_highfreq.outFreq" value="50/11 MHz" locked="false" accuracy=""/>
-                  <clock_output id="GPT2_ipg_clk_highfreq.outFreq" value="50/11 MHz" locked="false" accuracy=""/>
+                  <clock_output id="GPT1_ipg_clk_highfreq.outFreq" value="75 MHz" locked="false" accuracy=""/>
+                  <clock_output id="GPT2_ipg_clk_highfreq.outFreq" value="75 MHz" locked="false" accuracy=""/>
                   <clock_output id="IPG_CLK_ROOT.outFreq" value="150 MHz" locked="false" accuracy=""/>
                   <clock_output id="LCDIF_CLK_ROOT.outFreq" value="67.5 MHz" locked="false" accuracy=""/>
                   <clock_output id="LPI2C_CLK_ROOT.outFreq" value="60 MHz" locked="false" accuracy=""/>
                   <clock_output id="LPSPI_CLK_ROOT.outFreq" value="132 MHz" locked="false" accuracy=""/>
                   <clock_output id="LVDS1_CLK.outFreq" value="1.2 GHz" locked="false" accuracy=""/>
                   <clock_output id="MQS_MCLK.outFreq" value="1080/17 MHz" locked="false" accuracy=""/>
-                  <clock_output id="PERCLK_CLK_ROOT.outFreq" value="50/11 MHz" locked="false" accuracy=""/>
+                  <clock_output id="PERCLK_CLK_ROOT.outFreq" value="75 MHz" locked="true" accuracy="0.001"/>
                   <clock_output id="PLL7_MAIN_CLK.outFreq" value="24 MHz" locked="false" accuracy=""/>
                   <clock_output id="SAI1_CLK_ROOT.outFreq" value="1080/17 MHz" locked="false" accuracy=""/>
                   <clock_output id="SAI1_MCLK1.outFreq" value="1080/17 MHz" locked="false" accuracy=""/>
@@ -150,7 +150,7 @@
                <clock_settings>
                   <setting id="CCM.FLEXSPI_PODF.scale" value="3" locked="true"/>
                   <setting id="CCM.FLEXSPI_SEL.sel" value="CCM_ANALOG.PLL3_PFD0_CLK" locked="false"/>
-                  <setting id="CCM.PERCLK_PODF.scale" value="33" locked="false"/>
+                  <setting id="CCM.PERCLK_PODF.scale" value="2" locked="true"/>
                   <setting id="CCM.SEMC_PODF.scale" value="5" locked="false"/>
                   <setting id="CCM_ANALOG.PLL1_BYPASS.sel" value="CCM_ANALOG.PLL1" locked="false"/>
                   <setting id="CCM_ANALOG.PLL1_PREDIV.scale" value="1" locked="true"/>
@@ -213,7 +213,7 @@
             <component name="system" uuid="b2527345-7aac-4585-b6ff-5a35e5c2a224" type_id="system_54b53072540eeeb8f8e9343e71f28176">
                <config_set_global name="global_system_definitions"/>
             </component>
-            <component name="msg" uuid="4f3f541a-d5a9-4dbd-ac70-940659f6c31a" type_id="msg_6e2baaf3b97dbeef01c0043275f9a0e7">
+            <component name="msg" uuid="01d29e65-4dc5-426b-a577-8e48d64cb4af" type_id="msg_6e2baaf3b97dbeef01c0043275f9a0e7">
                <config_set_global name="global_messages"/>
             </component>
          </components>

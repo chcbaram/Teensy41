@@ -31,5 +31,6 @@ void hwInit(void)
 {
   bspInit();
 
+  microsInit();
   ledInit();
 }

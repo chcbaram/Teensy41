@@ -131,6 +131,7 @@
 								<option id="com.crt.advproject.link.cpp.multicore.slave.1654243409" name="Multicore configuration" superClass="com.crt.advproject.link.cpp.multicore.slave" useByScannerDiscovery="false"/>
 								<option id="com.crt.advproject.link.cpp.toram.1074118544" name="Link application to RAM" superClass="com.crt.advproject.link.cpp.toram" useByScannerDiscovery="false" value="false" valueType="boolean"/>
 								<option id="com.crt.advproject.link.cpp.arch.953893947" name="Architecture" superClass="com.crt.advproject.link.cpp.arch" useByScannerDiscovery="false"/>
+								<option id="com.crt.advproject.link.cpp.script.53296401" name="Linker script" superClass="com.crt.advproject.link.cpp.script" useByScannerDiscovery="false" value="teensy4_fw_Debug.ld" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1940175781" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>

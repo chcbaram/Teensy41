@@ -22,12 +22,12 @@ void apMain(void)
   uint32_t pre_time;
 
 
-  pre_time = millis();
+  pre_time = micros();
   while(1)
   {
-    if (millis()-pre_time >= 500)
+    if (micros()-pre_time >= 500*1000)
     {
-      pre_time = millis();
+      pre_time = micros();
 
       ledToggle(_DEF_LED1);
     }
