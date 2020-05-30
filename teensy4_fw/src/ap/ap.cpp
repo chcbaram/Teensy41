@@ -15,6 +15,8 @@
 void apInit(void)
 {
   hwInit();
+
+  cmdifOpen(_DEF_UART1, 57600);
 }
 
 void apMain(void)
@@ -25,6 +27,8 @@ void apMain(void)
   pre_time = micros();
   while(1)
   {
+    cmdifMain();
+
     if (micros()-pre_time >= 500*1000)
     {
       pre_time = micros();

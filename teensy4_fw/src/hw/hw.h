@@ -20,7 +20,10 @@ extern "C" {
 
 #include "led.h"
 #include "micros.h"
-
+#include "cmdif.h"
+#include "swtimer.h"
+#include "vcp.h"
+#include "uart.h"
 
 
 void hwInit(void);

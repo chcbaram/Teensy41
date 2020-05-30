@@ -32,5 +32,11 @@ void hwInit(void)
   bspInit();
 
   microsInit();
+  swtimerInit();
+  cmdifInit();
   ledInit();
+
+  vcpInit();
+  uartInit();
+  uartOpen(_DEF_UART1, 57600);
 }
