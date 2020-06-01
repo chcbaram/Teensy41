@@ -26,6 +26,8 @@ extern "C" {
 #include "uart.h"
 #include "clocks.h"
 #include "psram.h"
+#include "gpio.h"
+#include "sd.h"
 
 
 void hwInit(void);

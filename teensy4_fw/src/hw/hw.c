@@ -43,4 +43,6 @@ void hwInit(void)
 
   clocksInit();
   psramInit();
+  gpioInit();
+  sdInit();
 }
