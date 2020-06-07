@@ -241,7 +241,7 @@ status_t flexspiGetVendorID(uint8_t ch, uint8_t *vendorId)
   else
   {
     flashXfer.port        = kFLEXSPI_PortA2;
-    flashXfer.deviceAddress = 0;
+    flashXfer.deviceAddress = PSRAM_MAX_SIZE;
   }
   flashXfer.cmdType       = kFLEXSPI_Read;
   flashXfer.SeqNumber     = 1;
@@ -277,7 +277,7 @@ status_t flexspiEnterQPI(uint8_t ch)
   else
   {
     flashXfer.port        = kFLEXSPI_PortA2;
-    flashXfer.deviceAddress = 0;;
+    flashXfer.deviceAddress = PSRAM_MAX_SIZE;
   }
   flashXfer.cmdType       = kFLEXSPI_Command;
   flashXfer.SeqNumber     = 1;
@@ -300,7 +300,7 @@ status_t flexspiExitQPI(uint8_t ch)
   else
   {
     flashXfer.port        = kFLEXSPI_PortA2;
-    flashXfer.deviceAddress = 0;;
+    flashXfer.deviceAddress = PSRAM_MAX_SIZE;
   }
   flashXfer.cmdType       = kFLEXSPI_Command;
   flashXfer.SeqNumber     = 1;
