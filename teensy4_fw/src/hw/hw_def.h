@@ -35,11 +35,15 @@
 #define      HW_CMDIF_CMD_BUF_LENGTH        128
 
 #define _USE_HW_GPIO
-#define      HW_GPIO_MAX_CH         1
+#define      HW_GPIO_MAX_CH         2
 
 #define _USE_HW_SD
 #define      HW_SD_PIN_DETECTED     0
 #define      HW_SD_PIN_PWREN       -1
+
+#define _USE_HW_BUTTON
+#define      HW_BUTTON_MAX_CH       8
+
 
 
 #endif /* SRC_HW_HW_DEF_H_ */

@@ -28,6 +28,7 @@ extern "C" {
 #include "psram.h"
 #include "gpio.h"
 #include "sd.h"
+#include "button.h"
 
 
 void hwInit(void);
