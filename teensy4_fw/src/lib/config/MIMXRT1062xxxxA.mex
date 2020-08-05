@@ -263,51 +263,81 @@
                   </pin>
                   <pin peripheral="FLEXIO3" signal="IO, 00" pin_num="J11" pin_signal="GPIO_AD_B1_00">
                      <pin_features>
+                        <pin_feature name="software_input_on" value="Enable"/>
+                        <pin_feature name="pull_up_down_config" value="Pull_Up_47K_Ohm"/>
+                        <pin_feature name="pull_keeper_select" value="Pull"/>
                         <pin_feature name="slew_rate" value="Fast"/>
                      </pin_features>
                   </pin>
                   <pin peripheral="FLEXIO3" signal="IO, 01" pin_num="K11" pin_signal="GPIO_AD_B1_01">
                      <pin_features>
+                        <pin_feature name="software_input_on" value="Enable"/>
+                        <pin_feature name="pull_up_down_config" value="Pull_Up_47K_Ohm"/>
+                        <pin_feature name="pull_keeper_select" value="Pull"/>
                         <pin_feature name="slew_rate" value="Fast"/>
                      </pin_features>
                   </pin>
                   <pin peripheral="FLEXIO3" signal="IO, 02" pin_num="L11" pin_signal="GPIO_AD_B1_02">
                      <pin_features>
+                        <pin_feature name="software_input_on" value="Enable"/>
+                        <pin_feature name="pull_up_down_config" value="Pull_Up_47K_Ohm"/>
+                        <pin_feature name="pull_keeper_select" value="Pull"/>
                         <pin_feature name="slew_rate" value="Fast"/>
                      </pin_features>
                   </pin>
                   <pin peripheral="FLEXIO3" signal="IO, 03" pin_num="M12" pin_signal="GPIO_AD_B1_03">
                      <pin_features>
+                        <pin_feature name="software_input_on" value="Enable"/>
+                        <pin_feature name="pull_up_down_config" value="Pull_Up_47K_Ohm"/>
+                        <pin_feature name="pull_keeper_select" value="Pull"/>
                         <pin_feature name="slew_rate" value="Fast"/>
                      </pin_features>
                   </pin>
                   <pin peripheral="FLEXIO3" signal="IO, 04" pin_num="L12" pin_signal="GPIO_AD_B1_04">
                      <pin_features>
+                        <pin_feature name="software_input_on" value="Enable"/>
+                        <pin_feature name="pull_up_down_config" value="Pull_Up_47K_Ohm"/>
+                        <pin_feature name="pull_keeper_select" value="Pull"/>
                         <pin_feature name="slew_rate" value="Fast"/>
                      </pin_features>
                   </pin>
                   <pin peripheral="FLEXIO3" signal="IO, 05" pin_num="K12" pin_signal="GPIO_AD_B1_05">
                      <pin_features>
+                        <pin_feature name="software_input_on" value="Enable"/>
+                        <pin_feature name="pull_up_down_config" value="Pull_Up_47K_Ohm"/>
+                        <pin_feature name="pull_keeper_select" value="Pull"/>
                         <pin_feature name="slew_rate" value="Fast"/>
                      </pin_features>
                   </pin>
                   <pin peripheral="FLEXIO3" signal="IO, 06" pin_num="J12" pin_signal="GPIO_AD_B1_06">
                      <pin_features>
+                        <pin_feature name="software_input_on" value="Enable"/>
+                        <pin_feature name="pull_up_down_config" value="Pull_Up_47K_Ohm"/>
+                        <pin_feature name="pull_keeper_select" value="Pull"/>
                         <pin_feature name="slew_rate" value="Fast"/>
                      </pin_features>
                   </pin>
                   <pin peripheral="FLEXIO3" signal="IO, 07" pin_num="K10" pin_signal="GPIO_AD_B1_07">
                      <pin_features>
+                        <pin_feature name="software_input_on" value="Enable"/>
+                        <pin_feature name="pull_up_down_config" value="Pull_Up_47K_Ohm"/>
+                        <pin_feature name="pull_keeper_select" value="Pull"/>
                         <pin_feature name="slew_rate" value="Fast"/>
                      </pin_features>
                   </pin>
                   <pin peripheral="FLEXIO3" signal="IO, 08" pin_num="H13" pin_signal="GPIO_AD_B1_08">
                      <pin_features>
+                        <pin_feature name="software_input_on" value="Enable"/>
+                        <pin_feature name="pull_up_down_config" value="Pull_Up_47K_Ohm"/>
+                        <pin_feature name="pull_keeper_select" value="Pull"/>
                         <pin_feature name="slew_rate" value="Fast"/>
                      </pin_features>
                   </pin>
                   <pin peripheral="FLEXIO3" signal="IO, 12" pin_num="H12" pin_signal="GPIO_AD_B1_12">
                      <pin_features>
+                        <pin_feature name="software_input_on" value="Enable"/>
+                        <pin_feature name="pull_up_down_config" value="Pull_Up_47K_Ohm"/>
+                        <pin_feature name="pull_keeper_select" value="Pull"/>
                         <pin_feature name="slew_rate" value="Fast"/>
                      </pin_features>
                   </pin>
@@ -324,6 +354,13 @@
                         <pin_feature name="direction" value="OUTPUT"/>
                         <pin_feature name="pull_up_down_config" value="no_init"/>
                         <pin_feature name="slew_rate" value="Fast"/>
+                     </pin_features>
+                  </pin>
+                  <pin peripheral="GPIO1" signal="gpio_io, 02" pin_num="M11" pin_signal="GPIO_AD_B0_02">
+                     <pin_features>
+                        <pin_feature name="direction" value="OUTPUT"/>
+                        <pin_feature name="gpio_init_state" value="true"/>
+                        <pin_feature name="pull_up_down_config" value="no_init"/>
                      </pin_features>
                   </pin>
                </pins>
@@ -386,8 +423,8 @@
                   <clock_output id="ENET2_TX_CLK.outFreq" value="1.2 MHz" locked="false" accuracy=""/>
                   <clock_output id="ENET_125M_CLK.outFreq" value="2.4 MHz" locked="false" accuracy=""/>
                   <clock_output id="ENET_25M_REF_CLK.outFreq" value="1.2 MHz" locked="false" accuracy=""/>
-                  <clock_output id="FLEXIO1_CLK_ROOT.outFreq" value="30 MHz" locked="false" accuracy=""/>
-                  <clock_output id="FLEXIO2_CLK_ROOT.outFreq" value="30 MHz" locked="false" accuracy=""/>
+                  <clock_output id="FLEXIO1_CLK_ROOT.outFreq" value="120 MHz" locked="false" accuracy=""/>
+                  <clock_output id="FLEXIO2_CLK_ROOT.outFreq" value="120 MHz" locked="false" accuracy=""/>
                   <clock_output id="FLEXSPI2_CLK_ROOT.outFreq" value="99 MHz" locked="false" accuracy=""/>
                   <clock_output id="FLEXSPI_CLK_ROOT.outFreq" value="120 MHz" locked="false" accuracy=""/>
                   <clock_output id="GPT1_ipg_clk_highfreq.outFreq" value="75 MHz" locked="false" accuracy=""/>
@@ -419,6 +456,9 @@
                   <clock_output id="USDHC2_CLK_ROOT.outFreq" value="198 MHz" locked="false" accuracy=""/>
                </clock_outputs>
                <clock_settings>
+                  <setting id="CCM.FLEXIO1_CLK_PODF.scale" value="2" locked="true"/>
+                  <setting id="CCM.FLEXIO2_CLK_PODF.scale" value="1" locked="true"/>
+                  <setting id="CCM.FLEXIO2_CLK_PRED.scale" value="4" locked="true"/>
                   <setting id="CCM.FLEXSPI2_PODF.scale" value="4" locked="true"/>
                   <setting id="CCM.FLEXSPI2_SEL.sel" value="CCM_ANALOG.PLL2_PFD2_CLK" locked="false"/>
                   <setting id="CCM.FLEXSPI_PODF.scale" value="3" locked="true"/>
@@ -472,6 +512,18 @@
          </dcdx_configurations>
       </dcdx>
       <periphs name="Peripherals" version="7.0" enabled="true" update_project_code="true">
+         <dependencies>
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.flexio_mculcd" description="FLEXIO MCULCD Driver not found in the toolchain/IDE project. Project will not compile!" problem_level="2" source="Peripherals">
+               <feature name="enabled" evaluation="equal">
+                  <data type="Boolean">true</data>
+               </feature>
+            </dependency>
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.flexio_mculcd" description="Unsupported version of the FLEXIO MCULCD Driver in the toolchain/IDE project. Required: ${required_value}, actual: ${actual_value}. Project might not compile correctly." problem_level="1" source="Peripherals">
+               <feature name="version" evaluation="equivalent">
+                  <data type="Version">2.0.2</data>
+               </feature>
+            </dependency>
+         </dependencies>
          <generated_project_files>
             <file path="board/peripherals.c" update_enabled="true"/>
             <file path="board/peripherals.h" update_enabled="true"/>
@@ -483,8 +535,134 @@
             <functional_group name="BOARD_InitPeripherals" uuid="f97233eb-8e44-45df-9ba5-345de1b5ecb6" called_from_default_init="true" id_prefix="" core="core0">
                <description></description>
                <options/>
-               <dependencies/>
-               <instances/>
+               <dependencies>
+                  <dependency resourceType="SWComponent" resourceId="platform.drivers.flexio" description="The fsl_flexio driver is missing in the project (required for the FlexIO I2C master). Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="enabled" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="SWComponent" resourceId="platform.drivers.flexio" description="The compatible version of the fsl_flexio driver is not available in the project (required for the FlexIO I2C master). Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="version" evaluation="compatible">
+                        <data type="Version">2.0.2</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="SWComponent" resourceId="platform.drivers.igpio" description="The fsl_gpio driver is missing in the project (required for the MCU LCD peripheral pins setting). Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="enabled" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="ClockOutput" resourceId="FLEXIO2_CLK_ROOT" description="FLEXIO2_CLK_ROOT is inactive. Problem must be resolved in another tool." problem_level="2" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="frequency" evaluation="greaterThan">
+                        <data type="Frequency" unit="Hz">0</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="FLEXIO3.flexio_d.00" description="Signal IO of the channel 0 of the peripheral FLEXIO3 is not routed. Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="FLEXIO3.flexio_d.01" description="Signal IO of the channel 1 of the peripheral FLEXIO3 is not routed. Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="FLEXIO3.flexio_d.02" description="Signal IO of the channel 2 of the peripheral FLEXIO3 is not routed. Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="FLEXIO3.flexio_d.03" description="Signal IO of the channel 3 of the peripheral FLEXIO3 is not routed. Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="FLEXIO3.flexio_d.04" description="Signal IO of the channel 4 of the peripheral FLEXIO3 is not routed. Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="FLEXIO3.flexio_d.05" description="Signal IO of the channel 5 of the peripheral FLEXIO3 is not routed. Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="FLEXIO3.flexio_d.06" description="Signal IO of the channel 6 of the peripheral FLEXIO3 is not routed. Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="FLEXIO3.flexio_d.07" description="Signal IO of the channel 7 of the peripheral FLEXIO3 is not routed. Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="FLEXIO3.flexio_d.08" description="Signal IO of the channel 8 of the peripheral FLEXIO3 is not routed. Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="FLEXIO3.flexio_d.12" description="Signal IO of the channel 12 of the peripheral FLEXIO3 is not routed. Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="GPIO2.gpio.01" description="Signal gpio_io of the channel 01 of the peripheral GPIO2 is not routed. Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="GPIO2.gpio.01" description="Signal gpio_io of the channel 01 of the peripheral GPIO2 is not set to output direction. Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="direction" evaluation="equal">
+                        <data type="String">OUTPUT</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="GPIO2.gpio.00" description="Signal gpio_io of the channel 00 of the peripheral GPIO2 is not routed. Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="GPIO2.gpio.00" description="Signal gpio_io of the channel 00 of the peripheral GPIO2 is not set to output direction. Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="direction" evaluation="equal">
+                        <data type="String">OUTPUT</data>
+                     </feature>
+                  </dependency>
+               </dependencies>
+               <instances>
+                  <instance name="FLEXIO3" uuid="8f1a6e7f-582c-439b-9be4-c2daf7e4634a" type="flexio_mculcd" type_id="flexio_mculcd_71c03477918e9bdca54eff5edc785168" mode="polling" peripheral="FLEXIO3" enabled="true" comment="" custom_name_enabled="false">
+                     <config_set name="fsl_flexio_mculcd">
+                        <setting name="clockSource" value="FlexIoClock"/>
+                        <setting name="clockSourceFreq" value="BOARD_BootClockRUN"/>
+                        <struct name="peripheralConfig">
+                           <setting name="busType" value="kFLEXIO_MCULCD_8080"/>
+                           <setting name="dataFlexIOMcuLcdBusWidth" value="8"/>
+                           <setting name="dataPinStartIndex" value="0"/>
+                           <setting name="ENWRPinIndex" value="8"/>
+                           <setting name="RDPinIndex_sel" value="12"/>
+                           <struct name="setCSPinStruct">
+                              <setting name="function_type" value="functionDN"/>
+                              <setting name="gpio_peripherals" value="GPIO2"/>
+                              <setting name="gpio_signals" value="gpio_io.01"/>
+                              <setting name="disableGPIOCheck" value="false"/>
+                           </struct>
+                           <struct name="setRSPinStruct">
+                              <setting name="function_type" value="functionDN"/>
+                              <setting name="gpio_peripherals" value="GPIO2"/>
+                              <setting name="gpio_signals" value="gpio_io.00"/>
+                              <setting name="disableGPIOCheck" value="false"/>
+                           </struct>
+                           <setting name="txShifterEndIndex" value="3"/>
+                           <setting name="rxShifterStartIndex" value="3"/>
+                        </struct>
+                        <struct name="config">
+                           <setting name="enable" value="true"/>
+                           <setting name="enableInDoze" value="false"/>
+                           <setting name="enableInDebug" value="false"/>
+                           <setting name="enableFastAccess" value="false"/>
+                           <setting name="baudRate_Bps" value="320000000"/>
+                        </struct>
+                     </config_set>
+                  </instance>
+               </instances>
             </functional_group>
          </functional_groups>
          <components>

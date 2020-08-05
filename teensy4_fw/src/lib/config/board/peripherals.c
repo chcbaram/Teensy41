@@ -39,10 +39,98 @@ component:
 #include "peripherals.h"
 
 /***********************************************************************************************************************
+ * BOARD_InitPeripherals functional group
+ **********************************************************************************************************************/
+/***********************************************************************************************************************
+ * FLEXIO3 initialization code
+ **********************************************************************************************************************/
+/* clang-format off */
+/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+instance:
+- name: 'FLEXIO3'
+- type: 'flexio_mculcd'
+- mode: 'polling'
+- custom_name_enabled: 'false'
+- type_id: 'flexio_mculcd_71c03477918e9bdca54eff5edc785168'
+- functional_group: 'BOARD_InitPeripherals'
+- peripheral: 'FLEXIO3'
+- config_sets:
+  - fsl_flexio_mculcd:
+    - clockSource: 'FlexIoClock'
+    - clockSourceFreq: 'BOARD_BootClockRUN'
+    - peripheralConfig:
+      - busType: 'kFLEXIO_MCULCD_8080'
+      - dataFlexIOMcuLcdBusWidth: '8'
+      - dataPinStartIndex: '0'
+      - ENWRPinIndex: '8'
+      - RDPinIndex_sel: '12'
+      - setCSPinStruct:
+        - function_type: 'functionDN'
+        - gpio_peripherals: 'GPIO2'
+        - gpio_signals: 'gpio_io.01'
+        - disableGPIOCheck: 'false'
+      - setRSPinStruct:
+        - function_type: 'functionDN'
+        - gpio_peripherals: 'GPIO2'
+        - gpio_signals: 'gpio_io.00'
+        - disableGPIOCheck: 'false'
+      - txShifterEndIndex: '3'
+      - rxShifterStartIndex: '3'
+    - config:
+      - enable: 'true'
+      - enableInDoze: 'false'
+      - enableInDebug: 'false'
+      - enableFastAccess: 'false'
+      - baudRate_Bps: '320000000'
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
+/* clang-format on */
+/* FlexIO peripheral configuration */
+FLEXIO_MCULCD_Type FLEXIO3_peripheralConfig = {
+  .flexioBase = FLEXIO3_PERIPHERAL,
+  .busType = kFLEXIO_MCULCD_8080,
+  .dataPinStartIndex = 0,
+  .ENWRPinIndex = 8,
+  .RDPinIndex = 12,
+  .setRDWRPin = NULL,
+  .setCSPin = FLEXIO3_setCSPin,
+  .setRSPin = FLEXIO3_setRSPin,
+  .txShifterStartIndex = 0,
+  .txShifterEndIndex = 3,
+  .rxShifterStartIndex = 3,
+  .rxShifterEndIndex = 3,
+  .timerIndex = 0
+};
+/* FlexIO MCULCD configuration */
+flexio_mculcd_config_t FLEXIO3_config = {
+  .enable = true,
+  .enableInDoze = false,
+  .enableInDebug = false,
+  .enableFastAccess = false,
+  .baudRate_Bps = 320000000
+};
+
+/* GPIO CS pin set function */
+void FLEXIO3_setCSPin(bool set){
+  GPIO_PinWrite(FLEXIO3_GPIO_PERIPHERAL_CSPIN, FLEXIO3_GPIO_CSPIN, (uint8_t)set);
+}
+
+/* GPIO RS pin set function */
+void FLEXIO3_setRSPin(bool set){
+  GPIO_PinWrite(FLEXIO3_GPIO_PERIPHERAL_RSPIN, FLEXIO3_GPIO_RSPIN, (uint8_t)set);
+}
+
+void FLEXIO3_init(void) {
+  /* Master initialization */
+  FLEXIO_MCULCD_Init(&FLEXIO3_peripheralConfig, &FLEXIO3_config, FLEXIO3_CLK_FREQ);
+}
+
+/***********************************************************************************************************************
  * Initialization functions
  **********************************************************************************************************************/
 void BOARD_InitPeripherals(void)
 {
+  /* Initialize components */
+  FLEXIO3_init();
 }
 
 /***********************************************************************************************************************

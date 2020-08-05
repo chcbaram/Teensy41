@@ -34,6 +34,27 @@ void bspInit(void)
 
   SysTick_Config(SystemCoreClock / 1000U);
 
+#if 0
+  /* Disable I cache and D cache */
+  if (SCB_CCR_IC_Msk == (SCB_CCR_IC_Msk & SCB->CCR))
+  {
+      SCB_DisableICache();
+  }
+  if (SCB_CCR_DC_Msk == (SCB_CCR_DC_Msk & SCB->CCR))
+  {
+      SCB_DisableDCache();
+  }
+
+  /* Disable MPU */
+  ARM_MPU_Disable();
+
+  MPU->RBAR = ARM_MPU_RBAR(0, 0x70000000U);
+  MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 0, 0, 1, 1, 0, ARM_MPU_REGION_SIZE_16MB);
+
+  /* Enable MPU */
+  ARM_MPU_Enable(MPU_CTRL_PRIVDEFENA_Msk);
+#endif
+
   SCB_EnableDCache();
   SCB_EnableICache();
 }

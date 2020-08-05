@@ -29,7 +29,7 @@ extern "C" {
 #include "gpio.h"
 #include "sd.h"
 #include "button.h"
-
+#include "lcd.h"
 
 void hwInit(void);
 

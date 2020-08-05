@@ -46,4 +46,6 @@ void hwInit(void)
   gpioInit();
   buttonInit();
   sdInit();
+
+  lcdInit();
 }

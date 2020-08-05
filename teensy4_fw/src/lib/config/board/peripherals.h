@@ -6,9 +6,53 @@
 #ifndef _PERIPHERALS_H_
 #define _PERIPHERALS_H_
 
+/***********************************************************************************************************************
+ * Included files
+ **********************************************************************************************************************/
+#include "fsl_common.h"
+#include "fsl_flexio_mculcd.h"
+#include "fsl_gpio.h"
+
 #if defined(__cplusplus)
 extern "C" {
 #endif /* __cplusplus */
+
+/***********************************************************************************************************************
+ * Definitions
+ **********************************************************************************************************************/
+/* Definitions for BOARD_InitPeripherals functional group */
+/* Definition of peripheral ID */
+#define FLEXIO3_PERIPHERAL FLEXIO3
+/* Definition of the clock source frequency */
+#define FLEXIO3_CLK_FREQ 120000000UL
+/* FlexIO MCULCD data bus width check */
+#if ((defined(FLEXIO_MCULCD_DATA_BUS_WIDTH) && (FLEXIO_MCULCD_DATA_BUS_WIDTH != 8)))
+  #error FLEXIO_MCULCD_DATA_BUS_WIDTH define value is not the same as value in the Data bus width setting in the FLEXIO3 component instance. Check define (missing or different value) at the project setting.
+#endif
+/* GPIO CS pin peripheral */
+#define FLEXIO3_GPIO_PERIPHERAL_CSPIN GPIO2
+/* GPIO CS pin number */
+#define FLEXIO3_GPIO_CSPIN 1UL
+/* GPIO RS pin peripheral */
+#define FLEXIO3_GPIO_PERIPHERAL_RSPIN GPIO2
+/* GPIO RS pin number */
+#define FLEXIO3_GPIO_RSPIN 0UL
+
+/***********************************************************************************************************************
+ * Global variables
+ **********************************************************************************************************************/
+/* FlexIO peripheral configuration */
+extern FLEXIO_MCULCD_Type FLEXIO3_peripheralConfig;
+/* FlexIO MCULCD configuration */
+extern flexio_mculcd_config_t FLEXIO3_config;
+
+/***********************************************************************************************************************
+ * Global functions
+ **********************************************************************************************************************/
+/* GPIO CS pin set function */
+void FLEXIO3_setCSPin(bool set);
+/* GPIO RS pin set function */
+void FLEXIO3_setRSPin(bool set);
 
 /***********************************************************************************************************************
  * Initialization functions
