@@ -10,7 +10,7 @@
 
 #include "adc.h"
 #include "cmdif.h"
-
+#include "swtimer.h"
 
 
 
@@ -26,16 +26,25 @@ static adc_tbl_t adc_tbl[ADC_MAX_CH];
 static uint16_t adc_data[ADC_MAX_CH];
 
 
+static bool adcUpdate(void);
+
+
 #ifdef _USE_HW_CMDIF
 static void adcCmdif(void);
 #endif
 
 
+
+void adcISR(void *arg)
+{
+  adcUpdate();
+}
+
 bool adcInit(void)
 {
   uint32_t i;
   uint32_t ch;
-
+  swtimer_handle_t h_adc_timer;
 
 
   for (i=0; i<ADC_MAX_CH; i++)
@@ -55,9 +64,41 @@ bool adcInit(void)
   adc_tbl[ch].is_init     = true;
 
 
+  h_adc_timer = swtimerGetHandle();
+  swtimerSet(h_adc_timer, 5, LOOP_TIME, adcISR, NULL );
+  swtimerStart(h_adc_timer);
+
+
 #ifdef _USE_HW_CMDIF
   cmdifAdd("adc", adcCmdif);
 #endif
+
+  return true;
+}
+
+bool adcUpdate(void)
+{
+  static uint32_t ch = 0;
+  static uint8_t state = 0;
+
+
+  switch(state)
+  {
+    case 0:
+      ADC_SetChannelConfig(ADC2_PERIPHERAL, 0, &ADC2_channels_config[ch]);
+      state = 1;
+      break;
+
+    case 1:
+      if (ADC_GetChannelStatusFlags(ADC2_PERIPHERAL, 0) != 0)
+      {
+        adc_data[ch] = ADC_GetChannelConversionValue(ADC2_PERIPHERAL, 0);
+
+        ch = (ch + 1)%ADC_MAX_CH;
+        state = 0;
+      }
+      break;
+  }
 
   return true;
 }
@@ -71,25 +112,16 @@ uint32_t adcRead(uint8_t ch)
     return 0;
   }
 
-
-  ADC_SetChannelConfig(ADC2_PERIPHERAL, 0, &ADC2_channels_config[ch]);
-  while (ADC_GetChannelStatusFlags(ADC2_PERIPHERAL, 0) == 0)
-  {
-  }
-
   switch(ch)
   {
     case 0:
-      adc_data[ch] = 4095 - ADC_GetChannelConversionValue(ADC2_PERIPHERAL, 0);
+      adc_value = 4095 - adc_data[ch];
       break;
 
     case 1:
-      adc_data[ch] = ADC_GetChannelConversionValue(ADC2_PERIPHERAL, 0);
+      adc_value = adc_data[ch];
       break;
   }
-
-
-  adc_value = adc_data[ch];
 
   return adc_value;
 }

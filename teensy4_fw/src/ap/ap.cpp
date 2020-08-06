@@ -50,16 +50,20 @@ void apMain(void)
       pre_time_draw = micros();
       lcdClearBuffer(black);
 
-      lcdPrintf(0, 0, white, "테스트  %d fps, %d ms", fps_show, (millis()-pre_time_fps));
-      lcdPrintf(0,16, white, "드로우  %d ms", time_draw/1000);
+      lcdPrintf(0,16*0, white, "테스트  %d fps, %d ms", fps_show, (millis()-pre_time_fps));
+      lcdPrintf(0,16*1, white, "드로우  %d ms", time_draw/1000);
 
       fps = 1000/(millis()-pre_time_fps);
       pre_time_fps = millis();
 
+      lcdPrintf(0,16*2, white, "X %03d Y %03d", joypadGetX(), joypadGetY());
 
-      lcdDrawFillRect(x, 32, 30, 30, red);
-      lcdDrawFillRect(lcdGetWidth()-x, 62, 30, 30, green);
-      lcdDrawFillRect(x + 30, 92, 30, 30, blue);
+
+      uint16_t y_offset = 60;
+
+      lcdDrawFillRect(x, y_offset+32, 30, 30, red);
+      lcdDrawFillRect(lcdGetWidth()-x, y_offset+62, 30, 30, green);
+      lcdDrawFillRect(x + 30, y_offset+92, 30, 30, blue);
 
       if (buttonGetPressed(_PIN_BUTTON_A))
       {
