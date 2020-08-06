@@ -78,8 +78,8 @@ void pwmWrite(uint8_t ch, uint16_t pwm_data)
     pwm_data = PWM_DATA_MAX;
   }
 
-  PWM_UpdatePwmDutycycle(PWM1_PERIPHERAL, pwm_tbl[0].submodule, pwm_tbl[0].channel, kPWM_EdgeAligned, pwm_data);
-  PWM_SetPwmLdok(PWM1_PERIPHERAL, pwm_tbl[0].control, true);
+  PWM_UpdatePwmDutycycle(PWM1_PERIPHERAL, pwm_tbl[ch].submodule, pwm_tbl[ch].channel, kPWM_EdgeAligned, pwm_data);
+  PWM_SetPwmLdok(PWM1_PERIPHERAL, pwm_tbl[ch].control, true);
 }
 
 uint16_t pwmRead(uint8_t ch)
