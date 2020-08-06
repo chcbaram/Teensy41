@@ -12,11 +12,37 @@
 
 
 
+static void threadCmdif(void const *argument);
+
+
 void apInit(void)
 {
   hwInit();
 
   cmdifOpen(_DEF_UART1, 57600);
+#if 1
+  osThreadDef(threadCmdif, threadCmdif, _HW_DEF_RTOS_THREAD_PRI_CMDIF, 0, _HW_DEF_RTOS_THREAD_MEM_CMDIF);
+  if (osThreadCreate(osThread(threadCmdif), NULL) != NULL)
+  {
+    logPrintf("threadCmdif \t\t: OK\r\n");
+  }
+  else
+  {
+    logPrintf("threadCmdif \t\t: Fail\r\n");
+    while(1);
+  }
+#endif
+}
+
+static void threadCmdif(void const *argument)
+{
+  (void)argument;
+
+  while(1)
+  {
+    cmdifMain();
+    delay(1);
+  }
 }
 
 void apMain(void)
@@ -34,8 +60,6 @@ void apMain(void)
   pre_time = micros();
   while(1)
   {
-    cmdifMain();
-
     if (micros()-pre_time >= 500*1000)
     {
       pre_time = micros();
@@ -101,6 +125,8 @@ void apMain(void)
 
       lcdRequestDraw();
     }
+
+    osThreadYield();
   }
 }
 

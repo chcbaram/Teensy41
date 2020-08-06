@@ -20,6 +20,9 @@ extern "C" {
 #include "config/board/peripherals.h"
 
 
+#include "cmsis_os.h"
+
+
 #include "fsl_gpio.h"
 
 

@@ -123,7 +123,7 @@ uint8_t gpioPinRead(uint8_t channel)
 {
   if (gpio_tbl[channel].port == NULL)
   {
-    return;
+    return 0;
   }
 
   if (GPIO_PinRead(gpio_tbl[channel].port, gpio_tbl[channel].pin) == gpio_tbl[channel].on_state)
