@@ -30,6 +30,8 @@ extern "C" {
 #include "sd.h"
 #include "button.h"
 #include "lcd.h"
+#include "adc.h"
+#include "joypad.h"
 
 void hwInit(void);
 

@@ -18,6 +18,7 @@
 #define _USE_HW_VCP
 #define _USE_HW_CLOCKS
 #define _USE_HW_PSRAM
+#define _USE_HW_JOYPAD
 
 
 #define _USE_HW_LED
@@ -42,12 +43,15 @@
 #define      HW_SD_PIN_PWREN       -1
 
 #define _USE_HW_BUTTON
-#define      HW_BUTTON_MAX_CH       8
+#define      HW_BUTTON_MAX_CH       12
 
 #define _USE_HW_LCD
 #define _USE_HW_ILI9341
 #define      HW_LCD_WIDTH           320
 #define      HW_LCD_HEIGHT          240
+
+#define _USE_HW_ADC
+#define      HW_ADC_MAX_CH          2
 
 
 #define _PIN_BUTTON_A               0
@@ -58,6 +62,10 @@
 #define _PIN_BUTTON_SELECT          5
 #define _PIN_BUTTON_HOME            6
 #define _PIN_BUTTON_MENU            7
+#define _DEF_HW_BTN_LEFT            8
+#define _DEF_HW_BTN_RIGHT           9
+#define _DEF_HW_BTN_UP              10
+#define _DEF_HW_BTN_DOWN            11
 
 
 #define _PIN_GPIO_LCD_BKT_EN        1

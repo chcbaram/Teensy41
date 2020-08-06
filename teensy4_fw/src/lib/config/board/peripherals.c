@@ -125,12 +125,102 @@ void FLEXIO3_init(void) {
 }
 
 /***********************************************************************************************************************
+ * ADC2 initialization code
+ **********************************************************************************************************************/
+/* clang-format off */
+/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+instance:
+- name: 'ADC2'
+- type: 'adc_12b1msps_sar'
+- mode: 'ADC_GENERAL'
+- custom_name_enabled: 'false'
+- type_id: 'adc_12b1msps_sar_6a490e886349a7b2b07bed10ce7b299b'
+- functional_group: 'BOARD_InitPeripherals'
+- peripheral: 'ADC2'
+- config_sets:
+  - fsl_adc:
+    - clockConfig:
+      - clockSource: 'kADC_ClockSourceAD'
+      - clockSourceFreq: 'custom:10 MHz'
+      - clockDriver: 'kADC_ClockDriver2'
+      - samplePeriodMode: 'kADC_SamplePeriodShort2Clocks'
+      - enableAsynchronousClockOutput: 'true'
+    - conversionConfig:
+      - resolution: 'kADC_Resolution12Bit'
+      - hardwareAverageMode: 'kADC_HardwareAverageCount8'
+      - enableHardwareTrigger: 'software'
+      - enableHighSpeed: 'false'
+      - enableLowPower: 'false'
+      - enableContinuousConversion: 'false'
+      - enableOverWrite: 'false'
+      - enableDma: 'false'
+    - resultingTime: []
+    - resultCorrection:
+      - doAutoCalibration: 'false'
+      - offset: '0'
+    - hardwareCompareConfiguration:
+      - hardwareCompareMode: 'disabled'
+      - value1: '0'
+      - value2: '0'
+    - enableInterrupt: 'false'
+    - adc_interrupt:
+      - IRQn: 'ADC2_IRQn'
+      - enable_priority: 'false'
+      - priority: '0'
+      - enable_custom_name: 'false'
+    - adc_channels_config:
+      - 0:
+        - channelNumber: 'IN.3'
+        - channelName: ''
+        - channelGroup: '0'
+        - initializeChannel: 'false'
+        - enableInterruptOnConversionCompleted: 'false'
+      - 1:
+        - channelNumber: 'IN.2'
+        - channelName: ''
+        - channelGroup: '0'
+        - initializeChannel: 'false'
+        - enableInterruptOnConversionCompleted: 'false'
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
+/* clang-format on */
+const adc_config_t ADC2_config = {
+  .enableOverWrite = false,
+  .enableContinuousConversion = false,
+  .enableHighSpeed = false,
+  .enableLowPower = false,
+  .enableLongSample = false,
+  .enableAsynchronousClockOutput = true,
+  .referenceVoltageSource = kADC_ReferenceVoltageSourceAlt0,
+  .samplePeriodMode = kADC_SamplePeriodShort2Clocks,
+  .clockSource = kADC_ClockSourceAD,
+  .clockDriver = kADC_ClockDriver2,
+  .resolution = kADC_Resolution12Bit
+};
+const adc_channel_config_t ADC2_channels_config[2] = {
+  {
+    .channelNumber = 3U,
+    .enableInterruptOnConversionCompleted = false
+  },
+  {
+    .channelNumber = 2U,
+    .enableInterruptOnConversionCompleted = false
+  }
+};
+void ADC2_init(void) {
+  /* Initialize ADC2 peripheral. */
+  ADC_Init(ADC2_PERIPHERAL, &ADC2_config);
+  /* Configure ADC2 peripheral to average 8 conversions in one measurement. */
+  ADC_SetHardwareAverageConfig(ADC2_PERIPHERAL, kADC_HardwareAverageCount8);
+}
+
+/***********************************************************************************************************************
  * Initialization functions
  **********************************************************************************************************************/
 void BOARD_InitPeripherals(void)
 {
   /* Initialize components */
   FLEXIO3_init();
+  ADC2_init();
 }
 
 /***********************************************************************************************************************

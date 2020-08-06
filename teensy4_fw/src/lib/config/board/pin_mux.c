@@ -93,6 +93,8 @@ BOARD_InitPins:
   - {pin_num: E7, peripheral: GPIO2, signal: 'gpio_io, 01', pin_signal: GPIO_B0_01, direction: OUTPUT, gpio_init_state: 'true', pull_up_down_config: no_init, slew_rate: Fast}
   - {pin_num: D7, peripheral: GPIO2, signal: 'gpio_io, 00', pin_signal: GPIO_B0_00, direction: OUTPUT, pull_up_down_config: no_init, slew_rate: Fast}
   - {pin_num: M11, peripheral: GPIO1, signal: 'gpio_io, 02', pin_signal: GPIO_AD_B0_02, direction: OUTPUT, gpio_init_state: 'true', pull_up_down_config: no_init}
+  - {pin_num: H11, peripheral: ADC2, signal: 'IN, 2', pin_signal: GPIO_AD_B1_13, pull_up_down_config: no_init}
+  - {pin_num: G12, peripheral: ADC2, signal: 'IN, 3', pin_signal: GPIO_AD_B1_14, pull_up_down_config: no_init}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 
@@ -255,6 +257,12 @@ void BOARD_InitPins(void) {
   IOMUXC_SetPinMux(
       IOMUXC_GPIO_AD_B1_12_FLEXIO3_FLEXIO12,  /* GPIO_AD_B1_12 is configured as FLEXIO3_FLEXIO12 */
       1U);                                    /* Software Input On Field: Force input path of pad GPIO_AD_B1_12 */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_AD_B1_13_GPIO1_IO29,        /* GPIO_AD_B1_13 is configured as GPIO1_IO29 */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_AD_B1_14_GPIO1_IO30,        /* GPIO_AD_B1_14 is configured as GPIO1_IO30 */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
       IOMUXC_GPIO_B0_00_GPIO2_IO00,           /* GPIO_B0_00 is configured as GPIO2_IO00 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */

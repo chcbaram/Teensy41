@@ -44,6 +44,8 @@ void hwInit(void)
   clocksInit();
   psramInit();
   gpioInit();
+  adcInit();
+  joypadInit();
   buttonInit();
   sdInit();
 

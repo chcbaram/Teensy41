@@ -63,6 +63,11 @@
                         <data>true</data>
                      </feature>
                   </dependency>
+                  <dependency resourceType="Peripheral" resourceId="ADC2" description="Peripheral ADC2 is not initialized" problem_level="1" source="Pins:BOARD_InitPins">
+                     <feature name="initialized" evaluation="equal">
+                        <data>true</data>
+                     </feature>
+                  </dependency>
                   <dependency resourceType="SWComponent" resourceId="platform.drivers.common" description="Pins initialization requires the COMMON Driver in the project." problem_level="2" source="Pins:BOARD_InitPins">
                      <feature name="enabled" evaluation="equal" configuration="core0">
                         <data>true</data>
@@ -363,6 +368,16 @@
                         <pin_feature name="pull_up_down_config" value="no_init"/>
                      </pin_features>
                   </pin>
+                  <pin peripheral="ADC2" signal="IN, 2" pin_num="H11" pin_signal="GPIO_AD_B1_13">
+                     <pin_features>
+                        <pin_feature name="pull_up_down_config" value="no_init"/>
+                     </pin_features>
+                  </pin>
+                  <pin peripheral="ADC2" signal="IN, 3" pin_num="G12" pin_signal="GPIO_AD_B1_14">
+                     <pin_features>
+                        <pin_feature name="pull_up_down_config" value="no_init"/>
+                     </pin_features>
+                  </pin>
                </pins>
             </function>
          </functions_list>
@@ -523,6 +538,16 @@
                   <data type="Version">2.0.2</data>
                </feature>
             </dependency>
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.adc_12b1msps_sar" description="ADC Driver not found in the toolchain/IDE project. Project will not compile!" problem_level="2" source="Peripherals">
+               <feature name="enabled" evaluation="equal">
+                  <data type="Boolean">true</data>
+               </feature>
+            </dependency>
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.adc_12b1msps_sar" description="Unsupported version of the ADC Driver in the toolchain/IDE project. Required: ${required_value}, actual: ${actual_value}. Project might not compile correctly." problem_level="1" source="Peripherals">
+               <feature name="version" evaluation="equivalent">
+                  <data type="Version">2.0.0</data>
+               </feature>
+            </dependency>
          </dependencies>
          <generated_project_files>
             <file path="board/peripherals.c" update_enabled="true"/>
@@ -626,6 +651,16 @@
                         <data type="String">OUTPUT</data>
                      </feature>
                   </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="ADC2.adc_in.3" description="Signal IN of the channel 3 of the peripheral ADC2 is not routed. Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="ADC2.adc_in.2" description="Signal IN of the channel 2 of the peripheral ADC2 is not routed. Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
                </dependencies>
                <instances>
                   <instance name="FLEXIO3" uuid="8f1a6e7f-582c-439b-9be4-c2daf7e4634a" type="flexio_mculcd" type_id="flexio_mculcd_71c03477918e9bdca54eff5edc785168" mode="polling" peripheral="FLEXIO3" enabled="true" comment="" custom_name_enabled="false">
@@ -662,6 +697,60 @@
                         </struct>
                      </config_set>
                   </instance>
+                  <instance name="ADC2" uuid="87ed3c0a-148a-4a8d-b48b-57af206530bb" type="adc_12b1msps_sar" type_id="adc_12b1msps_sar_6a490e886349a7b2b07bed10ce7b299b" mode="ADC_GENERAL" peripheral="ADC2" enabled="true" comment="" custom_name_enabled="false">
+                     <config_set name="fsl_adc">
+                        <struct name="clockConfig">
+                           <setting name="clockSource" value="kADC_ClockSourceAD"/>
+                           <setting name="clockSourceFreq" value="custom:10 MHz"/>
+                           <setting name="clockDriver" value="kADC_ClockDriver2"/>
+                           <setting name="samplePeriodMode" value="kADC_SamplePeriodShort2Clocks"/>
+                           <setting name="enableAsynchronousClockOutput" value="true"/>
+                        </struct>
+                        <struct name="conversionConfig">
+                           <setting name="resolution" value="kADC_Resolution12Bit"/>
+                           <setting name="hardwareAverageMode" value="kADC_HardwareAverageCount8"/>
+                           <setting name="enableHardwareTrigger" value="software"/>
+                           <setting name="enableHighSpeed" value="false"/>
+                           <setting name="enableLowPower" value="false"/>
+                           <setting name="enableContinuousConversion" value="false"/>
+                           <setting name="enableOverWrite" value="false"/>
+                           <setting name="enableDma" value="false"/>
+                        </struct>
+                        <struct name="resultingTime"/>
+                        <struct name="resultCorrection">
+                           <setting name="doAutoCalibration" value="false"/>
+                           <setting name="offset" value="0"/>
+                        </struct>
+                        <struct name="hardwareCompareConfiguration">
+                           <setting name="hardwareCompareMode" value="disabled"/>
+                           <setting name="value1" value="0"/>
+                           <setting name="value2" value="0"/>
+                        </struct>
+                        <setting name="enableInterrupt" value="false"/>
+                        <struct name="adc_interrupt">
+                           <setting name="IRQn" value="ADC2_IRQn"/>
+                           <setting name="enable_priority" value="false"/>
+                           <setting name="priority" value="0"/>
+                           <setting name="enable_custom_name" value="false"/>
+                        </struct>
+                        <array name="adc_channels_config">
+                           <struct name="0">
+                              <setting name="channelNumber" value="IN.3"/>
+                              <setting name="channelName" value=""/>
+                              <setting name="channelGroup" value="0"/>
+                              <setting name="initializeChannel" value="false"/>
+                              <setting name="enableInterruptOnConversionCompleted" value="false"/>
+                           </struct>
+                           <struct name="1">
+                              <setting name="channelNumber" value="IN.2"/>
+                              <setting name="channelName" value=""/>
+                              <setting name="channelGroup" value="0"/>
+                              <setting name="initializeChannel" value="false"/>
+                              <setting name="enableInterruptOnConversionCompleted" value="false"/>
+                           </struct>
+                        </array>
+                     </config_set>
+                  </instance>
                </instances>
             </functional_group>
          </functional_groups>
@@ -669,7 +758,7 @@
             <component name="system" uuid="b2527345-7aac-4585-b6ff-5a35e5c2a224" type_id="system_54b53072540eeeb8f8e9343e71f28176">
                <config_set_global name="global_system_definitions"/>
             </component>
-            <component name="msg" uuid="432c8283-7b1a-4097-b655-cf5979973ca2" type_id="msg_6e2baaf3b97dbeef01c0043275f9a0e7">
+            <component name="msg" uuid="8551cd44-891a-40d6-84e8-2c6f67c5ebeb" type_id="msg_6e2baaf3b97dbeef01c0043275f9a0e7">
                <config_set_global name="global_messages"/>
             </component>
          </components>

@@ -11,6 +11,7 @@
 #include "button.h"
 #include "swtimer.h"
 #include "cmdif.h"
+#include "joypad.h"
 
 
 typedef struct
@@ -34,6 +35,11 @@ button_tbl_t button_port_tbl[BUTTON_MAX_CH] =
   {GPIO4, 8, _DEF_LOW, _DEF_HIGH}, // 5. BTN_SELECT
   {GPIO4,31, _DEF_LOW, _DEF_HIGH}, // 6. BTN_HOME
   {GPIO3,18, _DEF_LOW, _DEF_HIGH}, // 7. BTN_MENU
+
+  {NULL, },                        // 8.  BTN_LEFT
+  {NULL, },                        // 9.  BTN_RIGHT
+  {NULL, },                        // 10. BTN_UP
+  {NULL, },                        // 11. BTN_DOWN
 };
 
 
@@ -205,7 +211,14 @@ bool buttonGetPin(uint8_t ch)
   }
   else
   {
-    return false;
+    bool ret = false;
+
+    if (ch == _DEF_HW_BTN_LEFT  && joypadGetPressedButton(JOYPAD_LEFT))   ret = true;
+    if (ch == _DEF_HW_BTN_RIGHT && joypadGetPressedButton(JOYPAD_RIGHT))  ret = true;
+    if (ch == _DEF_HW_BTN_UP    && joypadGetPressedButton(JOYPAD_UP))     ret = true;
+    if (ch == _DEF_HW_BTN_DOWN  && joypadGetPressedButton(JOYPAD_DOWN))   ret = true;
+
+    return ret;
   }
 }
 

@@ -12,6 +12,7 @@
 #include "fsl_common.h"
 #include "fsl_flexio_mculcd.h"
 #include "fsl_gpio.h"
+#include "fsl_adc.h"
 
 #if defined(__cplusplus)
 extern "C" {
@@ -37,6 +38,11 @@ extern "C" {
 #define FLEXIO3_GPIO_PERIPHERAL_RSPIN GPIO2
 /* GPIO RS pin number */
 #define FLEXIO3_GPIO_RSPIN 0UL
+/* BOARD_InitPeripherals defines for ADC2 */
+/* Definition of peripheral ID */
+#define ADC2_PERIPHERAL ADC2
+/* Definition of special channel interconnected with ADC_ETC which takes real channel to be measured from ADC_ETC. */
+#define ADC2_CHANNEL_DRIVEN_BY_ADC_ETC 16U
 
 /***********************************************************************************************************************
  * Global variables
@@ -45,6 +51,8 @@ extern "C" {
 extern FLEXIO_MCULCD_Type FLEXIO3_peripheralConfig;
 /* FlexIO MCULCD configuration */
 extern flexio_mculcd_config_t FLEXIO3_config;
+extern const adc_config_t ADC2_config;
+extern const adc_channel_config_t ADC2_channels_config[2];
 
 /***********************************************************************************************************************
  * Global functions
