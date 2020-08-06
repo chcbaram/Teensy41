@@ -53,6 +53,10 @@
 #define _USE_HW_ADC
 #define      HW_ADC_MAX_CH          2
 
+#define _USE_HW_PWM
+#define      HW_PWM_MAX_CH          1
+
+
 
 #define _PIN_BUTTON_A               0
 #define _PIN_BUTTON_B               1

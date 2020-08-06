@@ -37,6 +37,11 @@ extern "C" {
  */
 void BOARD_InitBootPins(void);
 
+/* GPIO_B1_00 (coord A11), LCD_BKT_PWM */
+#define BOARD_INITPINS_LCD_BKT_PWM_PERIPHERAL                               PWM1   /*!< Device name: PWM1 */
+#define BOARD_INITPINS_LCD_BKT_PWM_SIGNAL                                      A   /*!< PWM1 signal: A */
+#define BOARD_INITPINS_LCD_BKT_PWM_CHANNEL                                    3U   /*!< PWM1 A channel: 3 */
+
 
 /*!
  * @brief Configures pin routing and optionally pin electrical features.

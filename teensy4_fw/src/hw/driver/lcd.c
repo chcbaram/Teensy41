@@ -11,6 +11,7 @@
 #include "lcd.h"
 #include "cmdif.h"
 #include "button.h"
+#include "pwm.h"
 
 
 #ifdef _USE_HW_LCD
@@ -155,14 +156,7 @@ void lcdSetBackLight(uint8_t value)
     backlight_value = value;
   }
 
-  if (backlight_value > 0)
-  {
-    gpioPinWrite(_PIN_GPIO_LCD_BKT_EN, _DEF_HIGH);
-  }
-  else
-  {
-    gpioPinWrite(_PIN_GPIO_LCD_BKT_EN, _DEF_LOW);
-  }
+  pwmWrite(0, backlight_value * 50 / 100);
 }
 
 LCD_OPT_DEF uint32_t lcdReadPixel(uint16_t x_pos, uint16_t y_pos)

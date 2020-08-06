@@ -11,10 +11,13 @@ processor: MIMXRT1062xxxxA
 package_id: MIMXRT1062DVL6A
 mcu_data: ksdk2_0
 processor_version: 7.0.1
+pin_labels:
+- {pin_num: A11, pin_signal: GPIO_B1_00, label: LCD_BKT_PWM, identifier: LCD_BKT_PWM}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 
 #include "fsl_common.h"
+#include "fsl_xbara.h"
 #include "fsl_iomuxc.h"
 #include "fsl_gpio.h"
 #include "pin_mux.h"
@@ -61,7 +64,6 @@ BOARD_InitPins:
     slew_rate: Fast}
   - {pin_num: K1, peripheral: USDHC1, signal: 'usdhc_data, 1', pin_signal: GPIO_SD_B0_03, hysteresis_enable: Enable, pull_up_down_config: Pull_Up_47K_Ohm, pull_keeper_select: Pull,
     slew_rate: Fast}
-  - {pin_num: A11, peripheral: GPIO2, signal: 'gpio_io, 16', pin_signal: GPIO_B1_00, direction: OUTPUT, gpio_init_state: 'false', pull_up_down_config: no_init}
   - {pin_num: G5, peripheral: GPIO4, signal: 'gpio_io, 05', pin_signal: GPIO_EMC_05, direction: INPUT, pull_up_down_config: Pull_Up_47K_Ohm, pull_keeper_select: Pull}
   - {pin_num: H5, peripheral: GPIO4, signal: 'gpio_io, 06', pin_signal: GPIO_EMC_06, direction: INPUT, pull_up_down_config: Pull_Up_47K_Ohm, pull_keeper_select: Pull}
   - {pin_num: D9, peripheral: GPIO2, signal: 'gpio_io, 10', pin_signal: GPIO_B0_10, direction: INPUT, pull_up_down_config: Pull_Up_47K_Ohm, pull_keeper_select: Pull}
@@ -95,6 +97,11 @@ BOARD_InitPins:
   - {pin_num: M11, peripheral: GPIO1, signal: 'gpio_io, 02', pin_signal: GPIO_AD_B0_02, direction: OUTPUT, gpio_init_state: 'true', pull_up_down_config: no_init}
   - {pin_num: H11, peripheral: ADC2, signal: 'IN, 2', pin_signal: GPIO_AD_B1_13, pull_up_down_config: no_init}
   - {pin_num: G12, peripheral: ADC2, signal: 'IN, 3', pin_signal: GPIO_AD_B1_14, pull_up_down_config: no_init}
+  - {pin_num: A11, peripheral: PWM1, signal: 'A, 3', pin_signal: GPIO_B1_00, direction: OUTPUT, pull_up_down_config: no_init, pull_keeper_select: Keeper, slew_rate: Fast}
+  - {peripheral: PWM1, signal: 'FAULT, 0', pin_signal: LOGIC_HIGH}
+  - {peripheral: PWM1, signal: 'FAULT, 1', pin_signal: LOGIC_HIGH}
+  - {peripheral: PWM1, signal: 'FAULT, 2', pin_signal: LOGIC_HIGH}
+  - {peripheral: PWM1, signal: 'FAULT, 3', pin_signal: LOGIC_HIGH}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 
@@ -106,6 +113,7 @@ BOARD_InitPins:
  * END ****************************************************************************************************************/
 void BOARD_InitPins(void) {
   CLOCK_EnableClock(kCLOCK_Iomuxc);           /* iomuxc clock (iomuxc_clk_enable): 0x03U */
+  CLOCK_EnableClock(kCLOCK_Xbar1);            /* xbar1 clock (xbar1_clk_enable): 0x03U */
 
   /* GPIO configuration on GPIO_AD_B0_02 (pin M11) */
   gpio_pin_config_t gpio1_pinM11_config = {
@@ -160,15 +168,6 @@ void BOARD_InitPins(void) {
   };
   /* Initialize GPIO functionality on GPIO_B0_11 (pin A10) */
   GPIO_PinInit(GPIO2, 11U, &gpio2_pinA10_config);
-
-  /* GPIO configuration on GPIO_B1_00 (pin A11) */
-  gpio_pin_config_t gpio2_pinA11_config = {
-      .direction = kGPIO_DigitalOutput,
-      .outputLogic = 0U,
-      .interruptMode = kGPIO_NoIntmode
-  };
-  /* Initialize GPIO functionality on GPIO_B1_00 (pin A11) */
-  GPIO_PinInit(GPIO2, 16U, &gpio2_pinA11_config);
 
   /* GPIO configuration on GPIO_EMC_32 (pin D5) */
   gpio_pin_config_t gpio3_pinD5_config = {
@@ -279,7 +278,7 @@ void BOARD_InitPins(void) {
       IOMUXC_GPIO_B0_11_GPIO2_IO11,           /* GPIO_B0_11 is configured as GPIO2_IO11 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
-      IOMUXC_GPIO_B1_00_GPIO2_IO16,           /* GPIO_B1_00 is configured as GPIO2_IO16 */
+      IOMUXC_GPIO_B1_00_FLEXPWM1_PWMA03,      /* GPIO_B1_00 is configured as FLEXPWM1_PWMA03 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
       IOMUXC_GPIO_EMC_05_GPIO4_IO05,          /* GPIO_EMC_05 is configured as GPIO4_IO05 */
@@ -357,6 +356,10 @@ void BOARD_InitPins(void) {
     (~(IOMUXC_GPR_GPR29_GPIO_MUX4_GPIO_SEL_MASK))) /* Mask bits to zero which are setting */
       | IOMUXC_GPR_GPR29_GPIO_MUX4_GPIO_SEL(0x00U) /* GPIO4 and GPIO9 share same IO MUX function, GPIO_MUX4 selects one GPIO function: 0x00U */
     );
+  XBARA_SetSignalsConnection(XBARA1, kXBARA1_InputLogicHigh, kXBARA1_OutputFlexpwm1Fault0); /* LOGIC_HIGH output assigned to XBARA1_IN1 input is connected to XBARA1_OUT35 output assigned to FLEXPWM1_FAULT0 */
+  XBARA_SetSignalsConnection(XBARA1, kXBARA1_InputLogicHigh, kXBARA1_OutputFlexpwm1Fault1); /* LOGIC_HIGH output assigned to XBARA1_IN1 input is connected to XBARA1_OUT36 output assigned to FLEXPWM1_FAULT1 */
+  XBARA_SetSignalsConnection(XBARA1, kXBARA1_InputLogicHigh, kXBARA1_OutputFlexpwm1234Fault2); /* LOGIC_HIGH output assigned to XBARA1_IN1 input is connected to XBARA1_OUT37 output assigned to FLEXPWM1_2_3_4_FAULT2 */
+  XBARA_SetSignalsConnection(XBARA1, kXBARA1_InputLogicHigh, kXBARA1_OutputFlexpwm1234Fault3); /* LOGIC_HIGH output assigned to XBARA1_IN1 input is connected to XBARA1_OUT38 output assigned to FLEXPWM1_2_3_4_FAULT3 */
   IOMUXC_SetPinConfig(
       IOMUXC_GPIO_AD_B1_00_FLEXIO3_FLEXIO00,  /* GPIO_AD_B1_00 PAD functional properties : */
       0x70B1U);                               /* Slew Rate Field: Fast Slew Rate
@@ -496,6 +499,16 @@ void BOARD_InitPins(void) {
                                                  Pull / Keep Enable Field: Pull/Keeper Enabled
                                                  Pull / Keep Select Field: Pull
                                                  Pull Up / Down Config. Field: 47K Ohm Pull Up
+                                                 Hyst. Enable Field: Hysteresis Disabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_B1_00_FLEXPWM1_PWMA03,      /* GPIO_B1_00 PAD functional properties : */
+      0x10B1U);                               /* Slew Rate Field: Fast Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: medium(100MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Keeper
+                                                 Pull Up / Down Config. Field: 100K Ohm Pull Down
                                                  Hyst. Enable Field: Hysteresis Disabled */
   IOMUXC_SetPinConfig(
       IOMUXC_GPIO_EMC_05_GPIO4_IO05,          /* GPIO_EMC_05 PAD functional properties : */

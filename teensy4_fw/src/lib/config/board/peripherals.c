@@ -42,89 +42,6 @@ component:
  * BOARD_InitPeripherals functional group
  **********************************************************************************************************************/
 /***********************************************************************************************************************
- * FLEXIO3 initialization code
- **********************************************************************************************************************/
-/* clang-format off */
-/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
-instance:
-- name: 'FLEXIO3'
-- type: 'flexio_mculcd'
-- mode: 'polling'
-- custom_name_enabled: 'false'
-- type_id: 'flexio_mculcd_71c03477918e9bdca54eff5edc785168'
-- functional_group: 'BOARD_InitPeripherals'
-- peripheral: 'FLEXIO3'
-- config_sets:
-  - fsl_flexio_mculcd:
-    - clockSource: 'FlexIoClock'
-    - clockSourceFreq: 'BOARD_BootClockRUN'
-    - peripheralConfig:
-      - busType: 'kFLEXIO_MCULCD_8080'
-      - dataFlexIOMcuLcdBusWidth: '8'
-      - dataPinStartIndex: '0'
-      - ENWRPinIndex: '8'
-      - RDPinIndex_sel: '12'
-      - setCSPinStruct:
-        - function_type: 'functionDN'
-        - gpio_peripherals: 'GPIO2'
-        - gpio_signals: 'gpio_io.01'
-        - disableGPIOCheck: 'false'
-      - setRSPinStruct:
-        - function_type: 'functionDN'
-        - gpio_peripherals: 'GPIO2'
-        - gpio_signals: 'gpio_io.00'
-        - disableGPIOCheck: 'false'
-      - txShifterEndIndex: '3'
-      - rxShifterStartIndex: '3'
-    - config:
-      - enable: 'true'
-      - enableInDoze: 'false'
-      - enableInDebug: 'false'
-      - enableFastAccess: 'false'
-      - baudRate_Bps: '320000000'
- * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
-/* clang-format on */
-/* FlexIO peripheral configuration */
-FLEXIO_MCULCD_Type FLEXIO3_peripheralConfig = {
-  .flexioBase = FLEXIO3_PERIPHERAL,
-  .busType = kFLEXIO_MCULCD_8080,
-  .dataPinStartIndex = 0,
-  .ENWRPinIndex = 8,
-  .RDPinIndex = 12,
-  .setRDWRPin = NULL,
-  .setCSPin = FLEXIO3_setCSPin,
-  .setRSPin = FLEXIO3_setRSPin,
-  .txShifterStartIndex = 0,
-  .txShifterEndIndex = 3,
-  .rxShifterStartIndex = 3,
-  .rxShifterEndIndex = 3,
-  .timerIndex = 0
-};
-/* FlexIO MCULCD configuration */
-flexio_mculcd_config_t FLEXIO3_config = {
-  .enable = true,
-  .enableInDoze = false,
-  .enableInDebug = false,
-  .enableFastAccess = false,
-  .baudRate_Bps = 320000000
-};
-
-/* GPIO CS pin set function */
-void FLEXIO3_setCSPin(bool set){
-  GPIO_PinWrite(FLEXIO3_GPIO_PERIPHERAL_CSPIN, FLEXIO3_GPIO_CSPIN, (uint8_t)set);
-}
-
-/* GPIO RS pin set function */
-void FLEXIO3_setRSPin(bool set){
-  GPIO_PinWrite(FLEXIO3_GPIO_PERIPHERAL_RSPIN, FLEXIO3_GPIO_RSPIN, (uint8_t)set);
-}
-
-void FLEXIO3_init(void) {
-  /* Master initialization */
-  FLEXIO_MCULCD_Init(&FLEXIO3_peripheralConfig, &FLEXIO3_config, FLEXIO3_CLK_FREQ);
-}
-
-/***********************************************************************************************************************
  * ADC2 initialization code
  **********************************************************************************************************************/
 /* clang-format off */
@@ -214,13 +131,274 @@ void ADC2_init(void) {
 }
 
 /***********************************************************************************************************************
+ * FLEXIO3 initialization code
+ **********************************************************************************************************************/
+/* clang-format off */
+/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+instance:
+- name: 'FLEXIO3'
+- type: 'flexio_mculcd'
+- mode: 'polling'
+- custom_name_enabled: 'false'
+- type_id: 'flexio_mculcd_71c03477918e9bdca54eff5edc785168'
+- functional_group: 'BOARD_InitPeripherals'
+- peripheral: 'FLEXIO3'
+- config_sets:
+  - fsl_flexio_mculcd:
+    - clockSource: 'FlexIoClock'
+    - clockSourceFreq: 'BOARD_BootClockRUN'
+    - peripheralConfig:
+      - busType: 'kFLEXIO_MCULCD_8080'
+      - dataFlexIOMcuLcdBusWidth: '8'
+      - dataPinStartIndex: '0'
+      - ENWRPinIndex: '8'
+      - RDPinIndex_sel: '12'
+      - setCSPinStruct:
+        - function_type: 'functionDN'
+        - gpio_peripherals: 'GPIO2'
+        - gpio_signals: 'gpio_io.01'
+        - disableGPIOCheck: 'false'
+      - setRSPinStruct:
+        - function_type: 'functionDN'
+        - gpio_peripherals: 'GPIO2'
+        - gpio_signals: 'gpio_io.00'
+        - disableGPIOCheck: 'false'
+      - txShifterEndIndex: '3'
+      - rxShifterStartIndex: '3'
+    - config:
+      - enable: 'true'
+      - enableInDoze: 'false'
+      - enableInDebug: 'false'
+      - enableFastAccess: 'false'
+      - baudRate_Bps: '320000000'
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
+/* clang-format on */
+/* FlexIO peripheral configuration */
+FLEXIO_MCULCD_Type FLEXIO3_peripheralConfig = {
+  .flexioBase = FLEXIO3_PERIPHERAL,
+  .busType = kFLEXIO_MCULCD_8080,
+  .dataPinStartIndex = 0,
+  .ENWRPinIndex = 8,
+  .RDPinIndex = 12,
+  .setRDWRPin = NULL,
+  .setCSPin = FLEXIO3_setCSPin,
+  .setRSPin = FLEXIO3_setRSPin,
+  .txShifterStartIndex = 0,
+  .txShifterEndIndex = 3,
+  .rxShifterStartIndex = 3,
+  .rxShifterEndIndex = 3,
+  .timerIndex = 0
+};
+/* FlexIO MCULCD configuration */
+flexio_mculcd_config_t FLEXIO3_config = {
+  .enable = true,
+  .enableInDoze = false,
+  .enableInDebug = false,
+  .enableFastAccess = false,
+  .baudRate_Bps = 320000000
+};
+
+/* GPIO CS pin set function */
+void FLEXIO3_setCSPin(bool set){
+  GPIO_PinWrite(FLEXIO3_GPIO_PERIPHERAL_CSPIN, FLEXIO3_GPIO_CSPIN, (uint8_t)set);
+}
+
+/* GPIO RS pin set function */
+void FLEXIO3_setRSPin(bool set){
+  GPIO_PinWrite(FLEXIO3_GPIO_PERIPHERAL_RSPIN, FLEXIO3_GPIO_RSPIN, (uint8_t)set);
+}
+
+void FLEXIO3_init(void) {
+  /* Master initialization */
+  FLEXIO_MCULCD_Init(&FLEXIO3_peripheralConfig, &FLEXIO3_config, FLEXIO3_CLK_FREQ);
+}
+
+/***********************************************************************************************************************
+ * PWM1 initialization code
+ **********************************************************************************************************************/
+/* clang-format off */
+/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+instance:
+- name: 'PWM1'
+- type: 'pwm'
+- mode: 'general'
+- custom_name_enabled: 'false'
+- type_id: 'pwm_8b65bb514bad0e7add761f3ca35a604d'
+- functional_group: 'BOARD_InitPeripherals'
+- peripheral: 'PWM1'
+- config_sets:
+  - fsl_pwm:
+    - clockSource: 'SystemClock'
+    - clockSourceFreq: 'BOARD_BootClockRUN'
+    - submodules:
+      - 0:
+        - sm: 'kPWM_Module_3'
+        - sm_id: 'SM0'
+        - config:
+          - clockSource: 'kPWM_BusClock'
+          - prescale: 'kPWM_Prescale_Divide_1'
+          - pwmFreq: '50 kHz'
+          - pairOperation: 'kPWM_Independent'
+          - operationMode: 'kPWM_EdgeAligned'
+          - initializationControl: 'kPWM_Initialize_LocalSync'
+          - reloadLogic: 'kPWM_ReloadImmediate'
+          - reloadSelect: 'kPWM_LocalReload'
+          - reloadFrequency: 'kPWM_LoadEveryOportunity'
+          - forceTrigger: 'kPWM_Force_Local'
+          - enableDebugMode: 'false'
+          - enableWait: 'false'
+          - outputTrigger_sel: ''
+          - loadOK: 'false'
+          - startCounter: 'false'
+          - interrupt_sel: ''
+        - channels:
+          - 0:
+            - channel_id: 'A'
+            - functionSel: 'pwmOutput'
+            - pwm:
+              - dutyCyclePercent: '0'
+              - level: 'kPWM_HighTrue'
+              - deadtime_input_by_force: 'kPWM_UsePwm'
+              - clockSource: 'kPWM_BusClock'
+              - deadtimeValue: '0'
+              - interrupt_sel: ''
+          - 1:
+            - channel_id: 'B'
+            - functionSel: 'notUsed'
+          - 2:
+            - channel_id: 'X'
+            - functionSel: 'notUsed'
+        - common_interruptEn: 'false'
+        - common_interrupt:
+          - IRQn: 'PWM1_0_IRQn'
+          - enable_priority: 'false'
+          - priority: '0'
+          - enable_custom_name: 'false'
+    - faultChannels:
+      - 0:
+        - commonFaultSetting:
+          - clockSource: 'kPWM_BusClock'
+          - faultFilterPeriod: '1'
+          - faultFilterCount: '3'
+          - faultGlitchStretch: 'false'
+        - faults:
+          - 0:
+            - fault_id: 'Fault0'
+            - faultClearingMode: 'kPWM_Automatic'
+            - faultLevelR: 'low'
+            - enableCombinationalPathR: 'nonFiltered'
+            - recoverMode: 'kPWM_NoRecovery'
+            - fault_int_source: 'false'
+          - 1:
+            - fault_id: 'Fault1'
+            - faultClearingMode: 'kPWM_Automatic'
+            - faultLevelR: 'low'
+            - enableCombinationalPathR: 'nonFiltered'
+            - recoverMode: 'kPWM_NoRecovery'
+            - fault_int_source: 'false'
+          - 2:
+            - fault_id: 'Fault2'
+            - faultClearingMode: 'kPWM_Automatic'
+            - faultLevelR: 'low'
+            - enableCombinationalPathR: 'nonFiltered'
+            - recoverMode: 'kPWM_NoRecovery'
+            - fault_int_source: 'false'
+          - 3:
+            - fault_id: 'Fault3'
+            - faultClearingMode: 'kPWM_Automatic'
+            - faultLevelR: 'low'
+            - enableCombinationalPathR: 'nonFiltered'
+            - recoverMode: 'kPWM_NoRecovery'
+            - fault_int_source: 'false'
+    - fault_error_interruptEn: 'false'
+    - fault_error_interrupt:
+      - IRQn: 'PWM1_FAULT_IRQn'
+      - enable_priority: 'false'
+      - priority: '0'
+      - enable_custom_name: 'false'
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
+/* clang-format on */
+/* PWM main configuration */
+pwm_config_t PWM1_SM0_config = {
+  .clockSource = kPWM_BusClock,
+  .prescale = kPWM_Prescale_Divide_1,
+  .pairOperation = kPWM_Independent,
+  .initializationControl = kPWM_Initialize_LocalSync,
+  .reloadLogic = kPWM_ReloadImmediate,
+  .reloadSelect = kPWM_LocalReload,
+  .reloadFrequency = kPWM_LoadEveryOportunity,
+  .forceTrigger = kPWM_Force_Local,
+  .enableDebugMode = false,
+  .enableWait = false
+};
+
+pwm_signal_param_t PWM1_SM0_pwm_function_config[1]= {
+  {
+    .pwmChannel = kPWM_PwmA,
+    .dutyCyclePercent = 0,
+    .level = kPWM_HighTrue,
+    .deadtimeValue = 0
+  },
+};
+
+const pwm_fault_input_filter_param_t PWM1_faultInputFilter_config = {
+  .faultFilterPeriod = 1,
+  .faultFilterCount = 3,
+  .faultGlitchStretch = false
+};
+const pwm_fault_param_t PWM1_Fault0_fault_config = {
+  .faultClearingMode = kPWM_Automatic,
+  .faultLevel = false,
+  .enableCombinationalPath = false,
+  .recoverMode = kPWM_NoRecovery
+};
+const pwm_fault_param_t PWM1_Fault1_fault_config = {
+  .faultClearingMode = kPWM_Automatic,
+  .faultLevel = false,
+  .enableCombinationalPath = false,
+  .recoverMode = kPWM_NoRecovery
+};
+const pwm_fault_param_t PWM1_Fault2_fault_config = {
+  .faultClearingMode = kPWM_Automatic,
+  .faultLevel = false,
+  .enableCombinationalPath = false,
+  .recoverMode = kPWM_NoRecovery
+};
+const pwm_fault_param_t PWM1_Fault3_fault_config = {
+  .faultClearingMode = kPWM_Automatic,
+  .faultLevel = false,
+  .enableCombinationalPath = false,
+  .recoverMode = kPWM_NoRecovery
+};
+
+void PWM1_init(void) {
+  /* Initialize PWM submodule SM0 main configuration */
+  PWM_Init(PWM1_PERIPHERAL, PWM1_SM0, &PWM1_SM0_config);
+  /* Initialize fault input filter configuration */
+  PWM_SetupFaultInputFilter(PWM1_PERIPHERAL, &PWM1_faultInputFilter_config);
+  /* Initialize fault channel 0 fault Fault0 configuration */
+  PWM_SetupFaults(PWM1_PERIPHERAL, PWM1_F0_FAULT0, &PWM1_Fault0_fault_config);
+  /* Initialize fault channel 0 fault Fault1 configuration */
+  PWM_SetupFaults(PWM1_PERIPHERAL, PWM1_F0_FAULT1, &PWM1_Fault1_fault_config);
+  /* Initialize fault channel 0 fault Fault2 configuration */
+  PWM_SetupFaults(PWM1_PERIPHERAL, PWM1_F0_FAULT2, &PWM1_Fault2_fault_config);
+  /* Initialize fault channel 0 fault Fault3 configuration */
+  PWM_SetupFaults(PWM1_PERIPHERAL, PWM1_F0_FAULT3, &PWM1_Fault3_fault_config);
+  /* Initialize deadtime logic input for the channel A */
+  PWM_SetupForceSignal(PWM1_PERIPHERAL, PWM1_SM0, PWM1_SM0_A, kPWM_UsePwm);
+  /* Setup PWM output setting for submodule SM0 */
+  PWM_SetupPwm(PWM1_PERIPHERAL, PWM1_SM0, PWM1_SM0_pwm_function_config, 1U, kPWM_EdgeAligned, PWM1_SM0_COUNTER_FREQ_HZ, PWM1_SM0_COUNTER_CLK_SOURCE_FREQ_HZ);
+}
+
+/***********************************************************************************************************************
  * Initialization functions
  **********************************************************************************************************************/
 void BOARD_InitPeripherals(void)
 {
   /* Initialize components */
-  FLEXIO3_init();
   ADC2_init();
+  FLEXIO3_init();
+  PWM1_init();
 }
 
 /***********************************************************************************************************************

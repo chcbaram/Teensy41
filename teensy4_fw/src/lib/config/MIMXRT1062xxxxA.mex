@@ -23,6 +23,9 @@
          <pins_profile>
             <processor_version>7.0.1</processor_version>
             <power_domains/>
+            <pin_labels>
+               <pin_label pin_num="A11" pin_signal="GPIO_B1_00" label="LCD_BKT_PWM" identifier="LCD_BKT_PWM"/>
+            </pin_labels>
          </pins_profile>
          <functions_list>
             <function name="BOARD_InitPins">
@@ -68,6 +71,11 @@
                         <data>true</data>
                      </feature>
                   </dependency>
+                  <dependency resourceType="Peripheral" resourceId="PWM1" description="Peripheral PWM1 is not initialized" problem_level="1" source="Pins:BOARD_InitPins">
+                     <feature name="initialized" evaluation="equal">
+                        <data>true</data>
+                     </feature>
+                  </dependency>
                   <dependency resourceType="SWComponent" resourceId="platform.drivers.common" description="Pins initialization requires the COMMON Driver in the project." problem_level="2" source="Pins:BOARD_InitPins">
                      <feature name="enabled" evaluation="equal" configuration="core0">
                         <data>true</data>
@@ -79,6 +87,11 @@
                      </feature>
                   </dependency>
                   <dependency resourceType="SWComponent" resourceId="platform.drivers.igpio" description="Pins initialization requires the IGPIO Driver in the project." problem_level="2" source="Pins:BOARD_InitPins">
+                     <feature name="enabled" evaluation="equal" configuration="core0">
+                        <data>true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="SWComponent" resourceId="platform.drivers.xbara" description="Pins initialization requires the XBARA Driver in the project." problem_level="2" source="Pins:BOARD_InitPins">
                      <feature name="enabled" evaluation="equal" configuration="core0">
                         <data>true</data>
                      </feature>
@@ -201,13 +214,6 @@
                         <pin_feature name="pull_up_down_config" value="Pull_Up_47K_Ohm"/>
                         <pin_feature name="pull_keeper_select" value="Pull"/>
                         <pin_feature name="slew_rate" value="Fast"/>
-                     </pin_features>
-                  </pin>
-                  <pin peripheral="GPIO2" signal="gpio_io, 16" pin_num="A11" pin_signal="GPIO_B1_00">
-                     <pin_features>
-                        <pin_feature name="direction" value="OUTPUT"/>
-                        <pin_feature name="gpio_init_state" value="false"/>
-                        <pin_feature name="pull_up_down_config" value="no_init"/>
                      </pin_features>
                   </pin>
                   <pin peripheral="GPIO4" signal="gpio_io, 05" pin_num="G5" pin_signal="GPIO_EMC_05">
@@ -378,6 +384,18 @@
                         <pin_feature name="pull_up_down_config" value="no_init"/>
                      </pin_features>
                   </pin>
+                  <pin peripheral="PWM1" signal="A, 3" pin_num="A11" pin_signal="GPIO_B1_00">
+                     <pin_features>
+                        <pin_feature name="direction" value="OUTPUT"/>
+                        <pin_feature name="pull_up_down_config" value="no_init"/>
+                        <pin_feature name="pull_keeper_select" value="Keeper"/>
+                        <pin_feature name="slew_rate" value="Fast"/>
+                     </pin_features>
+                  </pin>
+                  <pin peripheral="PWM1" signal="FAULT, 0" pin_num="" pin_signal="LOGIC_HIGH"/>
+                  <pin peripheral="PWM1" signal="FAULT, 1" pin_num="" pin_signal="LOGIC_HIGH"/>
+                  <pin peripheral="PWM1" signal="FAULT, 2" pin_num="" pin_signal="LOGIC_HIGH"/>
+                  <pin peripheral="PWM1" signal="FAULT, 3" pin_num="" pin_signal="LOGIC_HIGH"/>
                </pins>
             </function>
          </functions_list>
@@ -528,6 +546,16 @@
       </dcdx>
       <periphs name="Peripherals" version="7.0" enabled="true" update_project_code="true">
          <dependencies>
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.adc_12b1msps_sar" description="ADC Driver not found in the toolchain/IDE project. Project will not compile!" problem_level="2" source="Peripherals">
+               <feature name="enabled" evaluation="equal">
+                  <data type="Boolean">true</data>
+               </feature>
+            </dependency>
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.adc_12b1msps_sar" description="Unsupported version of the ADC Driver in the toolchain/IDE project. Required: ${required_value}, actual: ${actual_value}. Project might not compile correctly." problem_level="1" source="Peripherals">
+               <feature name="version" evaluation="equivalent">
+                  <data type="Version">2.0.0</data>
+               </feature>
+            </dependency>
             <dependency resourceType="SWComponent" resourceId="platform.drivers.flexio_mculcd" description="FLEXIO MCULCD Driver not found in the toolchain/IDE project. Project will not compile!" problem_level="2" source="Peripherals">
                <feature name="enabled" evaluation="equal">
                   <data type="Boolean">true</data>
@@ -538,14 +566,14 @@
                   <data type="Version">2.0.2</data>
                </feature>
             </dependency>
-            <dependency resourceType="SWComponent" resourceId="platform.drivers.adc_12b1msps_sar" description="ADC Driver not found in the toolchain/IDE project. Project will not compile!" problem_level="2" source="Peripherals">
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.pwm" description="PWM Driver not found in the toolchain/IDE project. Project will not compile!" problem_level="2" source="Peripherals">
                <feature name="enabled" evaluation="equal">
                   <data type="Boolean">true</data>
                </feature>
             </dependency>
-            <dependency resourceType="SWComponent" resourceId="platform.drivers.adc_12b1msps_sar" description="Unsupported version of the ADC Driver in the toolchain/IDE project. Required: ${required_value}, actual: ${actual_value}. Project might not compile correctly." problem_level="1" source="Peripherals">
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.pwm" description="Unsupported version of the PWM Driver in the toolchain/IDE project. Required: ${required_value}, actual: ${actual_value}. Project might not compile correctly." problem_level="1" source="Peripherals">
                <feature name="version" evaluation="equivalent">
-                  <data type="Version">2.0.0</data>
+                  <data type="Version">2.1.0</data>
                </feature>
             </dependency>
          </dependencies>
@@ -561,6 +589,16 @@
                <description></description>
                <options/>
                <dependencies>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="ADC2.adc_in.3" description="Signal IN of the channel 3 of the peripheral ADC2 is not routed. Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="ADC2.adc_in.2" description="Signal IN of the channel 2 of the peripheral ADC2 is not routed. Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
                   <dependency resourceType="SWComponent" resourceId="platform.drivers.flexio" description="The fsl_flexio driver is missing in the project (required for the FlexIO I2C master). Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
                      <feature name="enabled" evaluation="equal">
                         <data type="Boolean">true</data>
@@ -651,52 +689,38 @@
                         <data type="String">OUTPUT</data>
                      </feature>
                   </dependency>
-                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="ADC2.adc_in.3" description="Signal IN of the channel 3 of the peripheral ADC2 is not routed. Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
-                     <feature name="routed" evaluation="">
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="PWM1.pwm_a.3" description="PWM1.PWM_A, 3 pin needs to be routed Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
                         <data type="Boolean">true</data>
                      </feature>
                   </dependency>
-                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="ADC2.adc_in.2" description="Signal IN of the channel 2 of the peripheral ADC2 is not routed. Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
-                     <feature name="routed" evaluation="">
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="PWM1.pwm_a.3" description="PWM1.PWM_A, 3 pin needs to be routed as output Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="direction" evaluation="equal">
+                        <data type="String">OUTPUT</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="PWM1.pwm_fault.0" description="PWM1.FAULT, 0 pin needs to be routed Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="PWM1.pwm_fault.1" description="PWM1.FAULT, 1 pin needs to be routed Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="PWM1.pwm_fault.2" description="PWM1.FAULT, 2 pin needs to be routed Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="PWM1.pwm_fault.3" description="PWM1.FAULT, 3 pin needs to be routed Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
                         <data type="Boolean">true</data>
                      </feature>
                   </dependency>
                </dependencies>
                <instances>
-                  <instance name="FLEXIO3" uuid="8f1a6e7f-582c-439b-9be4-c2daf7e4634a" type="flexio_mculcd" type_id="flexio_mculcd_71c03477918e9bdca54eff5edc785168" mode="polling" peripheral="FLEXIO3" enabled="true" comment="" custom_name_enabled="false">
-                     <config_set name="fsl_flexio_mculcd">
-                        <setting name="clockSource" value="FlexIoClock"/>
-                        <setting name="clockSourceFreq" value="BOARD_BootClockRUN"/>
-                        <struct name="peripheralConfig">
-                           <setting name="busType" value="kFLEXIO_MCULCD_8080"/>
-                           <setting name="dataFlexIOMcuLcdBusWidth" value="8"/>
-                           <setting name="dataPinStartIndex" value="0"/>
-                           <setting name="ENWRPinIndex" value="8"/>
-                           <setting name="RDPinIndex_sel" value="12"/>
-                           <struct name="setCSPinStruct">
-                              <setting name="function_type" value="functionDN"/>
-                              <setting name="gpio_peripherals" value="GPIO2"/>
-                              <setting name="gpio_signals" value="gpio_io.01"/>
-                              <setting name="disableGPIOCheck" value="false"/>
-                           </struct>
-                           <struct name="setRSPinStruct">
-                              <setting name="function_type" value="functionDN"/>
-                              <setting name="gpio_peripherals" value="GPIO2"/>
-                              <setting name="gpio_signals" value="gpio_io.00"/>
-                              <setting name="disableGPIOCheck" value="false"/>
-                           </struct>
-                           <setting name="txShifterEndIndex" value="3"/>
-                           <setting name="rxShifterStartIndex" value="3"/>
-                        </struct>
-                        <struct name="config">
-                           <setting name="enable" value="true"/>
-                           <setting name="enableInDoze" value="false"/>
-                           <setting name="enableInDebug" value="false"/>
-                           <setting name="enableFastAccess" value="false"/>
-                           <setting name="baudRate_Bps" value="320000000"/>
-                        </struct>
-                     </config_set>
-                  </instance>
                   <instance name="ADC2" uuid="87ed3c0a-148a-4a8d-b48b-57af206530bb" type="adc_12b1msps_sar" type_id="adc_12b1msps_sar_6a490e886349a7b2b07bed10ce7b299b" mode="ADC_GENERAL" peripheral="ADC2" enabled="true" comment="" custom_name_enabled="false">
                      <config_set name="fsl_adc">
                         <struct name="clockConfig">
@@ -751,6 +775,156 @@
                         </array>
                      </config_set>
                   </instance>
+                  <instance name="FLEXIO3" uuid="8f1a6e7f-582c-439b-9be4-c2daf7e4634a" type="flexio_mculcd" type_id="flexio_mculcd_71c03477918e9bdca54eff5edc785168" mode="polling" peripheral="FLEXIO3" enabled="true" comment="" custom_name_enabled="false">
+                     <config_set name="fsl_flexio_mculcd">
+                        <setting name="clockSource" value="FlexIoClock"/>
+                        <setting name="clockSourceFreq" value="BOARD_BootClockRUN"/>
+                        <struct name="peripheralConfig">
+                           <setting name="busType" value="kFLEXIO_MCULCD_8080"/>
+                           <setting name="dataFlexIOMcuLcdBusWidth" value="8"/>
+                           <setting name="dataPinStartIndex" value="0"/>
+                           <setting name="ENWRPinIndex" value="8"/>
+                           <setting name="RDPinIndex_sel" value="12"/>
+                           <struct name="setCSPinStruct">
+                              <setting name="function_type" value="functionDN"/>
+                              <setting name="gpio_peripherals" value="GPIO2"/>
+                              <setting name="gpio_signals" value="gpio_io.01"/>
+                              <setting name="disableGPIOCheck" value="false"/>
+                           </struct>
+                           <struct name="setRSPinStruct">
+                              <setting name="function_type" value="functionDN"/>
+                              <setting name="gpio_peripherals" value="GPIO2"/>
+                              <setting name="gpio_signals" value="gpio_io.00"/>
+                              <setting name="disableGPIOCheck" value="false"/>
+                           </struct>
+                           <setting name="txShifterEndIndex" value="3"/>
+                           <setting name="rxShifterStartIndex" value="3"/>
+                        </struct>
+                        <struct name="config">
+                           <setting name="enable" value="true"/>
+                           <setting name="enableInDoze" value="false"/>
+                           <setting name="enableInDebug" value="false"/>
+                           <setting name="enableFastAccess" value="false"/>
+                           <setting name="baudRate_Bps" value="320000000"/>
+                        </struct>
+                     </config_set>
+                  </instance>
+                  <instance name="PWM1" uuid="ef1ccfcf-d193-474a-bf2a-076bb4dd4931" type="pwm" type_id="pwm_8b65bb514bad0e7add761f3ca35a604d" mode="general" peripheral="PWM1" enabled="true" comment="" custom_name_enabled="false">
+                     <config_set name="fsl_pwm">
+                        <setting name="clockSource" value="SystemClock"/>
+                        <setting name="clockSourceFreq" value="BOARD_BootClockRUN"/>
+                        <array name="submodules">
+                           <struct name="0">
+                              <setting name="sm" value="kPWM_Module_3"/>
+                              <setting name="sm_id" value="SM0"/>
+                              <struct name="config">
+                                 <setting name="clockSource" value="kPWM_BusClock"/>
+                                 <setting name="prescale" value="kPWM_Prescale_Divide_1"/>
+                                 <setting name="pwmFreq" value="50 kHz"/>
+                                 <setting name="pairOperation" value="kPWM_Independent"/>
+                                 <setting name="operationMode" value="kPWM_EdgeAligned"/>
+                                 <setting name="initializationControl" value="kPWM_Initialize_LocalSync"/>
+                                 <setting name="reloadLogic" value="kPWM_ReloadImmediate"/>
+                                 <setting name="reloadSelect" value="kPWM_LocalReload"/>
+                                 <setting name="reloadFrequency" value="kPWM_LoadEveryOportunity"/>
+                                 <setting name="forceTrigger" value="kPWM_Force_Local"/>
+                                 <setting name="enableDebugMode" value="false"/>
+                                 <setting name="enableWait" value="false"/>
+                                 <set name="outputTrigger_sel">
+                                    <selected/>
+                                 </set>
+                                 <setting name="loadOK" value="false"/>
+                                 <setting name="startCounter" value="false"/>
+                                 <set name="interrupt_sel">
+                                    <selected/>
+                                 </set>
+                              </struct>
+                              <array name="channels">
+                                 <struct name="0">
+                                    <setting name="channel_id" value="A"/>
+                                    <setting name="functionSel" value="pwmOutput"/>
+                                    <struct name="pwm">
+                                       <setting name="dutyCyclePercent" value="0"/>
+                                       <setting name="level" value="kPWM_HighTrue"/>
+                                       <setting name="deadtime_input_by_force" value="kPWM_UsePwm"/>
+                                       <setting name="clockSource" value="kPWM_BusClock"/>
+                                       <setting name="deadtimeValue" value="0"/>
+                                       <set name="interrupt_sel">
+                                          <selected/>
+                                       </set>
+                                    </struct>
+                                 </struct>
+                                 <struct name="1">
+                                    <setting name="channel_id" value="B"/>
+                                    <setting name="functionSel" value="notUsed"/>
+                                 </struct>
+                                 <struct name="2">
+                                    <setting name="channel_id" value="X"/>
+                                    <setting name="functionSel" value="notUsed"/>
+                                 </struct>
+                              </array>
+                              <setting name="common_interruptEn" value="false"/>
+                              <struct name="common_interrupt">
+                                 <setting name="IRQn" value="PWM1_0_IRQn"/>
+                                 <setting name="enable_priority" value="false"/>
+                                 <setting name="priority" value="0"/>
+                                 <setting name="enable_custom_name" value="false"/>
+                              </struct>
+                           </struct>
+                        </array>
+                        <array name="faultChannels">
+                           <struct name="0">
+                              <struct name="commonFaultSetting">
+                                 <setting name="clockSource" value="kPWM_BusClock"/>
+                                 <setting name="faultFilterPeriod" value="1"/>
+                                 <setting name="faultFilterCount" value="3"/>
+                                 <setting name="faultGlitchStretch" value="false"/>
+                              </struct>
+                              <array name="faults">
+                                 <struct name="0">
+                                    <setting name="fault_id" value="Fault0"/>
+                                    <setting name="faultClearingMode" value="kPWM_Automatic"/>
+                                    <setting name="faultLevelR" value="low"/>
+                                    <setting name="enableCombinationalPathR" value="nonFiltered"/>
+                                    <setting name="recoverMode" value="kPWM_NoRecovery"/>
+                                    <setting name="fault_int_source" value="false"/>
+                                 </struct>
+                                 <struct name="1">
+                                    <setting name="fault_id" value="Fault1"/>
+                                    <setting name="faultClearingMode" value="kPWM_Automatic"/>
+                                    <setting name="faultLevelR" value="low"/>
+                                    <setting name="enableCombinationalPathR" value="nonFiltered"/>
+                                    <setting name="recoverMode" value="kPWM_NoRecovery"/>
+                                    <setting name="fault_int_source" value="false"/>
+                                 </struct>
+                                 <struct name="2">
+                                    <setting name="fault_id" value="Fault2"/>
+                                    <setting name="faultClearingMode" value="kPWM_Automatic"/>
+                                    <setting name="faultLevelR" value="low"/>
+                                    <setting name="enableCombinationalPathR" value="nonFiltered"/>
+                                    <setting name="recoverMode" value="kPWM_NoRecovery"/>
+                                    <setting name="fault_int_source" value="false"/>
+                                 </struct>
+                                 <struct name="3">
+                                    <setting name="fault_id" value="Fault3"/>
+                                    <setting name="faultClearingMode" value="kPWM_Automatic"/>
+                                    <setting name="faultLevelR" value="low"/>
+                                    <setting name="enableCombinationalPathR" value="nonFiltered"/>
+                                    <setting name="recoverMode" value="kPWM_NoRecovery"/>
+                                    <setting name="fault_int_source" value="false"/>
+                                 </struct>
+                              </array>
+                           </struct>
+                        </array>
+                        <setting name="fault_error_interruptEn" value="false"/>
+                        <struct name="fault_error_interrupt">
+                           <setting name="IRQn" value="PWM1_FAULT_IRQn"/>
+                           <setting name="enable_priority" value="false"/>
+                           <setting name="priority" value="0"/>
+                           <setting name="enable_custom_name" value="false"/>
+                        </struct>
+                     </config_set>
+                  </instance>
                </instances>
             </functional_group>
          </functional_groups>
@@ -758,7 +932,7 @@
             <component name="system" uuid="b2527345-7aac-4585-b6ff-5a35e5c2a224" type_id="system_54b53072540eeeb8f8e9343e71f28176">
                <config_set_global name="global_system_definitions"/>
             </component>
-            <component name="msg" uuid="8551cd44-891a-40d6-84e8-2c6f67c5ebeb" type_id="msg_6e2baaf3b97dbeef01c0043275f9a0e7">
+            <component name="msg" uuid="a8b669a7-82f4-4a7a-b1ad-e57bd7041b61" type_id="msg_6e2baaf3b97dbeef01c0043275f9a0e7">
                <config_set_global name="global_messages"/>
             </component>
          </components>

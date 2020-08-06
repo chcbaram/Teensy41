@@ -32,6 +32,8 @@ extern "C" {
 #include "lcd.h"
 #include "adc.h"
 #include "joypad.h"
+#include "pwm.h"
+
 
 void hwInit(void);
 

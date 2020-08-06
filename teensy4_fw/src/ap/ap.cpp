@@ -57,6 +57,7 @@ void apMain(void)
       pre_time_fps = millis();
 
       lcdPrintf(0,16*2, white, "X %03d Y %03d", joypadGetX(), joypadGetY());
+      lcdPrintf(0,16*3, white, "밝  기  %d %%", lcdGetBackLight());
 
 
       uint16_t y_offset = 60;
@@ -72,6 +73,22 @@ void apMain(void)
       if (buttonGetPressed(_PIN_BUTTON_B))
       {
         lcdDrawFillRect(150-60, 200, 30, 30, green);
+      }
+
+      if (buttonGetRepeatEvent(_PIN_BUTTON_A))
+      {
+        lcdSetBackLight(lcdGetBackLight() + 10);
+      }
+      if (buttonGetRepeatEvent(_PIN_BUTTON_B))
+      {
+        if (lcdGetBackLight() >= 10)
+        {
+          lcdSetBackLight(lcdGetBackLight() - 10);
+        }
+        else
+        {
+          lcdSetBackLight(0);
+        }
       }
 
 

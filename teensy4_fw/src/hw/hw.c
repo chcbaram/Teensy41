@@ -47,6 +47,7 @@ void hwInit(void)
   adcInit();
   joypadInit();
   buttonInit();
+  pwmInit();
   sdInit();
 
   lcdInit();

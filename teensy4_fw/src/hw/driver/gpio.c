@@ -34,7 +34,7 @@ typedef struct
 gpio_tbl_t gpio_tbl[GPIO_MAX_CH] =
 {
   {GPIO3, 17, _DEF_INPUT,   _DEF_HIGH, _DEF_HIGH},  // 0. SDCARD_CD
-  {GPIO2, 16, _DEF_OUTPUT,  _DEF_HIGH, _DEF_LOW},   // 1. LCD_BKT_EN
+  {NULL,  16, _DEF_OUTPUT,  _DEF_HIGH, _DEF_LOW},   // 1. LCD_BKT_EN
   {GPIO1,  2, _DEF_OUTPUT,  _DEF_HIGH, _DEF_HIGH},  // 2. LCD_RST
 };
 
@@ -103,7 +103,10 @@ void gpioPinWrite(uint8_t channel, uint8_t value)
   {
     return;
   }
-
+  if (gpio_tbl[channel].port == NULL)
+  {
+    return;
+  }
   if (value > 0)
   {
     pin_value = gpio_tbl[channel].on_state;
@@ -118,6 +121,11 @@ void gpioPinWrite(uint8_t channel, uint8_t value)
 
 uint8_t gpioPinRead(uint8_t channel)
 {
+  if (gpio_tbl[channel].port == NULL)
+  {
+    return;
+  }
+
   if (GPIO_PinRead(gpio_tbl[channel].port, gpio_tbl[channel].pin) == gpio_tbl[channel].on_state)
   {
     return _DEF_HIGH;
@@ -131,6 +139,10 @@ uint8_t gpioPinRead(uint8_t channel)
 void gpioPinToggle(uint8_t channel)
 {
   if (channel >= GPIO_MAX_CH)
+  {
+    return;
+  }
+  if (gpio_tbl[channel].port == NULL)
   {
     return;
   }
