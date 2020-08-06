@@ -99,6 +99,7 @@ void lcdDisplayOn(void);
 
 uint32_t lcdGetFps(void);
 uint32_t lcdGetFpsTime(void);
+uint32_t lcdGetDrawTime(void);
 
 int32_t lcdGetWidth(void);
 int32_t lcdGetHeight(void);

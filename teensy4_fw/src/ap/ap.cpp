@@ -11,7 +11,7 @@
 #include "ap.h"
 
 
-
+static void testCmdif(void);
 static void threadCmdif(void const *argument);
 
 
@@ -20,7 +20,8 @@ void apInit(void)
   hwInit();
 
   cmdifOpen(_DEF_UART1, 57600);
-#if 1
+  cmdifAdd("test", testCmdif);
+
   osThreadDef(threadCmdif, threadCmdif, _HW_DEF_RTOS_THREAD_PRI_CMDIF, 0, _HW_DEF_RTOS_THREAD_MEM_CMDIF);
   if (osThreadCreate(osThread(threadCmdif), NULL) != NULL)
   {
@@ -31,7 +32,6 @@ void apInit(void)
     logPrintf("threadCmdif \t\t: Fail\r\n");
     while(1);
   }
-#endif
 }
 
 static void threadCmdif(void const *argument)
@@ -74,7 +74,7 @@ void apMain(void)
       pre_time_draw = micros();
       lcdClearBuffer(black);
 
-      lcdPrintf(0,16*0, white, "테스트  %d fps, %d ms", fps_show, (millis()-pre_time_fps));
+      lcdPrintf(0,16*0, white, "테스트  %d fps, %d ms, %d ms", fps_show, (millis()-pre_time_fps), lcdGetDrawTime());
       lcdPrintf(0,16*1, white, "드로우  %d ms", time_draw/1000);
 
       fps = 1000/(millis()-pre_time_fps);
@@ -130,3 +130,27 @@ void apMain(void)
   }
 }
 
+
+
+
+
+void testCmdif(void)
+{
+  bool ret = true;
+
+
+  if (cmdifGetParamCnt() == 1 && cmdifHasString("info", 0) == true)
+  {
+    cmdifPrintf("GPR16 0x%08X\n", IOMUXC_GPR->GPR16);
+    cmdifPrintf("GPR17 0x%08X\n", IOMUXC_GPR->GPR17);
+  }
+  else
+  {
+    ret = false;
+  }
+
+  if (ret == false)
+  {
+    cmdifPrintf( "test info \n");
+  }
+}

@@ -37,17 +37,7 @@ static void illi9341SetRotation(uint8_t m);
 
 
 
-static void TransferDoneISR(void)
-{
-  if (is_write_frame == true)
-  {
-    is_write_frame = false;
-    if (frameCallBack != NULL)
-    {
-      frameCallBack();
-    }
-  }
-}
+
 
 
 bool ili9341Init(void)

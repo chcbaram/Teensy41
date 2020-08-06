@@ -29,9 +29,6 @@
 
 
 #define LCD_OPT_DEF   __attribute__((optimize("O2")))
-
-
-
 #define _PIN_DEF_BL_CTL       1
 
 
@@ -43,20 +40,32 @@ static bool is_init = false;
 static uint8_t backlight_value = 100;
 static volatile bool is_double_buffer = true;
 static uint8_t frame_index = 0;
-static bool is_tx_done = true;
+
+static bool lcd_request_draw = false;
 
 static volatile uint32_t fps_pre_time;
 static volatile uint32_t fps_time;
 static volatile uint32_t fps_count = 0;
 
+static volatile uint32_t draw_fps = 30;
+static volatile uint32_t draw_frame_time = 0;
+
+
 static uint16_t *p_draw_frame_buf = NULL;
 static __attribute__((section(".lcd_buf"))) uint16_t frame_buffer[2][HW_LCD_WIDTH * HW_LCD_HEIGHT];
-
 
 static uint16_t _win_w  = HW_LCD_WIDTH;
 static uint16_t _win_h  = HW_LCD_HEIGHT;
 static uint16_t _win_x  = 0;
 static uint16_t _win_y  = 0;
+
+
+static volatile bool requested_from_thread = false;
+static volatile osMessageQId cmd_q;
+
+
+
+
 
 
 #ifdef _USE_HW_CMDIF
@@ -66,19 +75,11 @@ static void lcdCmdif(void);
 
 void disHanFont(int x, int y, PHAN_FONT_OBJ *FontPtr, uint16_t textcolor);
 void lcdSwapFrameBuffer(void);
+static void lcdDrawProcess(void const *argument);
 
 
 
-void TransferDoneISR(void)
-{
-  fps_time = millis() - fps_pre_time;
-  if (fps_time > 0)
-  {
-    fps_count = 1000 / fps_time;
-  }
 
-  //is_tx_done = true;
-}
 
 
 bool lcdInit(void)
@@ -90,8 +91,6 @@ bool lcdInit(void)
   ili9341Init();
   ili9341InitDriver(&lcd);
 #endif
-
-  lcd.setCallBack(TransferDoneISR);
 
 
   for (int i=0; i<LCD_WIDTH*LCD_HEIGHT; i++)
@@ -123,6 +122,15 @@ bool lcdInit(void)
   lcdSetBackLight(100);
 
 
+  osThreadId ret;
+  osThreadDef(lcdDrawProcess, lcdDrawProcess, osPriorityNormal, 0, 1*1024/4);
+  ret = osThreadCreate(osThread(lcdDrawProcess), NULL);
+  if (ret == NULL)
+  {
+    logPrintf("threadCtableCmd Create fail\n");
+  }
+
+
   is_init = true;
 
 #ifdef _USE_HW_CMDIF
@@ -130,6 +138,50 @@ bool lcdInit(void)
 #endif
 
   return true;
+}
+
+static void lcdDrawProcess(void const *argument)
+{
+  (void)argument;
+  uint32_t pre_time;
+  uint32_t delay_time;
+  uint32_t pre_draw_time;
+  uint16_t *p_frame_buffer;
+
+  pre_time = osKernelSysTick();
+
+  delay_time = 1000 / draw_fps;
+  while(1)
+  {
+    osDelayUntil(&pre_time, delay_time);
+
+    if (lcd_request_draw == true)
+    {
+      p_frame_buffer = lcdGetFrameBuffer();
+
+      lcdSwapFrameBuffer();
+      lcd_request_draw = false;
+
+      pre_draw_time = micros();
+      lcd.setWindow(_win_x, _win_y, (_win_x+_win_w)-1, (_win_y+_win_h)-1);
+      lcd.sendBuffer((uint8_t *)p_frame_buffer, _win_w*_win_h*2, 0);
+      draw_frame_time = (micros() - pre_draw_time)/1000;
+    }
+
+    fps_time = millis()-fps_pre_time;
+    if (fps_time > 0)
+    {
+      fps_count = 1000 / fps_time;
+    }
+    fps_pre_time = millis();
+
+    delay_time = 1000 / draw_fps;
+  }
+}
+
+uint32_t lcdGetDrawTime(void)
+{
+  return draw_frame_time;
 }
 
 bool lcdIsInit(void)
@@ -207,26 +259,15 @@ bool lcdGetDoubleBuffer(void)
 
 bool lcdDrawAvailable(void)
 {
-  return is_tx_done;
+  return !lcd_request_draw;
 }
 
 bool lcdRequestDraw(void)
 {
-  if (is_tx_done != true || p_draw_frame_buf == NULL)
+  if (lcd_request_draw != true)
   {
-    return false;
+    lcd_request_draw = true;
   }
-
-  lcdSwapFrameBuffer();
-
-  fps_pre_time = millis();
-
-  lcd.setWindow(_win_x, _win_y, (_win_x+_win_w)-1, (_win_y+_win_h)-1);
-
-  //is_tx_done = false;
-  is_tx_done = true;
-  lcd.sendBuffer((uint8_t *)lcdGetCurrentFrameBuffer(), _win_w*_win_h*2, 0);
-
   return true;
 }
 
@@ -239,12 +280,6 @@ void lcdUpdateDraw(void)
 void lcdSetWindow(uint16_t x, uint16_t y, uint16_t w, uint16_t h)
 {
   lcd.setWindow(x, y, w, h);
-}
-
-void lcdSendBuffer(uint8_t *p_data, uint32_t length, uint32_t timeout_ms)
-{
-  is_tx_done = false;
-  lcd.sendBuffer(p_data, length, timeout_ms);
 }
 
 void lcdSwapFrameBuffer(void)
