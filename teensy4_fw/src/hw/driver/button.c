@@ -51,6 +51,11 @@ typedef struct
   uint32_t    released_start_time;
   uint32_t    released_end_time;
 
+  bool        repeat_update;
+  uint32_t    repeat_cnt;
+  uint32_t    repeat_time_detect;
+  uint32_t    repeat_time_delay;
+  uint32_t    repeat_time;
 } button_t;
 
 
@@ -69,6 +74,7 @@ static bool buttonGetPin(uint8_t ch);
 void button_isr(void *arg)
 {
   uint8_t i;
+  uint32_t repeat_time;
 
 
   for (i=0; i<BUTTON_MAX_CH; i++)
@@ -85,6 +91,25 @@ void button_isr(void *arg)
       button_tbl[i].pressed = true;
       button_tbl[i].pressed_cnt++;
 
+      if (button_tbl[i].repeat_cnt == 0)
+      {
+        repeat_time = button_tbl[i].repeat_time_detect;
+      }
+      else if (button_tbl[i].repeat_cnt == 1)
+      {
+        repeat_time = button_tbl[i].repeat_time_delay;
+      }
+      else
+      {
+        repeat_time = button_tbl[i].repeat_time;
+      }
+      if (button_tbl[i].pressed_cnt >= repeat_time)
+      {
+        button_tbl[i].pressed_cnt = 0;
+        button_tbl[i].repeat_cnt++;
+        button_tbl[i].repeat_update = true;
+      }
+
       button_tbl[i].pressed_end_time = millis();
 
       button_tbl[i].released = false;
@@ -99,6 +124,8 @@ void button_isr(void *arg)
 
       button_tbl[i].pressed  = false;
       button_tbl[i].released = true;
+      button_tbl[i].repeat_cnt = 0;
+      button_tbl[i].repeat_update = false;
 
       button_tbl[i].released_end_time = millis();
     }
@@ -126,6 +153,13 @@ bool buttonInit(void)
     button_tbl[i].pressed        = 0;
     button_tbl[i].released       = 0;
     button_tbl[i].released_event = 0;
+
+    button_tbl[i].repeat_cnt     = 0;
+    button_tbl[i].repeat_time_detect = 50;
+    button_tbl[i].repeat_time_delay  = 150;
+    button_tbl[i].repeat_time        = 200;
+
+    button_tbl[i].repeat_update = false;
   }
 
   h_button_timer = swtimerGetHandle();
@@ -190,14 +224,59 @@ bool buttonGetPressed(uint8_t ch)
   return button_tbl[ch].pressed;
 }
 
-bool buttonOsdGetPressed(uint8_t ch)
+uint8_t  buttonGetPressedCount(void)
 {
-  if (ch >= BUTTON_MAX_CH)
+  uint32_t i;
+  uint8_t ret = 0;
+
+  for (i=0; i<BUTTON_MAX_CH; i++)
   {
-    return false;
+    if (buttonGetPressed(i) == true)
+    {
+      ret++;
+    }
   }
 
-  return button_tbl[ch].pressed;
+  return ret;
+}
+
+void buttonSetRepeatTime(uint8_t ch, uint32_t detect_ms, uint32_t repeat_delay_ms, uint32_t repeat_ms)
+{
+  if (ch >= BUTTON_MAX_CH || is_enable == false) return;
+
+  button_tbl[ch].repeat_update = false;
+  button_tbl[ch].repeat_cnt = 0;
+  button_tbl[ch].pressed_cnt = 0;
+
+  button_tbl[ch].repeat_time_detect = detect_ms;
+  button_tbl[ch].repeat_time_delay  = repeat_delay_ms;
+  button_tbl[ch].repeat_time        = repeat_ms;
+}
+
+uint32_t buttonGetRepeatEvent(uint8_t ch)
+{
+  volatile uint32_t ret = 0;
+
+  if (ch >= BUTTON_MAX_CH || is_enable == false) return 0;
+
+  if (button_tbl[ch].repeat_update)
+  {
+    button_tbl[ch].repeat_update = false;
+    ret = button_tbl[ch].repeat_cnt;
+  }
+
+  return ret;
+}
+
+uint32_t buttonGetRepeatCount(uint8_t ch)
+{
+  volatile uint32_t ret = 0;
+
+  if (ch >= BUTTON_MAX_CH || is_enable == false) return 0;
+
+  ret = button_tbl[ch].repeat_cnt;
+
+  return ret;
 }
 
 bool buttonGetPressedEvent(uint8_t ch)

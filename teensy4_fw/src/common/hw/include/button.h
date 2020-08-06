@@ -33,7 +33,12 @@ bool     buttonGetReleased(uint8_t ch);
 bool     buttonGetReleasedEvent(uint8_t ch);
 uint32_t buttonGetReleasedTime(uint8_t ch);
 
-bool     buttonOsdGetPressed(uint8_t ch);
+uint8_t  buttonGetPressedCount(void);
+
+void     buttonSetRepeatTime(uint8_t ch, uint32_t detect_ms, uint32_t repeat_delay_ms, uint32_t repeat_ms);
+uint32_t buttonGetRepeatEvent(uint8_t ch);
+uint32_t buttonGetRepeatCount(uint8_t ch);
+
 
 #endif
 
