@@ -51,4 +51,5 @@ void hwInit(void)
   sdInit();
 
   lcdInit();
+  i2sInit();
 }

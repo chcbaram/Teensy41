@@ -68,7 +68,7 @@ outputs:
 - {id: GPT1_ipg_clk_highfreq.outFreq, value: 75 MHz}
 - {id: GPT2_ipg_clk_highfreq.outFreq, value: 75 MHz}
 - {id: IPG_CLK_ROOT.outFreq, value: 150 MHz}
-- {id: LCDIF_CLK_ROOT.outFreq, value: 67.5 MHz}
+- {id: LCDIF_CLK_ROOT.outFreq, value: 66 MHz}
 - {id: LPI2C_CLK_ROOT.outFreq, value: 60 MHz}
 - {id: LPSPI_CLK_ROOT.outFreq, value: 132 MHz}
 - {id: LVDS1_CLK.outFreq, value: 1.2 GHz}
@@ -100,7 +100,14 @@ settings:
 - {id: CCM.FLEXSPI2_SEL.sel, value: CCM_ANALOG.PLL2_PFD2_CLK}
 - {id: CCM.FLEXSPI_PODF.scale, value: '3', locked: true}
 - {id: CCM.FLEXSPI_SEL.sel, value: CCM_ANALOG.PLL3_PFD0_CLK}
+- {id: CCM.LCDIF_PRE_CLK_SEL.sel, value: CCM_ANALOG.PLL2_MAIN_CLK}
 - {id: CCM.PERCLK_PODF.scale, value: '2', locked: true}
+- {id: CCM.SAI1_CLK_PODF.scale, value: '8', locked: true}
+- {id: CCM.SAI1_CLK_PRED.scale, value: '1', locked: true}
+- {id: CCM.SAI2_CLK_PODF.scale, value: '8', locked: true}
+- {id: CCM.SAI2_CLK_PRED.scale, value: '1', locked: true}
+- {id: CCM.SAI3_CLK_PODF.scale, value: '8', locked: true}
+- {id: CCM.SAI3_CLK_PRED.scale, value: '1', locked: true}
 - {id: CCM.SEMC_PODF.scale, value: '5'}
 - {id: CCM.USDHC1_CLK_SEL.sel, value: CCM_ANALOG.PLL2_PFD0_CLK}
 - {id: CCM_ANALOG.PLL1_BYPASS.sel, value: CCM_ANALOG.PLL1}
@@ -121,7 +128,11 @@ settings:
 - {id: CCM_ANALOG.PLL3_PFD0_DIV.scale, value: '24', locked: true}
 - {id: CCM_ANALOG.PLL3_PFD0_MUL.scale, value: '18', locked: true}
 - {id: CCM_ANALOG.PLL3_PFD1_BYPASS.sel, value: CCM_ANALOG.PLL3_PFD1}
+- {id: CCM_ANALOG.PLL3_PFD1_DIV.scale, value: '12', locked: true}
+- {id: CCM_ANALOG.PLL3_PFD1_MUL.scale, value: '18', locked: true}
 - {id: CCM_ANALOG.PLL3_PFD2_BYPASS.sel, value: CCM_ANALOG.PLL3_PFD2}
+- {id: CCM_ANALOG.PLL3_PFD2_DIV.scale, value: '17', locked: true}
+- {id: CCM_ANALOG.PLL3_PFD2_MUL.scale, value: '18', locked: true}
 - {id: CCM_ANALOG.PLL3_PFD3_BYPASS.sel, value: CCM_ANALOG.PLL3_PFD3}
 - {id: CCM_ANALOG_PLL_USB1_EN_USB_CLKS_CFG, value: Enabled}
 - {id: CCM_ANALOG_PLL_USB1_EN_USB_CLKS_OUT_CFG, value: Enabled}
@@ -273,25 +284,25 @@ void BOARD_BootClockRUN(void)
     /* Disable SAI1 clock gate. */
     CLOCK_DisableClock(kCLOCK_Sai1);
     /* Set SAI1_CLK_PRED. */
-    CLOCK_SetDiv(kCLOCK_Sai1PreDiv, 3);
+    CLOCK_SetDiv(kCLOCK_Sai1PreDiv, 0);
     /* Set SAI1_CLK_PODF. */
-    CLOCK_SetDiv(kCLOCK_Sai1Div, 1);
+    CLOCK_SetDiv(kCLOCK_Sai1Div, 7);
     /* Set Sai1 clock source. */
     CLOCK_SetMux(kCLOCK_Sai1Mux, 0);
     /* Disable SAI2 clock gate. */
     CLOCK_DisableClock(kCLOCK_Sai2);
     /* Set SAI2_CLK_PRED. */
-    CLOCK_SetDiv(kCLOCK_Sai2PreDiv, 3);
+    CLOCK_SetDiv(kCLOCK_Sai2PreDiv, 0);
     /* Set SAI2_CLK_PODF. */
-    CLOCK_SetDiv(kCLOCK_Sai2Div, 1);
+    CLOCK_SetDiv(kCLOCK_Sai2Div, 7);
     /* Set Sai2 clock source. */
     CLOCK_SetMux(kCLOCK_Sai2Mux, 0);
     /* Disable SAI3 clock gate. */
     CLOCK_DisableClock(kCLOCK_Sai3);
     /* Set SAI3_CLK_PRED. */
-    CLOCK_SetDiv(kCLOCK_Sai3PreDiv, 3);
+    CLOCK_SetDiv(kCLOCK_Sai3PreDiv, 0);
     /* Set SAI3_CLK_PODF. */
-    CLOCK_SetDiv(kCLOCK_Sai3Div, 1);
+    CLOCK_SetDiv(kCLOCK_Sai3Div, 7);
     /* Set Sai3 clock source. */
     CLOCK_SetMux(kCLOCK_Sai3Mux, 0);
     /* Disable Lpi2c clock gate. */
@@ -333,7 +344,7 @@ void BOARD_BootClockRUN(void)
     /* Set LCDIF_CLK_PODF. */
     CLOCK_SetDiv(kCLOCK_LcdifDiv, 3);
     /* Set Lcdif pre clock source. */
-    CLOCK_SetMux(kCLOCK_LcdifPreMux, 5);
+    CLOCK_SetMux(kCLOCK_LcdifPreMux, 0);
     /* Disable SPDIF clock gate. */
     CLOCK_DisableClock(kCLOCK_Spdif);
     /* Set SPDIF0_CLK_PRED. */
@@ -389,7 +400,7 @@ void BOARD_BootClockRUN(void)
     /* Init Usb1 pfd0. */
     CLOCK_InitUsb1Pfd(kCLOCK_Pfd0, 24);
     /* Init Usb1 pfd1. */
-    CLOCK_InitUsb1Pfd(kCLOCK_Pfd1, 16);
+    CLOCK_InitUsb1Pfd(kCLOCK_Pfd1, 12);
     /* Init Usb1 pfd2. */
     CLOCK_InitUsb1Pfd(kCLOCK_Pfd2, 17);
     /* Init Usb1 pfd3. */

@@ -61,9 +61,6 @@ static uint16_t _win_y  = 0;
 
 
 static volatile bool requested_from_thread = false;
-static volatile osMessageQId cmd_q;
-
-
 
 
 
@@ -123,11 +120,11 @@ bool lcdInit(void)
 
 
   osThreadId ret;
-  osThreadDef(lcdDrawProcess, lcdDrawProcess, osPriorityNormal, 0, 1*1024/4);
+  osThreadDef(lcdDrawProcess, lcdDrawProcess, _HW_DEF_RTOS_THREAD_PRI_LCD, 0, _HW_DEF_RTOS_THREAD_MEM_LCD);
   ret = osThreadCreate(osThread(lcdDrawProcess), NULL);
   if (ret == NULL)
   {
-    logPrintf("threadCtableCmd Create fail\n");
+    logPrintf("lcdDrawProcess Create fail\n");
   }
 
 

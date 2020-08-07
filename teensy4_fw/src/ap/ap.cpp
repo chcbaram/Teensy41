@@ -101,6 +101,8 @@ void apMain(void)
 
       if (buttonGetRepeatEvent(_PIN_BUTTON_A))
       {
+        i2sPlayNote(5, 1, 50, 30);
+
         lcdSetBackLight(lcdGetBackLight() + 10);
       }
       if (buttonGetRepeatEvent(_PIN_BUTTON_B))

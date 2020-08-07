@@ -33,6 +33,8 @@ extern "C" {
 #include "adc.h"
 #include "joypad.h"
 #include "pwm.h"
+#include "i2s.h"
+#include "mixer.h"
 
 
 void hwInit(void);

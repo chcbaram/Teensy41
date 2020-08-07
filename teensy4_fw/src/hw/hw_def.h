@@ -18,11 +18,14 @@
 
 #define _HW_DEF_RTOS_THREAD_PRI_MAIN          osPriorityNormal
 #define _HW_DEF_RTOS_THREAD_PRI_CMDIF         osPriorityNormal
+#define _HW_DEF_RTOS_THREAD_PRI_LCD           osPriorityNormal
+#define _HW_DEF_RTOS_THREAD_PRI_I2S           osPriorityAboveNormal
 
 
 #define _HW_DEF_RTOS_THREAD_MEM_MAIN          _HW_DEF_RTOS_MEM_SIZE(12*1024)
 #define _HW_DEF_RTOS_THREAD_MEM_CMDIF         _HW_DEF_RTOS_MEM_SIZE( 6*1024)
-
+#define _HW_DEF_RTOS_THREAD_MEM_LCD           _HW_DEF_RTOS_MEM_SIZE( 1*1024)
+#define _HW_DEF_RTOS_THREAD_MEM_I2S           _HW_DEF_RTOS_MEM_SIZE( 1*1024)
 
 
 
@@ -33,7 +36,7 @@
 #define _USE_HW_PSRAM
 #define _USE_HW_JOYPAD
 #define _USE_HW_RTOS
-
+#define _USE_HW_I2S
 
 
 #define _USE_HW_LED
@@ -70,6 +73,10 @@
 
 #define _USE_HW_PWM
 #define      HW_PWM_MAX_CH          1
+
+#define _USE_HW_MIXER
+#define      HW_MIXER_MAX_CH        8
+#define      HW_MIXER_MAX_BUF_LEN   (16*4*8)
 
 
 

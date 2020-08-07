@@ -102,6 +102,9 @@ BOARD_InitPins:
   - {peripheral: PWM1, signal: 'FAULT, 1', pin_signal: LOGIC_HIGH}
   - {peripheral: PWM1, signal: 'FAULT, 2', pin_signal: LOGIC_HIGH}
   - {peripheral: PWM1, signal: 'FAULT, 3', pin_signal: LOGIC_HIGH}
+  - {pin_num: B11, peripheral: SAI1, signal: sai_tx_data0, pin_signal: GPIO_B1_01, pull_up_down_config: Pull_Up_47K_Ohm, slew_rate: Fast}
+  - {pin_num: D11, peripheral: SAI1, signal: sai_tx_sync, pin_signal: GPIO_B1_03, pull_up_down_config: Pull_Up_47K_Ohm, slew_rate: Fast}
+  - {pin_num: C11, peripheral: SAI1, signal: sai_tx_bclk, pin_signal: GPIO_B1_02, pull_up_down_config: Pull_Up_47K_Ohm, slew_rate: Fast}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 
@@ -279,6 +282,15 @@ void BOARD_InitPins(void) {
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
       IOMUXC_GPIO_B1_00_FLEXPWM1_PWMA03,      /* GPIO_B1_00 is configured as FLEXPWM1_PWMA03 */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_B1_01_SAI1_TX_DATA00,       /* GPIO_B1_01 is configured as SAI1_TX_DATA00 */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_B1_02_SAI1_TX_BCLK,         /* GPIO_B1_02 is configured as SAI1_TX_BCLK */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_B1_03_SAI1_TX_SYNC,         /* GPIO_B1_03 is configured as SAI1_TX_SYNC */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
       IOMUXC_GPIO_EMC_05_GPIO4_IO05,          /* GPIO_EMC_05 is configured as GPIO4_IO05 */
@@ -509,6 +521,36 @@ void BOARD_InitPins(void) {
                                                  Pull / Keep Enable Field: Pull/Keeper Enabled
                                                  Pull / Keep Select Field: Keeper
                                                  Pull Up / Down Config. Field: 100K Ohm Pull Down
+                                                 Hyst. Enable Field: Hysteresis Disabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_B1_01_SAI1_TX_DATA00,       /* GPIO_B1_01 PAD functional properties : */
+      0x50B1U);                               /* Slew Rate Field: Fast Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: medium(100MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Keeper
+                                                 Pull Up / Down Config. Field: 47K Ohm Pull Up
+                                                 Hyst. Enable Field: Hysteresis Disabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_B1_02_SAI1_TX_BCLK,         /* GPIO_B1_02 PAD functional properties : */
+      0x50B1U);                               /* Slew Rate Field: Fast Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: medium(100MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Keeper
+                                                 Pull Up / Down Config. Field: 47K Ohm Pull Up
+                                                 Hyst. Enable Field: Hysteresis Disabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_B1_03_SAI1_TX_SYNC,         /* GPIO_B1_03 PAD functional properties : */
+      0x50B1U);                               /* Slew Rate Field: Fast Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: medium(100MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Keeper
+                                                 Pull Up / Down Config. Field: 47K Ohm Pull Up
                                                  Hyst. Enable Field: Hysteresis Disabled */
   IOMUXC_SetPinConfig(
       IOMUXC_GPIO_EMC_05_GPIO4_IO05,          /* GPIO_EMC_05 PAD functional properties : */

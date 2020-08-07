@@ -162,6 +162,12 @@
 							<inputType id="com.crt.advproject.compiler.input.1133188066" superClass="com.crt.advproject.compiler.input"/>
 						</tool>
 					</fileInfo>
+					<fileInfo id="com.crt.advproject.config.exe.debug.826508571.2142384446" name="mixer.c" rcbsApplicability="disable" resourcePath="src/hw/driver/mixer.c" toolsToInvoke="com.crt.advproject.gcc.exe.debug.173807106.1827032674">
+						<tool id="com.crt.advproject.gcc.exe.debug.173807106.1827032674" name="MCU C Compiler" superClass="com.crt.advproject.gcc.exe.debug.173807106">
+							<option id="com.crt.advproject.gcc.exe.debug.option.optimization.level.1673885443" name="Optimization Level" superClass="com.crt.advproject.gcc.exe.debug.option.optimization.level" useByScannerDiscovery="true" value="gnu.c.optimization.level.more" valueType="enumerated"/>
+							<inputType id="com.crt.advproject.compiler.input.751315184" superClass="com.crt.advproject.compiler.input"/>
+						</tool>
+					</fileInfo>
 					<sourceEntries>
 						<entry excluding="src/bsp/FreeRTOS/Source/portable/GCC/ARM_CM7_MPU|src/bsp/FreeRTOS/Source/portable/GCC/ARM_CM4F|src/bsp/FreeRTOS/Source/portable/GCC/ARM_CM4_MPU|src/bsp/FreeRTOS/Source/portable/GCC/ARM_CM33_NTZ|src/bsp/FreeRTOS/Source/portable/GCC/ARM_CM33|src/bsp/FreeRTOS/Source/portable/GCC/ARM_CM3_MPU|src/bsp/FreeRTOS/Source/portable/GCC/ARM_CM3|src/bsp/FreeRTOS/Source/portable/GCC/ARM_CM23_NTZ|src/bsp/FreeRTOS/Source/portable/GCC/ARM_CM23|src/bsp/FreeRTOS/Source/portable/GCC/ARM_CM0|src/bsp/FreeRTOS/Source/portable/MemMang/heap_5.c|src/bsp/FreeRTOS/Source/portable/MemMang/heap_3.c|src/bsp/FreeRTOS/Source/portable/MemMang/heap_2.c|src/bsp/FreeRTOS/Source/portable/MemMang/heap_1.c|src/bsp/FreeRTOS/Source/portable/Tasking|src/bsp/FreeRTOS/Source/portable/RVDS|src/bsp/FreeRTOS/Source/portable/Keil|src/bsp/FreeRTOS/Source/portable/IAR|src/bsp/FreeRTOS/Source/portable/Common|src/bsp/FreeRTOS/Source/CMSIS_RTOS_V2|src/lib/sdk/drivers/fsl_lpuart_freertos.c|src/lib/sdk/drivers/fsl_lpspi_freertos.c|src/lib/sdk/drivers/fsl_lpi2c_freertos.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
@@ -255,7 +261,7 @@
 &lt;vendor&gt;NXP&lt;/vendor&gt;&#13;
 &lt;memory can_program="true" id="Flash" is_ro="true" size="0" type="Flash"/&gt;&#13;
 &lt;memory id="RAM" size="1024" type="RAM"/&gt;&#13;
-&lt;memoryInstance derived_from="Flash" edited="true" id="FLASH" location="0x60000000" size="0x100000"/&gt;&#13;
+&lt;memoryInstance derived_from="Flash" edited="true" id="FLASH" location="0x60000000" size="0x200000"/&gt;&#13;
 &lt;memoryInstance derived_from="RAM" edited="true" id="SRAM_DTC" location="0x20000000" size="0x20000"/&gt;&#13;
 &lt;memoryInstance derived_from="RAM" edited="true" id="SRAM_ITC" location="0x0" size="0x20000"/&gt;&#13;
 &lt;memoryInstance derived_from="RAM" edited="true" id="SRAM_OC" location="0x20200000" size="0x80000"/&gt;&#13;

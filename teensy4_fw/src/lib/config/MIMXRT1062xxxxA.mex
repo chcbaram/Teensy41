@@ -76,6 +76,11 @@
                         <data>true</data>
                      </feature>
                   </dependency>
+                  <dependency resourceType="Peripheral" resourceId="SAI1" description="Peripheral SAI1 is not initialized" problem_level="1" source="Pins:BOARD_InitPins">
+                     <feature name="initialized" evaluation="equal">
+                        <data>true</data>
+                     </feature>
+                  </dependency>
                   <dependency resourceType="SWComponent" resourceId="platform.drivers.common" description="Pins initialization requires the COMMON Driver in the project." problem_level="2" source="Pins:BOARD_InitPins">
                      <feature name="enabled" evaluation="equal" configuration="core0">
                         <data>true</data>
@@ -396,6 +401,24 @@
                   <pin peripheral="PWM1" signal="FAULT, 1" pin_num="" pin_signal="LOGIC_HIGH"/>
                   <pin peripheral="PWM1" signal="FAULT, 2" pin_num="" pin_signal="LOGIC_HIGH"/>
                   <pin peripheral="PWM1" signal="FAULT, 3" pin_num="" pin_signal="LOGIC_HIGH"/>
+                  <pin peripheral="SAI1" signal="sai_tx_data0" pin_num="B11" pin_signal="GPIO_B1_01">
+                     <pin_features>
+                        <pin_feature name="pull_up_down_config" value="Pull_Up_47K_Ohm"/>
+                        <pin_feature name="slew_rate" value="Fast"/>
+                     </pin_features>
+                  </pin>
+                  <pin peripheral="SAI1" signal="sai_tx_sync" pin_num="D11" pin_signal="GPIO_B1_03">
+                     <pin_features>
+                        <pin_feature name="pull_up_down_config" value="Pull_Up_47K_Ohm"/>
+                        <pin_feature name="slew_rate" value="Fast"/>
+                     </pin_features>
+                  </pin>
+                  <pin peripheral="SAI1" signal="sai_tx_bclk" pin_num="C11" pin_signal="GPIO_B1_02">
+                     <pin_features>
+                        <pin_feature name="pull_up_down_config" value="Pull_Up_47K_Ohm"/>
+                        <pin_feature name="slew_rate" value="Fast"/>
+                     </pin_features>
+                  </pin>
                </pins>
             </function>
          </functions_list>
@@ -463,7 +486,7 @@
                   <clock_output id="GPT1_ipg_clk_highfreq.outFreq" value="75 MHz" locked="false" accuracy=""/>
                   <clock_output id="GPT2_ipg_clk_highfreq.outFreq" value="75 MHz" locked="false" accuracy=""/>
                   <clock_output id="IPG_CLK_ROOT.outFreq" value="150 MHz" locked="false" accuracy=""/>
-                  <clock_output id="LCDIF_CLK_ROOT.outFreq" value="67.5 MHz" locked="false" accuracy=""/>
+                  <clock_output id="LCDIF_CLK_ROOT.outFreq" value="66 MHz" locked="false" accuracy=""/>
                   <clock_output id="LPI2C_CLK_ROOT.outFreq" value="60 MHz" locked="false" accuracy=""/>
                   <clock_output id="LPSPI_CLK_ROOT.outFreq" value="132 MHz" locked="false" accuracy=""/>
                   <clock_output id="LVDS1_CLK.outFreq" value="1.2 GHz" locked="false" accuracy=""/>
@@ -496,7 +519,14 @@
                   <setting id="CCM.FLEXSPI2_SEL.sel" value="CCM_ANALOG.PLL2_PFD2_CLK" locked="false"/>
                   <setting id="CCM.FLEXSPI_PODF.scale" value="3" locked="true"/>
                   <setting id="CCM.FLEXSPI_SEL.sel" value="CCM_ANALOG.PLL3_PFD0_CLK" locked="false"/>
+                  <setting id="CCM.LCDIF_PRE_CLK_SEL.sel" value="CCM_ANALOG.PLL2_MAIN_CLK" locked="false"/>
                   <setting id="CCM.PERCLK_PODF.scale" value="2" locked="true"/>
+                  <setting id="CCM.SAI1_CLK_PODF.scale" value="8" locked="true"/>
+                  <setting id="CCM.SAI1_CLK_PRED.scale" value="1" locked="true"/>
+                  <setting id="CCM.SAI2_CLK_PODF.scale" value="8" locked="true"/>
+                  <setting id="CCM.SAI2_CLK_PRED.scale" value="1" locked="true"/>
+                  <setting id="CCM.SAI3_CLK_PODF.scale" value="8" locked="true"/>
+                  <setting id="CCM.SAI3_CLK_PRED.scale" value="1" locked="true"/>
                   <setting id="CCM.SEMC_PODF.scale" value="5" locked="false"/>
                   <setting id="CCM.USDHC1_CLK_SEL.sel" value="CCM_ANALOG.PLL2_PFD0_CLK" locked="false"/>
                   <setting id="CCM_ANALOG.PLL1_BYPASS.sel" value="CCM_ANALOG.PLL1" locked="false"/>
@@ -517,7 +547,11 @@
                   <setting id="CCM_ANALOG.PLL3_PFD0_DIV.scale" value="24" locked="true"/>
                   <setting id="CCM_ANALOG.PLL3_PFD0_MUL.scale" value="18" locked="true"/>
                   <setting id="CCM_ANALOG.PLL3_PFD1_BYPASS.sel" value="CCM_ANALOG.PLL3_PFD1" locked="false"/>
+                  <setting id="CCM_ANALOG.PLL3_PFD1_DIV.scale" value="12" locked="true"/>
+                  <setting id="CCM_ANALOG.PLL3_PFD1_MUL.scale" value="18" locked="true"/>
                   <setting id="CCM_ANALOG.PLL3_PFD2_BYPASS.sel" value="CCM_ANALOG.PLL3_PFD2" locked="false"/>
+                  <setting id="CCM_ANALOG.PLL3_PFD2_DIV.scale" value="17" locked="true"/>
+                  <setting id="CCM_ANALOG.PLL3_PFD2_MUL.scale" value="18" locked="true"/>
                   <setting id="CCM_ANALOG.PLL3_PFD3_BYPASS.sel" value="CCM_ANALOG.PLL3_PFD3" locked="false"/>
                   <setting id="CCM_ANALOG_PLL_USB1_EN_USB_CLKS_CFG" value="Enabled" locked="false"/>
                   <setting id="CCM_ANALOG_PLL_USB1_EN_USB_CLKS_OUT_CFG" value="Enabled" locked="false"/>
@@ -574,6 +608,26 @@
             <dependency resourceType="SWComponent" resourceId="platform.drivers.pwm" description="Unsupported version of the PWM Driver in the toolchain/IDE project. Required: ${required_value}, actual: ${actual_value}. Project might not compile correctly." problem_level="1" source="Peripherals">
                <feature name="version" evaluation="equivalent">
                   <data type="Version">2.1.0</data>
+               </feature>
+            </dependency>
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.sai" description="SAI Driver not found in the toolchain/IDE project. Project will not compile!" problem_level="2" source="Peripherals">
+               <feature name="enabled" evaluation="equal">
+                  <data type="Boolean">true</data>
+               </feature>
+            </dependency>
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.sai" description="Unsupported version of the SAI Driver in the toolchain/IDE project. Required: ${required_value}, actual: ${actual_value}. Project might not compile correctly." problem_level="1" source="Peripherals">
+               <feature name="version" evaluation="equivalent">
+                  <data type="Version">2.2.1</data>
+               </feature>
+            </dependency>
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.edma" description="EDMA Driver not found in the toolchain/IDE project. Project will not compile!" problem_level="2" source="Peripherals">
+               <feature name="enabled" evaluation="equal">
+                  <data type="Boolean">true</data>
+               </feature>
+            </dependency>
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.edma" description="Unsupported version of the EDMA Driver in the toolchain/IDE project. Required: ${required_value}, actual: ${actual_value}. Project might not compile correctly." problem_level="1" source="Peripherals">
+               <feature name="version" evaluation="equivalent">
+                  <data type="Version">2.3.0</data>
                </feature>
             </dependency>
          </dependencies>
@@ -717,6 +771,46 @@
                   <dependency resourceType="PeripheralUnifiedSignal" resourceId="PWM1.pwm_fault.3" description="PWM1.FAULT, 3 pin needs to be routed Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
                      <feature name="routed" evaluation="equal">
                         <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="SAI1.i2s_txd0" description="SAI1.TX DATA (0) pin needs to be routed Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="SAI1.i2s_tclk" description="SAI1.TX BCLK pin needs to be routed Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="SAI1.i2s_tfs" description="SAI1.TX SYNC pin needs to be routed Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="SWComponent" resourceId="platform.drivers.sai_edma" description="The fsl_sai_edma driver is missing in the project (required for the eDMA mode). Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="enabled" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="SWComponent" resourceId="platform.drivers.sai_edma" description="The compatible version of the fsl_sai_edma driver is not available in the project (required for the eDMA mode). Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="version" evaluation="compatible">
+                        <data type="Version">2.1.5</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="ClockOutput" resourceId="IPG_CLK_ROOT" description="IPG_CLK_ROOT is inactive. Problem must be resolved in another tool." problem_level="2" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="frequency" evaluation="greaterThan">
+                        <data type="Frequency" unit="Hz">0</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="SWComponent" resourceId="platform.drivers.dmamux" description="The fsl_dmamux driver is missing in the project (required for the eDMA). Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="enabled" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="SWComponent" resourceId="platform.drivers.dmamux" description="The compatible version of the fsl_dmamux driver is not available in the project (required for the eDMA). Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="version" evaluation="compatible">
+                        <data type="Version">2.0.2</data>
                      </feature>
                   </dependency>
                </dependencies>
@@ -925,6 +1019,142 @@
                         </struct>
                      </config_set>
                   </instance>
+                  <instance name="SAI1" uuid="13176481-fc6b-416f-8f8c-bbd8c582c3b1" type="sai" type_id="sai_930e9b093093df3f492b3fa05284d81f" mode="edma" peripheral="SAI1" enabled="true" comment="" custom_name_enabled="false">
+                     <config_set name="fsl_sai">
+                        <setting name="usage" value="playback"/>
+                        <array name="signal_config">
+                           <struct name="0">
+                              <setting name="sourceTx" value="Tx"/>
+                           </struct>
+                           <struct name="1">
+                              <setting name="sourceTx" value="Tx"/>
+                           </struct>
+                        </array>
+                        <struct name="syncSwapI"/>
+                        <struct name="bclkTxSetting"/>
+                        <struct name="syncTxSetting"/>
+                        <struct name="whole">
+                           <struct name="tx_group">
+                              <struct name="sai_transceiver">
+                                 <struct name="bitClock">
+                                    <setting name="modeM" value="master"/>
+                                    <setting name="bitClockSource" value="kSAI_BclkSourceBusclk"/>
+                                    <setting name="bitClockSourceFreq" value="BOARD_BootClockRUN"/>
+                                    <setting name="bclkPolarityM" value="kSAI_PolarityActiveLow"/>
+                                    <setting name="bclkInputDelayM" value="false"/>
+                                 </struct>
+                                 <struct name="frameSync">
+                                    <setting name="modeM" value="master"/>
+                                    <setting name="frameSyncWidthM" value="16"/>
+                                    <setting name="frameSyncPolarityM" value="kSAI_PolarityActiveLow"/>
+                                    <setting name="frameSyncEarlyM" value="false"/>
+                                 </struct>
+                                 <setting name="sampleRate_Hz" value="kSAI_SampleRate16KHz"/>
+                                 <set name="channelMask">
+                                    <selected>
+                                       <id>kSAI_Channel0Mask</id>
+                                    </selected>
+                                 </set>
+                                 <struct name="serialData">
+                                    <setting name="dataMode" value="kSAI_DataPinStateTriState"/>
+                                    <setting name="differentFirstWord" value="false"/>
+                                    <setting name="sameDataWordLengthM" value="kSAI_WordWidth16bits"/>
+                                    <setting name="dataOrder" value="kSAI_DataMSB"/>
+                                    <setting name="dataFirstBitShiftedM" value="16"/>
+                                    <setting name="dataWordNumM" value="2"/>
+                                    <struct name="dataMasked_config">
+                                       <array name="dataMasked_L">
+                                          <setting name="0" value="true"/>
+                                          <setting name="1" value="false"/>
+                                          <setting name="2" value="false"/>
+                                          <setting name="3" value="false"/>
+                                          <setting name="4" value="false"/>
+                                          <setting name="5" value="false"/>
+                                          <setting name="6" value="false"/>
+                                          <setting name="7" value="false"/>
+                                          <setting name="8" value="false"/>
+                                          <setting name="9" value="false"/>
+                                          <setting name="10" value="false"/>
+                                          <setting name="11" value="false"/>
+                                          <setting name="12" value="false"/>
+                                          <setting name="13" value="false"/>
+                                          <setting name="14" value="false"/>
+                                          <setting name="15" value="false"/>
+                                       </array>
+                                       <array name="dataMasked_H">
+                                          <setting name="0" value="false"/>
+                                          <setting name="1" value="false"/>
+                                          <setting name="2" value="false"/>
+                                          <setting name="3" value="false"/>
+                                          <setting name="4" value="false"/>
+                                          <setting name="5" value="false"/>
+                                          <setting name="6" value="false"/>
+                                          <setting name="7" value="false"/>
+                                          <setting name="8" value="false"/>
+                                          <setting name="9" value="false"/>
+                                          <setting name="10" value="false"/>
+                                          <setting name="11" value="false"/>
+                                          <setting name="12" value="false"/>
+                                          <setting name="13" value="false"/>
+                                          <setting name="14" value="false"/>
+                                          <setting name="15" value="false"/>
+                                       </array>
+                                    </struct>
+                                 </struct>
+                                 <struct name="fifo">
+                                    <setting name="fifoWatermarkM" value="0"/>
+                                    <setting name="fifoPacking" value="kSAI_FifoPackingDisabled"/>
+                                    <setting name="fifoContinueOneError" value="true"/>
+                                 </struct>
+                              </struct>
+                              <struct name="edma_group">
+                                 <setting name="enable_edma_channel" value="true"/>
+                                 <struct name="edma_channel">
+                                    <setting name="eDMAn" value="0"/>
+                                    <setting name="eDMA_source" value="kDmaRequestMuxSai1Tx"/>
+                                    <setting name="enableTriggerPIT" value="false"/>
+                                    <setting name="init_channel_priority" value="false"/>
+                                    <struct name="edma_channel_Preemption">
+                                       <setting name="enableChannelPreemption" value="false"/>
+                                       <setting name="enablePreemptAbility" value="false"/>
+                                       <setting name="channelPriority" value="0"/>
+                                    </struct>
+                                    <setting name="enable_custom_name" value="false"/>
+                                 </struct>
+                                 <struct name="sai_edma_handle">
+                                    <setting name="enable_custom_name" value="false"/>
+                                    <setting name="init_callback" value="true"/>
+                                    <setting name="callback_fcn" value="i2sCallback"/>
+                                    <setting name="user_data" value=""/>
+                                 </struct>
+                              </struct>
+                           </struct>
+                        </struct>
+                     </config_set>
+                  </instance>
+                  <instance name="DMA0" uuid="40fc011e-ec95-4088-b1b9-59089fb0393f" type="edma" type_id="edma_6d0dd4e17e2f179c7d42d98767129ede" mode="basic" peripheral="DMA0" enabled="true" comment="" custom_name_enabled="false">
+                     <config_set name="fsl_edma" quick_selection="default">
+                        <struct name="common_settings">
+                           <setting name="enableContinuousLinkMode" value="false"/>
+                           <setting name="enableHaltOnError" value="true"/>
+                           <setting name="enableRoundRobinArbitration" value="false"/>
+                           <setting name="enableDebugMode" value="false"/>
+                        </struct>
+                        <array name="dma_table">
+                           <struct name="0"/>
+                        </array>
+                        <array name="edma_channels"/>
+                        <struct name="errInterruptConfig">
+                           <setting name="enableErrInterrupt" value="false"/>
+                           <struct name="errorInterrupt">
+                              <setting name="IRQn" value="DMA_ERROR_IRQn"/>
+                              <setting name="enable_priority" value="false"/>
+                              <setting name="priority" value="0"/>
+                              <setting name="enable_custom_name" value="false"/>
+                           </struct>
+                        </struct>
+                     </config_set>
+                  </instance>
                </instances>
             </functional_group>
          </functional_groups>
@@ -932,7 +1162,7 @@
             <component name="system" uuid="b2527345-7aac-4585-b6ff-5a35e5c2a224" type_id="system_54b53072540eeeb8f8e9343e71f28176">
                <config_set_global name="global_system_definitions"/>
             </component>
-            <component name="msg" uuid="a8b669a7-82f4-4a7a-b1ad-e57bd7041b61" type_id="msg_6e2baaf3b97dbeef01c0043275f9a0e7">
+            <component name="msg" uuid="afb016b0-0277-4bb9-a3d8-9e710f421781" type_id="msg_6e2baaf3b97dbeef01c0043275f9a0e7">
                <config_set_global name="global_messages"/>
             </component>
          </components>

@@ -892,6 +892,7 @@ void EDMA_PrepareTransferConfig(edma_transfer_config_t *config,
                                 uint32_t bytesEachRequest,
                                 uint32_t transferBytes)
 {
+
     assert(config != NULL);
     assert(srcAddr != NULL);
     assert(destAddr != NULL);
