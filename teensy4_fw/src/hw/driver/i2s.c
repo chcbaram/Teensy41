@@ -12,6 +12,7 @@
 #include "cmdif.h"
 #include "wav/wav.h"
 #include <math.h>
+#include "files.h"
 
 
 #ifdef _USE_HW_I2S
@@ -30,6 +31,7 @@ static void i2sCmdif(void);
 static bool is_init = false;
 volatile static bool is_started = false;
 static int16_t send_frame[I2S_MAX_BUF_LEN] = {0, };
+static int16_t buf_frame[I2S_MAX_BUF_LEN];
 
 
 static bool i2sAvailableTxDMA(void);
@@ -218,6 +220,25 @@ bool i2sPlayNote(int8_t octave, int8_t note, uint16_t volume, uint32_t time_ms)
 
 #ifdef _USE_HW_CMDIF
 
+typedef struct wavfile_header_s
+{
+  char    ChunkID[4];     /*  4   */
+  int32_t ChunkSize;      /*  4   */
+  char    Format[4];      /*  4   */
+
+  char    Subchunk1ID[4]; /*  4   */
+  int32_t Subchunk1Size;  /*  4   */
+  int16_t AudioFormat;    /*  2   */
+  int16_t NumChannels;    /*  2   */
+  int32_t SampleRate;     /*  4   */
+  int32_t ByteRate;       /*  4   */
+  int16_t BlockAlign;     /*  2   */
+  int16_t BitsPerSample;  /*  2   */
+
+  char    Subchunk2ID[4];
+  int32_t Subchunk2Size;
+} wavfile_header_t;
+
 
 void i2sCmdif(void)
 {
@@ -247,6 +268,43 @@ void i2sCmdif(void)
       }
       delay(1);
     }
+  }
+  else if (cmdifGetParamCnt() == 1 && cmdifHasString("play_file", 0))
+  {
+    uint8_t ch;
+    FILE *fp;
+    uint32_t r_len;
+
+
+    fp = fopen("sound.wav", "r");
+    if (fp == NULL)
+    {
+      cmdifPrintf("open sound.wav fail\n");
+      return;
+    }
+    fseek(fp, sizeof(wavfile_header_t), SEEK_SET);
+
+
+    r_len = I2S_MAX_FRAME_LEN*4;
+    ch = i2sGetEmptyChannel();
+    while(cmdifRxAvailable() == 0)
+    {
+      int len;
+
+      if (i2sAvailableForWrite(ch) >= r_len)
+      {
+        len = fread(buf_frame, r_len, 2, fp);
+
+        if (len != r_len*2)
+        {
+          break;
+        }
+        i2sWrite(ch, (int16_t *)buf_frame, len);
+      }
+      delay(1);
+    }
+
+    fclose(fp);
   }
   else
   {
