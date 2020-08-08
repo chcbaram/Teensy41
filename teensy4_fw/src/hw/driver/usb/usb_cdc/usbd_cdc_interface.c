@@ -21,12 +21,9 @@
 #include "usb_phy.h"
 
 #include "usbd_cdc_interface.h"
+#include "usb_composite.h"
 
-
-/* USB PHY condfiguration */
-#define BOARD_USB_PHY_D_CAL (0x0CU)
-#define BOARD_USB_PHY_TXCAL45DP (0x06U)
-#define BOARD_USB_PHY_TXCAL45DM (0x06U)
+//#include "reset.h"
 
 
 #define APP_RX_DATA_SIZE  2048
@@ -72,10 +69,14 @@ usb_status_t USB_DeviceCallback(usb_device_handle handle, uint32_t event, void *
 /*******************************************************************************
 * Variables
 ******************************************************************************/
-extern usb_device_endpoint_struct_t g_UsbDeviceCdcVcomDicEndpoints[];
+extern usb_device_endpoint_struct_t g_cdcVcomDicEndpoints[];
 extern usb_device_class_struct_t g_UsbDeviceCdcVcomConfig;
 /* Data structure of virtual com device */
-usb_cdc_vcom_struct_t s_cdcVcom;
+
+volatile static usb_device_composite_struct_t *g_deviceComposite;
+
+
+
 
 /* Line coding of cdc device */
 USB_DMA_INIT_DATA_ALIGN(USB_DATA_ALIGN_SIZE) static uint8_t s_lineCoding[LINE_CODING_SIZE] =
@@ -107,15 +108,7 @@ USB_DMA_NONINIT_DATA_ALIGN(USB_DATA_ALIGN_SIZE) static uint8_t s_currSendBuf[APP
 volatile static uint32_t s_recvSize = 0;
 volatile static uint32_t s_sendSize = 0;
 
-/* USB device class information */
-static usb_device_class_config_struct_t s_cdcAcmConfig[1] = {{
-    USB_DeviceCdcVcomCallback, 0, &g_UsbDeviceCdcVcomConfig,
-}};
 
-/* USB device class configuration information */
-static usb_device_class_config_list_struct_t s_cdcAcmConfigList = {
-    s_cdcAcmConfig, USB_DeviceCallback, 1,
-};
 
 #if defined(FSL_FEATURE_USB_KHCI_KEEP_ALIVE_ENABLED) && (FSL_FEATURE_USB_KHCI_KEEP_ALIVE_ENABLED > 0U) && \
     defined(USB_DEVICE_CONFIG_KEEP_ALIVE_MODE) && (USB_DEVICE_CONFIG_KEEP_ALIVE_MODE > 0U) &&             \
@@ -143,50 +136,15 @@ volatile uint32_t txd_BufPtrOut = 0;
 
 
 
+#define USB_CDC_RESET_MODE_TO_BOOT      1
+#define USB_CDC_RESET_MODE_TO_JUMP      2
 
-void USB_OTG1_IRQHandler(void)
-{
-    USB_DeviceEhciIsrFunction((void *)s_cdcVcom.deviceHandle);
-}
 
-void USB_OTG2_IRQHandler(void)
-{
-    USB_DeviceEhciIsrFunction((void *)s_cdcVcom.deviceHandle);
-}
+volatile uint8_t  cdc_reset_mode = 0;
+volatile uint32_t cdc_reset_delay_cnt = 0;
 
-void USB_DeviceClockInit(void)
-{
-  usb_phy_config_struct_t phyConfig =
-  {
-    BOARD_USB_PHY_D_CAL,
-    BOARD_USB_PHY_TXCAL45DP,
-    BOARD_USB_PHY_TXCAL45DM,
-  };
 
-  if (CONTROLLER_ID == kUSB_ControllerEhci0)
-  {
-    CLOCK_EnableUsbhs0PhyPllClock(kCLOCK_Usbphy480M, 480000000U);
-    CLOCK_EnableUsbhs0Clock(kCLOCK_Usb480M, 480000000U);
-  }
-  else
-  {
-    CLOCK_EnableUsbhs1PhyPllClock(kCLOCK_Usbphy480M, 480000000U);
-    CLOCK_EnableUsbhs1Clock(kCLOCK_Usb480M, 480000000U);
-  }
-  USB_EhciPhyInit(CONTROLLER_ID, BOARD_XTAL0_CLK_HZ, &phyConfig);
-}
 
-void USB_DeviceIsrEnable(void)
-{
-    uint8_t irqNumber;
-
-    uint8_t usbDeviceEhciIrq[] = USBHS_IRQS;
-    irqNumber                  = usbDeviceEhciIrq[CONTROLLER_ID - kUSB_ControllerEhci0];
-
-    /* Install isr, set priority, and enable IRQ. */
-    NVIC_SetPriority((IRQn_Type)irqNumber, USB_DEVICE_INTERRUPT_PRIORITY);
-    EnableIRQ((IRQn_Type)irqNumber);
-}
 
 
 
@@ -200,24 +158,34 @@ void USB_SoF_IRQHandler(void)
   // 수신버퍼가 USB 전송 패킷 이상 남았을때만 수신하도록 함.
   if (usb_rx_full == true)
   {
-    if (rx_buf_length >= g_UsbDeviceCdcVcomDicEndpoints[0].maxPacketSize)
+    if (rx_buf_length >= g_cdcVcomDicEndpoints[0].maxPacketSize)
     {
-      USB_DeviceCdcAcmRecv(s_cdcVcom.cdcAcmHandle, USB_CDC_VCOM_BULK_OUT_ENDPOINT, s_currRecvBuf, rx_buf_length);
+      USB_DeviceCdcAcmRecv(g_deviceComposite->cdcVcom.cdcAcmHandle, USB_CDC_VCOM_DIC_BULK_OUT_ENDPOINT, s_currRecvBuf, rx_buf_length);
       usb_rx_full = false;
     }
   }
 
   CDC_Itf_TxISR();
+
+  if (cdc_reset_delay_cnt > 0)
+  {
+    cdc_reset_delay_cnt--;
+
+    if (cdc_reset_delay_cnt == 0)
+    {
+      //resetRunSoftReset();
+    }
+  }
 }
 
 void CDC_Itf_TxISR(void)
 {
   uint32_t buffsize;
   usb_device_cdc_acm_struct_t *cdcAcmHandle;
-  cdcAcmHandle = (usb_device_cdc_acm_struct_t *)s_cdcVcom.cdcAcmHandle;
+  cdcAcmHandle = (usb_device_cdc_acm_struct_t *)g_deviceComposite->cdcVcom.cdcAcmHandle;
 
 
-  if (s_cdcVcom.attach != 1 || s_cdcVcom.startTransactions != 1) return;
+  if (g_deviceComposite->cdcVcom.attach != 1 || g_deviceComposite->cdcVcom.startTransactions != 1) return;
   if(cdcAcmHandle->bulkIn.isBusy == 1) return;
 
   buffsize = CDC_Itf_TxBufLengh();
@@ -230,7 +198,7 @@ void CDC_Itf_TxISR(void)
   }
 
 
-  USB_DeviceCdcAcmSend(s_cdcVcom.cdcAcmHandle, USB_CDC_VCOM_BULK_IN_ENDPOINT, s_currSendBuf, buffsize);
+  USB_DeviceCdcAcmSend(g_deviceComposite->cdcVcom.cdcAcmHandle, USB_CDC_VCOM_DIC_BULK_IN_ENDPOINT, s_currSendBuf, buffsize);
 }
 
 
@@ -262,15 +230,15 @@ usb_status_t USB_DeviceCdcVcomCallback(class_handle_t handle, uint32_t event, vo
     {
         case kUSB_DeviceCdcEventSendResponse:
         {
-            if ((epCbParam->length != 0) && (!(epCbParam->length % g_UsbDeviceCdcVcomDicEndpoints[0].maxPacketSize)))
+            if ((epCbParam->length != 0) && (!(epCbParam->length % g_cdcVcomDicEndpoints[0].maxPacketSize)))
             {
                 /* If the last packet is the size of endpoint, then send also zero-ended packet,
                  ** meaning that we want to inform the host that we do not have any additional
                  ** data, so it can flush the output.
                  */
-                error = USB_DeviceCdcAcmSend(handle, USB_CDC_VCOM_BULK_IN_ENDPOINT, NULL, 0);
+                error = USB_DeviceCdcAcmSend(handle, USB_CDC_VCOM_DIC_BULK_IN_ENDPOINT, NULL, 0);
             }
-            else if ((1 == s_cdcVcom.attach) && (1 == s_cdcVcom.startTransactions))
+            else if ((1 == g_deviceComposite->cdcVcom.attach) && (1 == g_deviceComposite->cdcVcom.startTransactions))
             {
                 if ((epCbParam->buffer != NULL) || ((epCbParam->buffer == NULL) && (epCbParam->length == 0)))
                 {
@@ -284,9 +252,27 @@ usb_status_t USB_DeviceCdcVcomCallback(class_handle_t handle, uint32_t event, vo
         break;
         case kUSB_DeviceCdcEventRecvResponse:
         {
-            if ((1 == s_cdcVcom.attach) && (1 == s_cdcVcom.startTransactions))
+            if ((1 == g_deviceComposite->cdcVcom.attach) && (1 == g_deviceComposite->cdcVcom.startTransactions))
             {
+              if (epCbParam->length > APP_RX_DATA_SIZE)
+              {
+                break;
+              }
+#if 0
+              if (cdc_reset_mode == USB_CDC_RESET_MODE_TO_BOOT)
+              {
+                resetSetBootMode(RESET_MODE_TO_BOOT);
+                cdc_reset_delay_cnt = 100;
+              }
+              if (cdc_reset_mode == USB_CDC_RESET_MODE_TO_JUMP)
+              {
+                resetSetBootMode(RESET_MODE_TO_JUMP);
+                cdc_reset_delay_cnt = 100;
+              }
+#endif
+
                 s_recvSize = epCbParam->length;
+
 
                 for( i=0; i<epCbParam->length; i++ )
                 {
@@ -306,10 +292,10 @@ usb_status_t USB_DeviceCdcVcomCallback(class_handle_t handle, uint32_t event, vo
                 rx_buf_len = APP_RX_DATA_SIZE - CDC_Itf_RxAvailable() - 1;
 
 
-                if (rx_buf_len >= g_UsbDeviceCdcVcomDicEndpoints[0].maxPacketSize)
+                if (rx_buf_len >= g_cdcVcomDicEndpoints[0].maxPacketSize)
                 {
                   /* Schedule buffer for next receive event */
-                  error = USB_DeviceCdcAcmRecv(handle, USB_CDC_VCOM_BULK_OUT_ENDPOINT, s_currRecvBuf, rx_buf_len);
+                  error = USB_DeviceCdcAcmRecv(handle, USB_CDC_VCOM_DIC_BULK_OUT_ENDPOINT, s_currRecvBuf, rx_buf_len);
                 }
                 else
                 {
@@ -381,7 +367,29 @@ usb_status_t USB_DeviceCdcVcomCallback(class_handle_t handle, uint32_t event, vo
         {
             if (1 == acmReqParam->isSetup)
             {
-                *(acmReqParam->buffer) = s_lineCoding;
+              uint32_t baud;
+
+              *(acmReqParam->buffer) = s_lineCoding;
+
+              baud  = s_lineCoding[0];
+              baud |= s_lineCoding[1]<<8;
+              baud |= s_lineCoding[2]<<16;
+              baud |= s_lineCoding[3]<<24;
+
+
+              if (baud == 1200)
+              {
+                cdc_reset_mode = USB_CDC_RESET_MODE_TO_BOOT;
+              }
+              if (baud == 1201)
+              {
+                cdc_reset_mode = USB_CDC_RESET_MODE_TO_JUMP;
+              }
+
+              if (1 == g_deviceComposite->cdcVcom.attach)
+              {
+                g_deviceComposite->cdcVcom.startTransactions = 1;
+              }
             }
             else
             {
@@ -435,7 +443,7 @@ usb_status_t USB_DeviceCdcVcomCallback(class_handle_t handle, uint32_t event, vo
             len = (uint32_t)(NOTIF_PACKET_SIZE + UART_BITMAP_SIZE);
             if (0 == ((usb_device_cdc_acm_struct_t *)handle)->hasSentState)
             {
-                error = USB_DeviceCdcAcmSend(handle, USB_CDC_VCOM_INTERRUPT_IN_ENDPOINT, acmInfo->serialStateBuf, len);
+                error = USB_DeviceCdcAcmSend(handle, USB_CDC_VCOM_CIC_INTERRUPT_IN_ENDPOINT, acmInfo->serialStateBuf, len);
                 if (kStatus_USB_Success != error)
                 {
                     //usb_echo("kUSB_DeviceCdcEventSetControlLineState error!");
@@ -455,9 +463,9 @@ usb_status_t USB_DeviceCdcVcomCallback(class_handle_t handle, uint32_t event, vo
             if (acmInfo->dteStatus & USB_DEVICE_CDC_CONTROL_SIG_BITMAP_DTE_PRESENCE)
             {
                 /* DTE_ACTIVATED */
-                if (1 == s_cdcVcom.attach)
+                if (1 == g_deviceComposite->cdcVcom.attach)
                 {
-                    s_cdcVcom.startTransactions = 1;
+                  g_deviceComposite->cdcVcom.startTransactions = 1;
 #if defined(FSL_FEATURE_USB_KHCI_KEEP_ALIVE_ENABLED) && (FSL_FEATURE_USB_KHCI_KEEP_ALIVE_ENABLED > 0U) && \
     defined(USB_DEVICE_CONFIG_KEEP_ALIVE_MODE) && (USB_DEVICE_CONFIG_KEEP_ALIVE_MODE > 0U) &&             \
     defined(FSL_FEATURE_USB_KHCI_USB_RAM) && (FSL_FEATURE_USB_KHCI_USB_RAM > 0U)
@@ -471,9 +479,9 @@ usb_status_t USB_DeviceCdcVcomCallback(class_handle_t handle, uint32_t event, vo
             else
             {
                 /* DTE_DEACTIVATED */
-                if (1 == s_cdcVcom.attach)
+                if (1 == g_deviceComposite->cdcVcom.attach)
                 {
-                    s_cdcVcom.startTransactions = 0;
+                  g_deviceComposite->cdcVcom.startTransactions = 0;
                 }
             }
         }
@@ -488,6 +496,47 @@ usb_status_t USB_DeviceCdcVcomCallback(class_handle_t handle, uint32_t event, vo
 }
 
 
+
+/*!
+ * @brief Virtual COM device set configuration function.
+ *
+ * This function sets configuration for CDC class.
+ *
+ * @param handle The CDC ACM class handle.
+ * @param configure The CDC ACM class configure index.
+ *
+ * @return A USB error code or kStatus_USB_Success.
+ */
+usb_status_t USB_DeviceCdcVcomSetConfigure(class_handle_t handle, uint8_t configure)
+{
+    if (USB_COMPOSITE_CONFIGURE_INDEX == configure)
+    {
+        g_deviceComposite->cdcVcom.attach = 1;
+        /* Schedule buffer for receive */
+        USB_DeviceCdcAcmRecv(g_deviceComposite->cdcVcom.cdcAcmHandle, USB_CDC_VCOM_DIC_BULK_OUT_ENDPOINT, s_currRecvBuf,
+                             g_cdcVcomDicEndpoints[0].maxPacketSize);
+    }
+    return kStatus_USB_Success;
+}
+
+
+/*!
+ * @brief Virtual COM device initialization function.
+ *
+ * This function initializes the device with the composite device class information.
+ *
+ * @param deviceComposite The pointer to the composite device structure.
+ *
+ * @return A USB error code or kStatus_USB_Success.
+ */
+usb_status_t USB_DeviceCdcVcomInit(usb_device_composite_struct_t *deviceComposite)
+{
+    g_deviceComposite = deviceComposite;
+    return kStatus_USB_Success;
+}
+
+
+#if 0
 
 /*!
  * @brief USB device callback function.
@@ -583,6 +632,8 @@ usb_status_t USB_DeviceCallback(usb_device_handle handle, uint32_t event, void *
     return error;
 }
 
+#endif
+
 
 void CDC_Itf_Init(void)
 {
@@ -593,28 +644,6 @@ void CDC_Itf_Init(void)
   txd_length      = 0;
   txd_BufPtrIn    = 0;
   txd_BufPtrOut   = 0;
-
-
-  USB_DeviceClockInit();
-
-  s_cdcVcom.speed = USB_SPEED_FULL;
-  s_cdcVcom.attach = 0;
-  s_cdcVcom.cdcAcmHandle = (class_handle_t)NULL;
-  s_cdcVcom.deviceHandle = NULL;
-
-  if (kStatus_USB_Success != USB_DeviceClassInit(CONTROLLER_ID, &s_cdcAcmConfigList, &s_cdcVcom.deviceHandle))
-  {
-      //usb_echo("USB device init failed\r\n");
-  }
-  else
-  {
-      //usb_echo("USB device CDC virtual com demo\r\n");
-      s_cdcVcom.cdcAcmHandle = s_cdcAcmConfigList.config->classHandle;
-  }
-
-  USB_DeviceIsrEnable();
-
-  USB_DeviceRun(s_cdcVcom.deviceHandle);
 }
 
 uint32_t CDC_Itf_GetBaud(void)
@@ -662,7 +691,7 @@ int32_t  CDC_Itf_Write( uint8_t *p_buf, uint32_t length )
   uint32_t ptr_index;
 
 
-  if (s_cdcVcom.attach != 1 || s_cdcVcom.startTransactions != 1)
+  if (g_deviceComposite->cdcVcom.attach != 1 || g_deviceComposite->cdcVcom.startTransactions != 1)
   {
     return -1;
   }
@@ -752,12 +781,12 @@ uint8_t CDC_Itf_TxRead( void )
 bool CDC_Itf_IsConnected(void)
 {
 
-  if (s_cdcVcom.attach != 1)
+  if (g_deviceComposite->cdcVcom.attach != 1)
   {
     return false;
   }
 
-  if (s_cdcVcom.currentConfiguration == 0)
+  if (g_deviceComposite->cdcVcom.currentConfiguration == 0)
   {
     return false;
   }

@@ -39,6 +39,7 @@ typedef struct
 
 
 bool sdInit(void);
+bool sdIsInit(void);
 bool sdDeInit(void);
 void sdTest(void);
 

@@ -52,7 +52,7 @@
 #define USB_DEVICE_CONFIG_CDC_ACM (1U)
 
 /*! @brief MSC instance count */
-#define USB_DEVICE_CONFIG_MSC (0U)
+#define USB_DEVICE_CONFIG_MSC (1U)
 
 /*! @brief Audio instance count */
 #define USB_DEVICE_CONFIG_AUDIO (0U)
@@ -78,7 +78,7 @@
 #define USB_DEVICE_CONFIG_SELF_POWER (1U)
 
 /*! @brief How many endpoints are supported in the stack. */
-#define USB_DEVICE_CONFIG_ENDPOINTS (4U)
+#define USB_DEVICE_CONFIG_ENDPOINTS (5U)
 
 /*! @brief Whether the device task is enabled. */
 #define USB_DEVICE_CONFIG_USE_TASK (0U)

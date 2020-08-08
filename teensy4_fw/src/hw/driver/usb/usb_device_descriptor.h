@@ -1,10 +1,11 @@
 /*
  * Copyright (c) 2015 - 2016, Freescale Semiconductor, Inc.
- * Copyright 2016 NXP
+ * Copyright 2016 - 2017 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
+
 #ifndef _USB_DEVICE_DESCRIPTOR_H_
 #define _USB_DEVICE_DESCRIPTOR_H_ 1
 
@@ -13,11 +14,6 @@
 ******************************************************************************/
 #define USB_DEVICE_SPECIFIC_BCD_VERSION (0x0200)
 #define USB_DEVICE_DEMO_BCD_VERSION (0x0101U)
-
-/* Communication  Class Codes */
-#define CDC_COMM_CLASS (0x02)
-/* Data  Class Codes */
-#define CDC_DATA_CLASS (0x0A)
 
 /* Communication Class SubClass Codes */
 #define USB_CDC_DIRECT_LINE_CONTROL_MODEL (0x01)
@@ -88,33 +84,63 @@
 #define USB_CDC_OBEX_SERVICE_ID_FUNC_DESC (0x19)
 
 /* usb descriptor length */
-#define USB_DESCRIPTOR_LENGTH_CONFIGURATION_ALL (sizeof(g_UsbDeviceConfigurationDescriptor))
+//#define USB_DESCRIPTOR_LENGTH_CONFIGURATION_ALL (sizeof(g_UsbDeviceConfigurationDescriptor))
+
+#define USB_MSC_DISK_REPORT_DESCRIPTOR_LENGTH (63)
+#define USB_CDC_VCOM_REPORT_DESCRIPTOR_LENGTH (33)
+#define USB_IAD_DESC_SIZE (8)
 #define USB_DESCRIPTOR_LENGTH_CDC_HEADER_FUNC (5)
 #define USB_DESCRIPTOR_LENGTH_CDC_CALL_MANAG (5)
 #define USB_DESCRIPTOR_LENGTH_CDC_ABSTRACT (4)
 #define USB_DESCRIPTOR_LENGTH_CDC_UNION_FUNC (5)
 
-/* Configuration, interface and endpoint. */
 #define USB_DEVICE_CONFIGURATION_COUNT (1)
-#define USB_DEVICE_STRING_COUNT (3)
+#define USB_DEVICE_STRING_COUNT (5)
 #define USB_DEVICE_LANGUAGE_COUNT (1)
+#define USB_INTERFACE_COUNT (3)
 
-#define USB_CDC_VCOM_CONFIGURE_INDEX (1)
+#define USB_COMPOSITE_CONFIGURE_INDEX (1)
 
-#define USB_CDC_VCOM_ENDPOINT_CIC_COUNT (1)
-#define USB_CDC_VCOM_ENDPOINT_DIC_COUNT (2)
-#define USB_CDC_VCOM_INTERRUPT_IN_ENDPOINT (1)
-#define USB_CDC_VCOM_BULK_IN_ENDPOINT (2)
-#define USB_CDC_VCOM_BULK_OUT_ENDPOINT (3)
+#define USB_MSC_DISK_CLASS (0x08)
+/* scsi command set */
+#define USB_MSC_DISK_SUBCLASS (0x06)
+/* bulk only transport protocol */
+#define USB_MSC_DISK_PROTOCOL (0x50)
+
+#define USB_MSC_DISK_INTERFACE_COUNT (1)
+#define USB_MSC_DISK_INTERFACE_INDEX (2)
+#define USB_MSC_DISK_ENDPOINT_COUNT (2)
+#define USB_MSC_DISK_BULK_IN_ENDPOINT (1)
+#define USB_MSC_DISK_BULK_OUT_ENDPOINT (2)
+
+#define HS_MSC_DISK_BULK_IN_PACKET_SIZE (512)
+#define FS_MSC_DISK_BULK_IN_PACKET_SIZE (64)
+#define HS_MSC_DISK_BULK_OUT_PACKET_SIZE (512)
+#define FS_MSC_DISK_BULK_OUT_PACKET_SIZE (64)
+
+/* Configuration, interface and endpoint. */
+#define USB_CDC_VCOM_CIC_CLASS (0x02)
+#define USB_CDC_VCOM_CIC_SUBCLASS (0x02)
+#define USB_CDC_VCOM_CIC_PROTOCOL (0x00)
+#define USB_CDC_VCOM_DIC_CLASS (0x0A)
+#define USB_CDC_VCOM_DIC_SUBCLASS (0x00)
+#define USB_CDC_VCOM_DIC_PROTOCOL (0x00)
+
 #define USB_CDC_VCOM_INTERFACE_COUNT (2)
-#define USB_CDC_VCOM_COMM_INTERFACE_INDEX (0)
-#define USB_CDC_VCOM_DATA_INTERFACE_INDEX (1)
+#define USB_CDC_VCOM_CIC_INTERFACE_INDEX (0)
+#define USB_CDC_VCOM_DIC_INTERFACE_INDEX (1)
+#define USB_CDC_VCOM_CIC_ENDPOINT_COUNT (1)
+#define USB_CDC_VCOM_CIC_INTERRUPT_IN_ENDPOINT (4)
+#define USB_CDC_VCOM_DIC_ENDPOINT_COUNT (2)
+#define USB_CDC_VCOM_DIC_BULK_IN_ENDPOINT (3)
+#define USB_CDC_VCOM_DIC_BULK_OUT_ENDPOINT (3)
 
 /* Packet size. */
 #define HS_CDC_VCOM_INTERRUPT_IN_PACKET_SIZE (16)
 #define FS_CDC_VCOM_INTERRUPT_IN_PACKET_SIZE (16)
 #define HS_CDC_VCOM_INTERRUPT_IN_INTERVAL (0x07) /* 2^(7-1) = 8ms */
 #define FS_CDC_VCOM_INTERRUPT_IN_INTERVAL (0x08)
+
 #define HS_CDC_VCOM_BULK_IN_PACKET_SIZE (512)
 #define FS_CDC_VCOM_BULK_IN_PACKET_SIZE (64)
 #define HS_CDC_VCOM_BULK_OUT_PACKET_SIZE (512)
@@ -124,24 +150,18 @@
 #define USB_DESCRIPTOR_LENGTH_STRING0 (sizeof(g_UsbDeviceString0))
 #define USB_DESCRIPTOR_LENGTH_STRING1 (sizeof(g_UsbDeviceString1))
 #define USB_DESCRIPTOR_LENGTH_STRING2 (sizeof(g_UsbDeviceString2))
+#define USB_DESCRIPTOR_LENGTH_STRING3 (sizeof(g_UsbDeviceString3))
+#define USB_DESCRIPTOR_LENGTH_STRING4 (sizeof(g_UsbDeviceString4))
 
 #define USB_DESCRIPTOR_TYPE_CDC_CS_INTERFACE (0x24)
 #define USB_DESCRIPTOR_TYPE_CDC_CS_ENDPOINT (0x25)
 
 /* Class code. */
-#define USB_DEVICE_CLASS (0x02)
-#define USB_DEVICE_SUBCLASS (0x00)
-#define USB_DEVICE_PROTOCOL (0x00)
+#define USB_DEVICE_CLASS (0xEF)
+#define USB_DEVICE_SUBCLASS (0x02)
+#define USB_DEVICE_PROTOCOL (0x01)
 
 #define USB_DEVICE_MAX_POWER (0x32)
-
-#define USB_CDC_VCOM_CIC_CLASS (CDC_COMM_CLASS)
-#define USB_CDC_VCOM_CIC_SUBCLASS (USB_CDC_ABSTRACT_CONTROL_MODEL)
-#define USB_CDC_VCOM_CIC_PROTOCOL (USB_CDC_NO_CLASS_SPECIFIC_PROTOCOL)
-
-#define USB_CDC_VCOM_DIC_CLASS (CDC_DATA_CLASS)
-#define USB_CDC_VCOM_DIC_SUBCLASS (0x00)
-#define USB_CDC_VCOM_DIC_PROTOCOL (USB_CDC_NO_CLASS_SPECIFIC_PROTOCOL)
 
 /*******************************************************************************
 * API
@@ -164,6 +184,11 @@
  * @return A USB error code or kStatus_USB_Success.
  */
 extern usb_status_t USB_DeviceSetSpeed(usb_device_handle handle, uint8_t speed);
+#if (defined(USB_DEVICE_CONFIG_CV_TEST) && (USB_DEVICE_CONFIG_CV_TEST > 0U))
+/* Get device qualifier descriptor request */
+usb_status_t USB_DeviceGetDeviceQualifierDescriptor(
+    usb_device_handle handle, usb_device_get_device_qualifier_descriptor_struct_t *deviceQualifierDescriptor);
+#endif
 /*!
  * @brief USB device get device descriptor function.
  *
@@ -174,8 +199,22 @@ extern usb_status_t USB_DeviceSetSpeed(usb_device_handle handle, uint8_t speed);
  *
  * @return A USB error code or kStatus_USB_Success.
  */
-extern usb_status_t USB_DeviceGetDeviceDescriptor(usb_device_handle handle,
-                                                  usb_device_get_device_descriptor_struct_t *deviceDescriptor);
+usb_status_t USB_DeviceGetDeviceDescriptor(usb_device_handle handle,
+                                           usb_device_get_device_descriptor_struct_t *deviceDescriptor);
+
+/*!
+ * @brief USB device get configuration descriptor function.
+ *
+ * This function gets the configuration descriptor of the USB device.
+ *
+ * @param handle The USB device handle.
+ * @param configurationDescriptor The pointer to the configuration descriptor structure.
+ *
+ * @return A USB error code or kStatus_USB_Success.
+ */
+usb_status_t USB_DeviceGetConfigurationDescriptor(
+    usb_device_handle handle, usb_device_get_configuration_descriptor_struct_t *configurationDescriptor);
+
 /*!
  * @brief USB device get string descriptor function.
  *
@@ -188,16 +227,5 @@ extern usb_status_t USB_DeviceGetDeviceDescriptor(usb_device_handle handle,
  */
 usb_status_t USB_DeviceGetStringDescriptor(usb_device_handle handle,
                                            usb_device_get_string_descriptor_struct_t *stringDescriptor);
-/*!
- * @brief USB device get configuration descriptor function.
- *
- * This function gets the configuration descriptor of the USB device.
- *
- * @param handle The USB device handle.
- * @param configurationDescriptor The pointer to the configuration descriptor structure.
- *
- * @return A USB error code or kStatus_USB_Success.
- */
-extern usb_status_t USB_DeviceGetConfigurationDescriptor(
-    usb_device_handle handle, usb_device_get_configuration_descriptor_struct_t *configurationDescriptor);
+
 #endif /* _USB_DEVICE_DESCRIPTOR_H_ */

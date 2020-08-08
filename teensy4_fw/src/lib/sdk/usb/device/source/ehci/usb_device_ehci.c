@@ -6,12 +6,13 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
+
 #include "usb_device_config.h"
 #include "fsl_device_registers.h"
 #include "usb.h"
-#include "usb_device.h"
 #if ((defined(USB_DEVICE_CONFIG_EHCI)) && (USB_DEVICE_CONFIG_EHCI > 0U))
 
+#include "usb_device.h"
 #include "usb_device_dci.h"
 
 #include "usb_device_ehci.h"

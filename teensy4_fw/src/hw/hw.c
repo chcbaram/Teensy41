@@ -37,7 +37,6 @@ void hwInit(void)
   ledInit();
 
 
-  vcpInit();
   uartInit();
   uartOpen(_DEF_UART1, 57600);
 
@@ -48,12 +47,14 @@ void hwInit(void)
   joypadInit();
   buttonInit();
   pwmInit();
+  memInit();
 
   if (sdInit() == true)
   {
     fatfsInit();
   }
-  memInit();
+  usbdInit();
+
   lcdInit();
   i2sInit();
 }

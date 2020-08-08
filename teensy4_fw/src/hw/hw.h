@@ -38,6 +38,7 @@ extern "C" {
 #include "fatfs.h"
 #include "files.h"
 #include "mem.h"
+#include "usbd.h"
 
 
 void hwInit(void);

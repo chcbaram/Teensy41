@@ -118,6 +118,10 @@ bool sdDeInit(void)
   return ret;
 }
 
+bool sdIsInit(void)
+{
+  return is_init;
+}
 
 bool sdReadBlocks(uint32_t block_addr, uint8_t *p_data, uint32_t num_of_blocks, uint32_t timeout_ms)
 {
