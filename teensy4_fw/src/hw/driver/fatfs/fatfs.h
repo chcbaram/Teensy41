@@ -26,7 +26,7 @@
 
 
 bool fatfsInit(void);
-
+bool fatfsReInit(void);
 
 
 #endif /* _USE_HW_FATFS */

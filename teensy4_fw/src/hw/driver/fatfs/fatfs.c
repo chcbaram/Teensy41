@@ -76,6 +76,27 @@ bool fatfsInit(void)
   return is_init;
 }
 
+bool fatfsReInit(void)
+{
+
+  if (is_init != true)
+  {
+    return false;
+  }
+
+  if(f_mount(NULL, (TCHAR const*)SDPath, 0) != FR_OK)
+  {
+    is_init = false;
+    return false;
+  }
+
+  if(f_mount(&SDFatFs, (TCHAR const*)SDPath, 0) == FR_OK)
+  {
+    is_init = true;
+  }
+
+  return is_init;
+}
 
 void fatfsPrintErr(FRESULT res)
 {
@@ -253,6 +274,17 @@ void fatfsCmdif(void)
     {
       cmdifPrintf(" err : ");
       fatfsPrintErr(res);
+    }
+  }
+  else if (cmdifGetParamCnt() == 1 && cmdifHasString("reinit", 0) == true)
+  {
+    if (fatfsReInit())
+    {
+      cmdifPrintf("fatfsReInit : OK\n");
+    }
+    else
+    {
+      cmdifPrintf("fatfsReInit : Fail\n");
     }
   }
   else if (cmdifGetParamCnt() == 1 && cmdifHasString("test", 0) == true)
