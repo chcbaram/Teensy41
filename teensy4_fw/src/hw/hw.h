@@ -36,6 +36,7 @@ extern "C" {
 #include "i2s.h"
 #include "mixer.h"
 
+#include "fatfs.h"
 
 void hwInit(void);
 

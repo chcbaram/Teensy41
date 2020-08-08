@@ -48,7 +48,11 @@ void hwInit(void)
   joypadInit();
   buttonInit();
   pwmInit();
-  sdInit();
+
+  if (sdInit() == true)
+  {
+    fatfsInit();
+  }
 
   lcdInit();
   i2sInit();

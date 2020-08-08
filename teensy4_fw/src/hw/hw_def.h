@@ -56,6 +56,8 @@
 #define _USE_HW_GPIO
 #define      HW_GPIO_MAX_CH         3
 
+#define _USE_HW_FILES
+#define _USE_HW_FATFS
 #define _USE_HW_SD
 #define      HW_SD_PIN_DETECTED     0
 #define      HW_SD_PIN_PWREN       -1
