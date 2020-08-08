@@ -35,8 +35,10 @@ extern "C" {
 #include "pwm.h"
 #include "i2s.h"
 #include "mixer.h"
-
 #include "fatfs.h"
+#include "files.h"
+#include "mem.h"
+
 
 void hwInit(void);
 

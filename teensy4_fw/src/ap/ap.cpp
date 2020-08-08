@@ -146,6 +146,36 @@ void testCmdif(void)
     cmdifPrintf("GPR16 0x%08X\n", IOMUXC_GPR->GPR16);
     cmdifPrintf("GPR17 0x%08X\n", IOMUXC_GPR->GPR17);
   }
+  else if (cmdifGetParamCnt() == 1 && cmdifHasString("mem", 0) == true)
+  {
+    uint32_t *p_buf;
+
+    p_buf = (uint32_t *)memMalloc(1*1024*1024);
+
+    if (p_buf)
+    {
+      cmdifPrintf("memMalloc OK\n");
+
+      for (uint32_t i=0; i<1*1024*1024/4; i++)
+      {
+        p_buf[i] = i;
+      }
+      for (uint32_t i=0; i<1*1024*1024/4; i++)
+      {
+        if (p_buf[i] != i)
+        {
+          cmdifPrintf("err %d \n", i);
+        }
+      }
+      cmdifPrintf("test finished\n");
+    }
+    else
+    {
+      cmdifPrintf("memMalloc Fail\n");
+    }
+
+
+  }
   else
   {
     ret = false;
@@ -154,5 +184,6 @@ void testCmdif(void)
   if (ret == false)
   {
     cmdifPrintf( "test info \n");
+    cmdifPrintf( "test mem \n");
   }
 }

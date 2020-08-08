@@ -53,7 +53,7 @@ void hwInit(void)
   {
     fatfsInit();
   }
-
+  memInit();
   lcdInit();
   i2sInit();
 }

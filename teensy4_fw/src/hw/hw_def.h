@@ -33,7 +33,6 @@
 #define _USE_HW_MICROS
 #define _USE_HW_VCP
 #define _USE_HW_CLOCKS
-#define _USE_HW_PSRAM
 #define _USE_HW_JOYPAD
 #define _USE_HW_RTOS
 #define _USE_HW_I2S
@@ -55,6 +54,10 @@
 
 #define _USE_HW_GPIO
 #define      HW_GPIO_MAX_CH         3
+
+#define _USE_HW_PSRAM
+#define      HW_PSRAM_ADDR           0x70000000
+#define      HW_PSRAM_LENGTH         (16*1024*1024)
 
 #define _USE_HW_FILES
 #define _USE_HW_FATFS
@@ -79,6 +82,13 @@
 #define _USE_HW_MIXER
 #define      HW_MIXER_MAX_CH        8
 #define      HW_MIXER_MAX_BUF_LEN   (16*4*8)
+
+#define _USE_HW_MEM
+#define      HW_MEM_ADDR            0x70000000
+#define      HW_MEM_LENGTH          (8*1024*1024)
+
+
+
 
 
 
