@@ -35,7 +35,7 @@ void hwInit(void)
   swtimerInit();
   cmdifInit();
   ledInit();
-
+  flashInit();
 
   uartInit();
   uartOpen(_DEF_UART1, 57600);

@@ -36,6 +36,8 @@
 #define _USE_HW_JOYPAD
 #define _USE_HW_RTOS
 #define _USE_HW_I2S
+#define _USE_HW_FLASH
+
 
 
 #define _USE_HW_LED

@@ -39,6 +39,7 @@ extern "C" {
 #include "files.h"
 #include "mem.h"
 #include "usbd.h"
+#include "flash.h"
 
 
 void hwInit(void);
