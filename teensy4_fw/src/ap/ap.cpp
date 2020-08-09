@@ -83,6 +83,12 @@ void apMain(void)
       lcdPrintf(0,16*2, white, "X %03d Y %03d", joypadGetX(), joypadGetY());
       lcdPrintf(0,16*3, white, "밝  기  %d %%", lcdGetBackLight());
 
+      lcdDrawFillRect(0 , 16*4, 30, 30, red);
+      lcdDrawFillRect(30, 16*4, 30, 30, green);
+      lcdDrawFillRect(60, 16*4, 30, 30, blue);
+      lcdPrintf(7,16*4+6, white, "R");
+      lcdPrintf(30+7,16*4+6, white, "G");
+      lcdPrintf(60+7,16*4+6, white, "B");
 
       uint16_t y_offset = 60;
 

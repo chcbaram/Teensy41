@@ -22,7 +22,7 @@
 extern "C" {
 #endif
 
-#if 0
+#if 1
 enum class_color {
  white     = 0xFFFF,
  gray      = 0x8410,

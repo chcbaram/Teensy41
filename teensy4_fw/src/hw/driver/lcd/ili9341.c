@@ -168,6 +168,11 @@ void ili9341InitRegs(void)
   writecommand(ILI9341_GAMMASET);    //Gamma curve selected
   writedata(0x01);
 
+  writecommand(ILI9341_IFCTL); // Interface Control
+  writedata(0x01);
+  writedata(0x00);
+  writedata(0x20); // Little Endian
+
 
   writecommand(ILI9341_GMCTRP1);    //Set Gamma
   writedata(0x0F);
@@ -202,6 +207,7 @@ void ili9341InitRegs(void)
   writedata(0x31);
   writedata(0x36);
   writedata(0x0F);
+
 
   writecommand(ILI9341_SLPOUT);    //Exit Sleep
 
