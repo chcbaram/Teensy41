@@ -18,6 +18,7 @@
 
 
 void rtosInit(void);
+bool rtosIsStarted(void);
 
 
 #ifdef __cplusplus

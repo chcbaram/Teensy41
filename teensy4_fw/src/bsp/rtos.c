@@ -20,6 +20,19 @@ void rtosInit(void)
 }
 
 
+bool rtosIsStarted(void)
+{
+  if (xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED)
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+
 void vApplicationStackOverflowHook(xTaskHandle xTask,
                                    signed portCHAR* pcTaskName)
 {

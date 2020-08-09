@@ -518,7 +518,9 @@ static uint32_t instance = 0; // Should identify NOR memory instance
 
 bool _flashInit(void)
 {
-  option.option0.U = 0xC0000008; // QuadSPI NOR, Frequency: 133MHz
+  //option.option0.U = 0xC0000008; // QuadSPI NOR, Frequency: 133MHz
+  option.option0.U = 0xC0100003; // QuadSPI NOR, Frequency: 133MHz
+
 
 
   // Need to run with interrupts disabled as all our code is running out of FlexSPI2 (internal NOT flash in RT1064)
@@ -531,14 +533,14 @@ bool _flashInit(void)
     __enable_irq();
     return false;
   }
-//#if !(defined(XIP_EXTERNAL_FLASH) && (XIP_EXTERNAL_FLASH == 1))
+#if !(defined(XIP_EXTERNAL_FLASH) && (XIP_EXTERNAL_FLASH == 1))
   status = flexspi_nor_flash_init(instance, &config);
   if (status != kStatus_Success)
   {
     __enable_irq();
     return false;
   }
-//#endif
+#endif
   __enable_irq();
   return true;
 }

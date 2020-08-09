@@ -119,6 +119,7 @@
 								<option id="gnu.c.compiler.option.misc.other.1048680497" name="Other flags" superClass="gnu.c.compiler.option.misc.other" useByScannerDiscovery="false" value="-c -fmessage-length=0 -ffunction-sections -fdata-sections -ffreestanding -fno-builtin" valueType="string"/>
 								<option id="com.crt.advproject.gcc.fpu.626251007" name="Floating point" superClass="com.crt.advproject.gcc.fpu" useByScannerDiscovery="true" value="com.crt.advproject.gcc.fpu.fpv5dp.hard" valueType="enumerated"/>
 								<option id="com.crt.advproject.gcc.arch.1931020008" name="Architecture" superClass="com.crt.advproject.gcc.arch" useByScannerDiscovery="true"/>
+								<option id="com.crt.advproject.gcc.merge.constants.863592571" name="Merge Identical Constants (-fmerge-constants)" superClass="com.crt.advproject.gcc.merge.constants" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<inputType id="com.crt.advproject.compiler.input.1320336633" superClass="com.crt.advproject.compiler.input"/>
 							</tool>
 							<tool id="com.crt.advproject.gas.exe.debug.1922141509" name="MCU Assembler" superClass="com.crt.advproject.gas.exe.debug">
@@ -170,12 +171,6 @@
 						<tool id="com.crt.advproject.gcc.exe.debug.173807106.1132184968" name="MCU C Compiler" superClass="com.crt.advproject.gcc.exe.debug.173807106">
 							<option id="com.crt.advproject.gcc.exe.debug.option.optimization.level.869142319" name="Optimization Level" superClass="com.crt.advproject.gcc.exe.debug.option.optimization.level" useByScannerDiscovery="true" value="gnu.c.optimization.level.more" valueType="enumerated"/>
 							<inputType id="com.crt.advproject.compiler.input.1133188066" superClass="com.crt.advproject.compiler.input"/>
-						</tool>
-					</fileInfo>
-					<fileInfo id="com.crt.advproject.config.exe.debug.826508571.2142384446" name="mixer.c" rcbsApplicability="disable" resourcePath="src/hw/driver/mixer.c" toolsToInvoke="com.crt.advproject.gcc.exe.debug.173807106.1827032674">
-						<tool id="com.crt.advproject.gcc.exe.debug.173807106.1827032674" name="MCU C Compiler" superClass="com.crt.advproject.gcc.exe.debug.173807106">
-							<option id="com.crt.advproject.gcc.exe.debug.option.optimization.level.1673885443" name="Optimization Level" superClass="com.crt.advproject.gcc.exe.debug.option.optimization.level" useByScannerDiscovery="true" value="gnu.c.optimization.level.more" valueType="enumerated"/>
-							<inputType id="com.crt.advproject.compiler.input.751315184" superClass="com.crt.advproject.compiler.input"/>
 						</tool>
 					</fileInfo>
 					<sourceEntries>

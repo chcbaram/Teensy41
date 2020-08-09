@@ -52,7 +52,14 @@
 
 /* Variables */
 extern int errno;
-register char * stack_ptr asm("sp");
+
+
+
+
+extern char _pvHeapStart;
+extern char _pvHeapLimit;
+extern char _HeapSize;
+
 
 /* Functions */
 
@@ -62,24 +69,19 @@ register char * stack_ptr asm("sp");
 **/
 caddr_t _sbrk(int incr)
 {
-  extern char end asm("end");
-  static char *heap_end;
+  static char *heap_end = &_pvHeapStart;
   char *prev_heap_end;
 
-  if (heap_end == 0)
-    heap_end = &end;
 
   prev_heap_end = heap_end;
 
 
-  // TODO : malloc 실패 처리 추가.
-  /*
-  if (heap_end + incr > stack_ptr)
+  if (heap_end + incr > &_pvHeapLimit)
   {
     errno = ENOMEM;
     return (caddr_t) -1;
   }
-  */
+
 
   heap_end += incr;
 

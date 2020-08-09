@@ -39,7 +39,7 @@ void bspDeInit(void);
 extern void delay(uint32_t delay_ms);
 extern uint32_t millis(void);
 extern uint32_t micros(void);
-
+extern bool rtosIsStarted(void);
 
 #ifdef __cplusplus
 }

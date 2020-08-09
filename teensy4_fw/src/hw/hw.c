@@ -54,7 +54,11 @@ void hwInit(void)
     fatfsInit();
   }
   usbdInit();
+  delay(100);
 
   lcdInit();
   i2sInit();
+  audioInit();
+
+
 }

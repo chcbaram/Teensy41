@@ -40,6 +40,7 @@ extern "C" {
 #include "mem.h"
 #include "usbd.h"
 #include "flash.h"
+#include "audio.h"
 
 
 void hwInit(void);

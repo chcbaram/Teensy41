@@ -24,7 +24,11 @@ FILE *ob_fopen(const char *filename, const char *mode)
 
   fil = malloc(sizeof(FIL));
   if (!fil)
+  {
+    printf("malloc fail\n");
     return NULL;
+  }
+
 
   for (i=0; mode[i] != 0; i++) {
     switch (mode[i]) {

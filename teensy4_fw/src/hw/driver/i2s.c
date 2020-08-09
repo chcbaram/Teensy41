@@ -142,6 +142,11 @@ int8_t i2sGetEmptyChannel(void)
   return mixerGetEmptyChannel();
 }
 
+uint32_t i2sGetFrameSize(void)
+{
+  return I2S_MAX_FRAME_LEN;
+}
+
 // https://m.blog.naver.com/PostView.nhn?blogId=hojoon108&logNo=80145019745&proxyReferer=https:%2F%2Fwww.google.com%2F
 //
 float i2sGetNoteHz(int8_t octave, int8_t note)
@@ -299,7 +304,7 @@ void i2sCmdif(void)
         {
           break;
         }
-        i2sWrite(ch, (int16_t *)buf_frame, len);
+        i2sWrite(ch, (int16_t *)buf_frame, r_len);
       }
       delay(1);
     }

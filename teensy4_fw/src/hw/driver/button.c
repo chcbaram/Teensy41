@@ -162,7 +162,7 @@ bool buttonInit(void)
 
     button_tbl[i].repeat_cnt     = 0;
     button_tbl[i].repeat_time_detect = 50;
-    button_tbl[i].repeat_time_delay  = 150;
+    button_tbl[i].repeat_time_delay  = 250;
     button_tbl[i].repeat_time        = 200;
 
     button_tbl[i].repeat_update = false;

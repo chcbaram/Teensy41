@@ -56,6 +56,10 @@ void apMain(void)
   uint16_t x = 0;
   uint16_t y = 0;
 
+  audio_t audio;
+
+  audioOpen(&audio);
+
 
   pre_time = micros();
   while(1)
@@ -107,12 +111,21 @@ void apMain(void)
 
       if (buttonGetRepeatEvent(_PIN_BUTTON_A))
       {
-        i2sPlayNote(5, 1, 50, 30);
-
+        audioPlayNote(5, 1, 30);
         lcdSetBackLight(lcdGetBackLight() + 10);
+      }
+      if (buttonGetRepeatEvent(_PIN_BUTTON_SELECT))
+      {
+        audioStopFile(&audio);
+      }
+      if (buttonGetRepeatEvent(_PIN_BUTTON_START))
+      {
+        audioPlayFile(&audio, "sound.wav", false);
       }
       if (buttonGetRepeatEvent(_PIN_BUTTON_B))
       {
+        audioPlayNote(5, 1, 30);
+
         if (lcdGetBackLight() >= 10)
         {
           lcdSetBackLight(lcdGetBackLight() - 10);
