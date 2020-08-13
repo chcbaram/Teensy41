@@ -41,6 +41,8 @@ extern "C" {
 #include "usbd.h"
 #include "flash.h"
 #include "audio.h"
+#include "resize.h"
+#include "lvgl/lvgl.h"
 
 
 void hwInit(void);
