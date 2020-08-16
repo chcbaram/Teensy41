@@ -87,9 +87,6 @@ bool pxpResize(pxp_resize_t *p_src, pxp_resize_t *p_dst)
     p_src->stride = p_src->w;
   }
   psBufferConfig.pitchBytes = p_src->stride * PXP_BPP;
-  //DCACHE_CleanByRange(psBufferConfig.bufferAddr, p_src->w*p_src->h*PXP_BPP);
-  L1CACHE_CleanDCache();
-  //L1CACHE_InvalidateDCache();
   PXP_SetProcessSurfaceBufferConfig(PXP, &psBufferConfig);
 
 
@@ -104,6 +101,8 @@ bool pxpResize(pxp_resize_t *p_src, pxp_resize_t *p_dst)
   PXP_SetOutputBufferConfig(PXP, &outputBufferConfig);
 
   PXP_SetProcessBlockSize(PXP, kPXP_BlockSize16);
+
+  L1CACHE_CleanDCache();
 
   PXP_Start(PXP);
 
