@@ -12,7 +12,7 @@
 #include "lcd.h"
 
 #include "fsl_pxp.h"
-
+#include "fsl_cache.h"
 
 typedef uint16_t pixel_t;
 #define PXP_BPP         2U                          /* Use 16-bit RGB565 format. */
@@ -81,12 +81,15 @@ bool pxpResize(pxp_resize_t *p_src, pxp_resize_t *p_dst)
   PXP_SetProcessSurfacePosition(PXP, 0, 0, p_dst->w - 1U, p_dst->h - 1U);
 
 
-  psBufferConfig.bufferAddr = (uint32_t)p_src->p_data;
+  psBufferConfig.bufferAddr = (uint32_t)&p_src->p_data[p_src->y*p_src->stride + p_src->x];
   if (p_src->stride == 0)
   {
     p_src->stride = p_src->w;
   }
   psBufferConfig.pitchBytes = p_src->stride * PXP_BPP;
+  //DCACHE_CleanByRange(psBufferConfig.bufferAddr, p_src->w*p_src->h*PXP_BPP);
+  L1CACHE_CleanDCache();
+  //L1CACHE_InvalidateDCache();
   PXP_SetProcessSurfaceBufferConfig(PXP, &psBufferConfig);
 
 
@@ -99,6 +102,8 @@ bool pxpResize(pxp_resize_t *p_src, pxp_resize_t *p_dst)
   outputBufferConfig.width       = p_dst->w;
   outputBufferConfig.height      = p_dst->h;
   PXP_SetOutputBufferConfig(PXP, &outputBufferConfig);
+
+  PXP_SetProcessBlockSize(PXP, kPXP_BlockSize16);
 
   PXP_Start(PXP);
 
@@ -114,6 +119,8 @@ bool pxpResize(pxp_resize_t *p_src, pxp_resize_t *p_dst)
     }
   }
   PXP_ClearStatusFlags(PXP, kPXP_CompleteFlag);
+
+  DCACHE_InvalidateByRange(outputBufferConfig.buffer0Addr, p_dst->w*p_dst->h*PXP_BPP);
 
   return ret;
 }

@@ -9,6 +9,7 @@
 
 
 #include "resize.h"
+#include "pxp.h"
 #include <math.h>
 
 
@@ -388,3 +389,7 @@ void resizeImageNearest(resize_image_t *src, resize_image_t *dest)
   }
 }
 
+void resizeImageFastPxp(resize_image_t *src, resize_image_t *dest)
+{
+  pxpResize((pxp_resize_t*)src, (pxp_resize_t *)dest);
+}

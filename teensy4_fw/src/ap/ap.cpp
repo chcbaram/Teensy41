@@ -175,21 +175,22 @@ void apMain(void)
       r_src.stride = image_src.header.w;
 
       r_dst.x = 0;
-      r_dst.y = 16;
-      r_dst.w = 320 * (resize_ratio+1)/10;
-      r_dst.h = (240-16) * (resize_ratio+1)/10;
-      //r_dst.w = 320;
-      //r_dst.h = 240-16;
+      r_dst.y = 16*2;
+      //r_dst.w = 320 * (resize_ratio+1)/10;
+      //r_dst.h = (240-16) * (resize_ratio+1)/10;
+      r_dst.w = 320;
+      r_dst.h = 240-16;
       r_dst.p_data = lcdGetFrameBuffer();
       r_dst.stride = LCD_WIDTH;
 
-      resizeImageFastOffset(&r_src, &r_dst);
+      //resizeImageFastOffset(&r_src, &r_dst);
+      resizeImageFastPxp(&r_src, &r_dst);
 
       //if (resize_time < (micros()-pre_time_resize)/1000)
       {
         resize_time = (micros()-pre_time_resize)/1000;
       }
-      lcdPrintf(0,16*1, red, "%d ms", resize_time);
+      lcdPrintf(0,16*2, red, "%d ms", resize_time);
 
 
       x += 2;

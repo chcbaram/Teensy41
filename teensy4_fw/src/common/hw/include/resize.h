@@ -31,6 +31,7 @@ void resizeImage(resize_image_t *src, resize_image_t *dest);
 void resizeImageNearest(resize_image_t *src, resize_image_t *dest);
 void resizeImageFast(resize_image_t *src, resize_image_t *dest);
 void resizeImageFastOffset(resize_image_t *src, resize_image_t *dest);
+void resizeImageFastPxp(resize_image_t *src, resize_image_t *dest);
 
 
 #ifdef __cplusplus
