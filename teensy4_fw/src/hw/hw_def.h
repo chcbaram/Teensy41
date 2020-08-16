@@ -39,6 +39,7 @@
 #define _USE_HW_I2S
 #define _USE_HW_FLASH
 #define _USE_HW_AUDIO
+#define _USE_HW_PXP
 
 
 #define _USE_HW_LED

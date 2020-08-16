@@ -42,6 +42,7 @@ extern "C" {
 #include "flash.h"
 #include "audio.h"
 #include "resize.h"
+#include "pxp.h"
 #include "lvgl/lvgl.h"
 
 

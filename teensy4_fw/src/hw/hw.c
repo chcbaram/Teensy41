@@ -56,6 +56,7 @@ void hwInit(void)
   usbdInit();
   delay(100);
 
+  pxpInit();
   lcdInit();
   i2sInit();
   audioInit();
