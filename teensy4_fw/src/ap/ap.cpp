@@ -183,8 +183,8 @@ void apMain(void)
       r_dst.p_data = lcdGetFrameBuffer();
       r_dst.stride = LCD_WIDTH;
 
-      //resizeImageFastOffset(&r_src, &r_dst);
-      resizeImageFastPxp(&r_src, &r_dst);
+      resizeImageFastOffset(&r_src, &r_dst);
+      //resizeImageFastPxp(&r_src, &r_dst);
 
       //if (resize_time < (micros()-pre_time_resize)/1000)
       {

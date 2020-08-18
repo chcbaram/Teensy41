@@ -244,6 +244,31 @@ typedef struct wavfile_header_s
   int32_t Subchunk2Size;
 } wavfile_header_t;
 
+#include "mp3/mp3dec.h"
+
+
+#define READBUF_SIZE  1940
+
+uint8_t read_buf [READBUF_SIZE*2];
+uint8_t *read_ptr;
+int16_t out_buf  [2 * 1152];
+int     bytes_left;
+
+static int fillReadBuffer(uint8_t *read_buf, uint8_t *read_ptr, int buf_size, int bytes_left, FILE *infile)
+{
+  int nRead;
+
+  /* move last, small chunk from end of buffer to start, then fill with new data */
+  memmove(read_buf, read_ptr, bytes_left);
+  nRead = fread( read_buf + bytes_left, 1, buf_size - bytes_left, infile);
+  /* zero-pad to avoid finding false sync word after last frame (from old data in readBuf) */
+  if (nRead < buf_size - bytes_left)
+  {
+    memset(read_buf + bytes_left + nRead, 0, buf_size - bytes_left - nRead);
+  }
+  return nRead;
+}
+
 
 void i2sCmdif(void)
 {
@@ -310,6 +335,138 @@ void i2sCmdif(void)
     }
 
     fclose(fp);
+  }
+  else if (cmdifGetParamCnt() == 1 && cmdifHasString("mp3", 0))
+  {
+    HMP3Decoder h_dec;
+
+    h_dec = MP3InitDecoder();
+
+    if (h_dec != 0)
+    {
+      MP3FrameInfo frameInfo;
+      FILE *fp;
+
+      cmdifPrintf("init ok\n");
+
+
+      fp = fopen( "mp3.mp3", "r" );
+
+      if( fp == NULL )
+      {
+        printf( "File is null\n" );
+        return;
+      }
+      else
+      {
+        printf( "File is not null\n" );
+      }
+
+      int offset;
+      int err;
+      int n_read;
+
+      //fread( buf, 4096, 1, fp );
+
+      bytes_left = 0;
+      read_ptr = read_buf;
+
+      n_read = fillReadBuffer(read_buf, read_ptr, READBUF_SIZE, bytes_left, fp);
+      bytes_left += n_read;
+      read_ptr = read_buf;
+
+      n_read = MP3FindSyncWord(read_ptr, READBUF_SIZE);
+      printf("Offset: %d\n", n_read);
+
+      bytes_left -= n_read;
+      read_ptr += n_read;
+
+      n_read = fillReadBuffer(read_buf, read_ptr, READBUF_SIZE, bytes_left, fp);
+      bytes_left += n_read;
+      read_ptr = read_buf;
+
+
+      err = MP3GetNextFrameInfo(h_dec, &frameInfo, read_ptr);
+      if (err != ERR_MP3_INVALID_FRAMEHEADER)
+      {
+        cmdifPrintf("samplerate     %d\n", frameInfo.samprate);
+        cmdifPrintf("bitrate        %d\n", frameInfo.bitrate);
+        cmdifPrintf("nChans         %d\n", frameInfo.nChans);
+        cmdifPrintf("outputSamps    %d\n", frameInfo.outputSamps);
+        cmdifPrintf("bitsPerSample  %d\n", frameInfo.bitsPerSample);
+
+        SAI_TxSetBitClockRate(SAI1_PERIPHERAL, SAI1_TX_BCLK_SOURCE_CLOCK_HZ, frameInfo.samprate/2, SAI1_TX_WORD_WIDTH, SAI1_TX_WORDS_PER_FRAME);
+      }
+
+
+      while(cmdifRxAvailable() == 0)
+      {
+        osThreadYield();
+
+        if (bytes_left < READBUF_SIZE)
+        {
+          n_read = fillReadBuffer(read_buf, read_ptr, READBUF_SIZE*2, bytes_left, fp);
+          if (n_read == 0 )
+          {
+            break;
+          }
+          bytes_left += n_read;
+          read_ptr = read_buf;
+        }
+        uint32_t pre_time;
+
+        pre_time = micros();
+        n_read = MP3FindSyncWord(read_ptr, bytes_left);
+        if (n_read >= 0)
+        {
+          read_ptr += n_read;
+          bytes_left -= n_read;
+
+
+          //fill the inactive outbuffer
+          err = MP3Decode(h_dec, &read_ptr, (int*) &bytes_left, out_buf, 0);
+          //cmdifPrintf("%d us\n", micros()-pre_time);
+
+          if (err)
+          {
+            // sometimes we have a bad frame, lets just nudge forward one byte
+            if (err == ERR_MP3_INVALID_FRAMEHEADER)
+            {
+              read_ptr   += 1;
+              bytes_left -= 1;
+            }
+          }
+          else
+          {
+            //cmdifPrintf("%d \n", bytes_left);
+
+
+            int index = 0;
+            int16_t i2s_buf[I2S_MAX_FRAME_LEN];
+
+            for (int i=0; i<1152*2; i+=4)
+            {
+              i2s_buf[index] = out_buf[i]/4;
+              index++;
+
+              if (index == I2S_MAX_FRAME_LEN)
+              {
+                index = 0;
+                while(i2sAvailableForWrite(0) < I2S_MAX_FRAME_LEN)
+                {
+                  osThreadYield();
+                }
+                i2sWrite(0, (int16_t *)i2s_buf, I2S_MAX_FRAME_LEN);
+                delay(1);
+              }
+            }
+          }
+          delay(1);
+        }
+
+      }
+      fclose(fp);
+    }
   }
   else
   {
