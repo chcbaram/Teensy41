@@ -442,21 +442,22 @@ void i2sCmdif(void)
 
 
             int index = 0;
-            int16_t i2s_buf[I2S_MAX_FRAME_LEN];
+            int buf_len = 1152*2 / 4 / 4;
+            int16_t i2s_buf[buf_len];
 
             for (int i=0; i<1152*2; i+=4)
             {
               i2s_buf[index] = out_buf[i]/4;
               index++;
 
-              if (index == I2S_MAX_FRAME_LEN)
+              if (index == buf_len)
               {
                 index = 0;
-                while(i2sAvailableForWrite(0) < I2S_MAX_FRAME_LEN)
+                while(i2sAvailableForWrite(0) < buf_len)
                 {
                   osThreadYield();
                 }
-                i2sWrite(0, (int16_t *)i2s_buf, I2S_MAX_FRAME_LEN);
+                i2sWrite(0, (int16_t *)i2s_buf, buf_len);
                 delay(1);
               }
             }
