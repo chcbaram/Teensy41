@@ -254,6 +254,16 @@ bool lcdGetDoubleBuffer(void)
   return is_double_buffer;
 }
 
+uint32_t lcdGetFps(void)
+{
+  return fps_count;
+}
+
+uint32_t lcdGetFpsTime(void)
+{
+  return fps_time;
+}
+
 bool lcdDrawAvailable(void)
 {
   return !lcd_request_draw;
