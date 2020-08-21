@@ -161,7 +161,7 @@ bool buttonInit(void)
     button_tbl[i].released_event = 0;
 
     button_tbl[i].repeat_cnt     = 0;
-    button_tbl[i].repeat_time_detect = 50;
+    button_tbl[i].repeat_time_detect = 60;
     button_tbl[i].repeat_time_delay  = 250;
     button_tbl[i].repeat_time        = 200;
 
@@ -213,10 +213,10 @@ bool buttonGetPin(uint8_t ch)
   {
     bool ret = false;
 
-    if (ch == _DEF_HW_BTN_LEFT  && joypadGetPressedButton(JOYPAD_LEFT))   ret = true;
-    if (ch == _DEF_HW_BTN_RIGHT && joypadGetPressedButton(JOYPAD_RIGHT))  ret = true;
-    if (ch == _DEF_HW_BTN_UP    && joypadGetPressedButton(JOYPAD_UP))     ret = true;
-    if (ch == _DEF_HW_BTN_DOWN  && joypadGetPressedButton(JOYPAD_DOWN))   ret = true;
+    if (ch == _PIN_BUTTON_LEFT  && joypadGetPressedButton(JOYPAD_LEFT))   ret = true;
+    if (ch == _PIN_BUTTON_RIGHT && joypadGetPressedButton(JOYPAD_RIGHT))  ret = true;
+    if (ch == _PIN_BUTTON_UP    && joypadGetPressedButton(JOYPAD_UP))     ret = true;
+    if (ch == _PIN_BUTTON_DOWN  && joypadGetPressedButton(JOYPAD_DOWN))   ret = true;
 
     return ret;
   }

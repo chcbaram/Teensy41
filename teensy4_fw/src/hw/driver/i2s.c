@@ -362,7 +362,7 @@ void i2sCmdif(void)
         printf( "File is not null\n" );
       }
 
-      int offset;
+      //int offset;
       int err;
       int n_read;
 
@@ -413,9 +413,9 @@ void i2sCmdif(void)
           bytes_left += n_read;
           read_ptr = read_buf;
         }
-        uint32_t pre_time;
+        //uint32_t pre_time;
 
-        pre_time = micros();
+        //pre_time = micros();
         n_read = MP3FindSyncWord(read_ptr, bytes_left);
         if (n_read >= 0)
         {

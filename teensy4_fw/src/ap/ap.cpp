@@ -9,6 +9,8 @@
 
 
 #include "ap.h"
+#include "files/files.hpp"
+
 
 
 static void testCmdif(void);
@@ -54,10 +56,13 @@ void apMain(void)
   uint32_t time_draw;
   uint16_t x = 0;
   uint16_t y = 0;
-
   audio_t audio;
 
+
   audioOpen(&audio);
+  lcdSetResizeMode(LCD_RESIZE_BILINEAR);
+
+  while(buttonGetPressed(_PIN_BUTTON_MENU));
 
 
   pre_time = micros();
@@ -68,6 +73,11 @@ void apMain(void)
       pre_time = micros();
 
       ledToggle(_DEF_LED1);
+    }
+
+    if (buttonGetRepeatEvent(_PIN_BUTTON_MENU))
+    {
+      filesMain();
     }
 
     if (lcdDrawAvailable())
@@ -130,7 +140,6 @@ void apMain(void)
           lcdSetBackLight(0);
         }
       }
-
 
       time_draw = micros()-pre_time_draw;
 

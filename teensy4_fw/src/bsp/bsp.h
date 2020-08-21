@@ -24,6 +24,7 @@ extern "C" {
 
 
 #include "fsl_gpio.h"
+#include "fsl_cache.h"
 
 
 #define BOARD_FLASH_SIZE        (0x800000U)

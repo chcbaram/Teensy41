@@ -104,10 +104,10 @@
 #define _PIN_BUTTON_SELECT          5
 #define _PIN_BUTTON_HOME            6
 #define _PIN_BUTTON_MENU            7
-#define _DEF_HW_BTN_LEFT            8
-#define _DEF_HW_BTN_RIGHT           9
-#define _DEF_HW_BTN_UP              10
-#define _DEF_HW_BTN_DOWN            11
+#define _PIN_BUTTON_LEFT            8
+#define _PIN_BUTTON_RIGHT           9
+#define _PIN_BUTTON_UP              10
+#define _PIN_BUTTON_DOWN            11
 
 
 #define _PIN_GPIO_LCD_BKT_EN        1

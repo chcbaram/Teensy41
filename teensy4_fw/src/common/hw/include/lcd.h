@@ -77,6 +77,30 @@ typedef struct lcd_driver_t_
 } lcd_driver_t;
 
 
+typedef enum
+{
+  LCD_ALIGN_H_LEFT    = (1<<0),
+  LCD_ALIGN_H_CENTER  = (1<<1),
+  LCD_ALIGN_H_RIGHT   = (1<<2),
+  LCD_ALIGN_V_TOP     = (1<<3),
+  LCD_ALIGN_V_CENTER  = (1<<4),
+  LCD_ALIGN_V_BOTTOM  = (1<<5),
+} LcdStringAlign;
+
+typedef enum
+{
+  LCD_RESIZE_NEAREST,
+  LCD_RESIZE_BILINEAR
+} LcdResizeMode;
+
+typedef struct
+{
+  int16_t x;
+  int16_t y;
+  int16_t w;
+  int16_t h;
+} lcd_rect_t;
+
 
 bool lcdInit(void);
 bool lcdIsInit(void);
@@ -109,6 +133,7 @@ uint16_t *lcdGetCurrentFrameBuffer(void);
 void lcdSetDoubleBuffer(bool enable);
 
 void lcdDrawPixel(uint16_t x_pos, uint16_t y_pos, uint32_t rgb_code);
+void lcdDrawPixelMix(uint16_t x_pos, uint16_t y_pos, uint32_t rgb_code, uint8_t mix);
 void lcdDrawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1,uint16_t color);
 void lcdDrawVLine(int16_t x, int16_t y, int16_t h, uint16_t color);
 void lcdDrawHLine(int16_t x, int16_t y, int16_t w, uint16_t color);
@@ -122,8 +147,11 @@ void lcdDrawTriangle(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3,
 void lcdDrawFillTriangle(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3, uint32_t color);
 void lcdDrawString(int x, int y, uint16_t color, const char *str);
 void lcdPrintf(int x, int y, uint16_t color,  const char *fmt, ...);
+void lcdPrintfResize(int x, int y, uint16_t color,  float ratio, const char *fmt, ...);
+void lcdPrintfRect(int x, int y, int w, int h, uint16_t color, float ratio, uint16_t align, const char *fmt, ...);
 uint32_t lcdGetStrWidth(const char *fmt, ...);
 
+void lcdSetResizeMode(LcdResizeMode mode);
 
 
 #ifdef __cplusplus

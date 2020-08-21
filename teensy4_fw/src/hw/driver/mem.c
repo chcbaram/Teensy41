@@ -12,7 +12,7 @@
 
 
 
-#define      HW_MEM_ADDR            0x70000000
+#define      HW_MEM_ADDR            0x70800000
 #define      HW_MEM_LENGTH          (8*1024*1024)
 
 //-- Internal Variables
