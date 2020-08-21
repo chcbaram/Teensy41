@@ -228,4 +228,7 @@ usb_status_t USB_DeviceGetConfigurationDescriptor(
 usb_status_t USB_DeviceGetStringDescriptor(usb_device_handle handle,
                                            usb_device_get_string_descriptor_struct_t *stringDescriptor);
 
+bool USB_DeviceIsMSC(void);
+
+
 #endif /* _USB_DEVICE_DESCRIPTOR_H_ */

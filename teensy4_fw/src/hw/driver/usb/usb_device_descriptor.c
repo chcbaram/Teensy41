@@ -15,10 +15,11 @@
 
 #include "usb_device_descriptor.h"
 #include "sd.h"
+#include "button.h"
 
 
 uint32_t USB_DESCRIPTOR_LENGTH_CONFIGURATION_ALL;
-
+static bool is_usb_msc = false;
 
 
 /*******************************************************************************
@@ -406,8 +407,9 @@ uint8_t g_UsbDeviceConfigurationDescriptor_cdc[] = {
 
 void USB_DeviceInitDesc(void)
 {
-  if (sdIsInit())
+  if (sdIsInit() && buttonGetPin(_PIN_BUTTON_MENU) == true)
   {
+    is_usb_msc = true;
     g_UsbDeviceConfigurationDescriptor = g_UsbDeviceConfigurationDescriptor_cdc_msc;
     USB_DESCRIPTOR_LENGTH_CONFIGURATION_ALL = sizeof(g_UsbDeviceConfigurationDescriptor_cdc_msc);
   }
@@ -418,6 +420,10 @@ void USB_DeviceInitDesc(void)
   }
 }
 
+bool USB_DeviceIsMSC(void)
+{
+  return is_usb_msc;
+}
 
 
 #if (defined(USB_DEVICE_CONFIG_CV_TEST) && (USB_DEVICE_CONFIG_CV_TEST > 0U))

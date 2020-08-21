@@ -18,7 +18,7 @@
 
 
 bool usbdInit(void);
-
+bool usbdIsMSC(void);
 
 #ifdef __cplusplus
 }

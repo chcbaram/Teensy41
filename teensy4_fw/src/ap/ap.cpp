@@ -50,10 +50,8 @@ LV_IMG_DECLARE(image_src);
 void apMain(void)
 {
   uint32_t pre_time;
-  uint32_t pre_time_fps;
   uint32_t pre_time_draw;
   uint32_t time_draw;
-  uint32_t fps = 0;
   uint16_t x = 0;
   uint16_t y = 0;
 
@@ -80,8 +78,6 @@ void apMain(void)
       lcdPrintf(0,16*0, white, "테스트  %d fps, %d ms, %d ms", lcdGetFps(), lcdGetFpsTime(), lcdGetDrawTime());
       lcdPrintf(0,16*1, white, "드로우  %d ms", time_draw/1000);
 
-      fps = 1000/(millis()-pre_time_fps);
-      pre_time_fps = millis();
 
       lcdPrintf(0,16*2, white, "X %03d Y %03d", joypadGetX(), joypadGetY());
       lcdPrintf(0,16*3, white, "밝  기  %d %%", lcdGetBackLight());
@@ -137,8 +133,6 @@ void apMain(void)
 
 
       time_draw = micros()-pre_time_draw;
-
-
 
 
       x += 2;

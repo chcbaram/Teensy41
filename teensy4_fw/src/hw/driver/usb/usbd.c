@@ -13,7 +13,7 @@
 
 
 extern void usbCompositeInit(void);
-
+extern bool USB_DeviceIsMSC(void);
 
 
 bool usbdInit(void)
@@ -22,4 +22,9 @@ bool usbdInit(void)
   usbCompositeInit();
 
   return true;
+}
+
+bool usbdIsMSC(void)
+{
+  return USB_DeviceIsMSC();
 }

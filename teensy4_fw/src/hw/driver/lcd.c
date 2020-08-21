@@ -32,6 +32,12 @@
 #define _PIN_DEF_BL_CTL       1
 
 
+typedef struct
+{
+  int16_t x;
+  int16_t y;
+} lcd_pixel_t;
+
 
 static lcd_driver_t lcd;
 
@@ -73,7 +79,7 @@ static void lcdCmdif(void);
 void disHanFont(int x, int y, PHAN_FONT_OBJ *FontPtr, uint16_t textcolor);
 void lcdSwapFrameBuffer(void);
 static void lcdDrawProcess(void const *argument);
-
+static void lcdDrawLineBuffer(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint16_t color, lcd_pixel_t *line);
 
 
 
@@ -254,6 +260,181 @@ bool lcdGetDoubleBuffer(void)
   return is_double_buffer;
 }
 
+LCD_OPT_DEF void lcdDrawFillCircle(int32_t x0, int32_t y0, int32_t r, uint16_t color)
+{
+  int32_t  x  = 0;
+  int32_t  dx = 1;
+  int32_t  dy = r+r;
+  int32_t  p  = -(r>>1);
+
+
+  lcdDrawHLine(x0 - r, y0, dy+1, color);
+
+  while(x<r)
+  {
+
+    if(p>=0) {
+      dy-=2;
+      p-=dy;
+      r--;
+    }
+
+    dx+=2;
+    p+=dx;
+
+    x++;
+
+    lcdDrawHLine(x0 - r, y0 + x, 2 * r+1, color);
+    lcdDrawHLine(x0 - r, y0 - x, 2 * r+1, color);
+    lcdDrawHLine(x0 - x, y0 + r, 2 * x+1, color);
+    lcdDrawHLine(x0 - x, y0 - r, 2 * x+1, color);
+  }
+}
+
+LCD_OPT_DEF void lcdDrawCircleHelper( int32_t x0, int32_t y0, int32_t r, uint8_t cornername, uint32_t color)
+{
+  int32_t f     = 1 - r;
+  int32_t ddF_x = 1;
+  int32_t ddF_y = -2 * r;
+  int32_t x     = 0;
+
+  while (x < r)
+  {
+    if (f >= 0)
+    {
+      r--;
+      ddF_y += 2;
+      f     += ddF_y;
+    }
+    x++;
+    ddF_x += 2;
+    f     += ddF_x;
+    if (cornername & 0x4)
+    {
+      lcdDrawPixel(x0 + x, y0 + r, color);
+      lcdDrawPixel(x0 + r, y0 + x, color);
+    }
+    if (cornername & 0x2)
+    {
+      lcdDrawPixel(x0 + x, y0 - r, color);
+      lcdDrawPixel(x0 + r, y0 - x, color);
+    }
+    if (cornername & 0x8)
+    {
+      lcdDrawPixel(x0 - r, y0 + x, color);
+      lcdDrawPixel(x0 - x, y0 + r, color);
+    }
+    if (cornername & 0x1)
+    {
+      lcdDrawPixel(x0 - r, y0 - x, color);
+      lcdDrawPixel(x0 - x, y0 - r, color);
+    }
+  }
+}
+
+LCD_OPT_DEF void lcdDrawRoundRect(int32_t x, int32_t y, int32_t w, int32_t h, int32_t r, uint32_t color)
+{
+  // smarter version
+  lcdDrawHLine(x + r    , y        , w - r - r, color); // Top
+  lcdDrawHLine(x + r    , y + h - 1, w - r - r, color); // Bottom
+  lcdDrawVLine(x        , y + r    , h - r - r, color); // Left
+  lcdDrawVLine(x + w - 1, y + r    , h - r - r, color); // Right
+
+  // draw four corners
+  lcdDrawCircleHelper(x + r        , y + r        , r, 1, color);
+  lcdDrawCircleHelper(x + w - r - 1, y + r        , r, 2, color);
+  lcdDrawCircleHelper(x + w - r - 1, y + h - r - 1, r, 4, color);
+  lcdDrawCircleHelper(x + r        , y + h - r - 1, r, 8, color);
+}
+
+LCD_OPT_DEF void lcdDrawFillCircleHelper(int32_t x0, int32_t y0, int32_t r, uint8_t cornername, int32_t delta, uint32_t color)
+{
+  int32_t f     = 1 - r;
+  int32_t ddF_x = 1;
+  int32_t ddF_y = -r - r;
+  int32_t y     = 0;
+
+  delta++;
+
+  while (y < r)
+  {
+    if (f >= 0)
+    {
+      r--;
+      ddF_y += 2;
+      f     += ddF_y;
+    }
+
+    y++;
+    ddF_x += 2;
+    f     += ddF_x;
+
+    if (cornername & 0x1)
+    {
+      lcdDrawHLine(x0 - r, y0 + y, r + r + delta, color);
+      lcdDrawHLine(x0 - y, y0 + r, y + y + delta, color);
+    }
+    if (cornername & 0x2)
+    {
+      lcdDrawHLine(x0 - r, y0 - y, r + r + delta, color); // 11995, 1090
+      lcdDrawHLine(x0 - y, y0 - r, y + y + delta, color);
+    }
+  }
+}
+
+LCD_OPT_DEF void lcdDrawFillRoundRect(int32_t x, int32_t y, int32_t w, int32_t h, int32_t r, uint32_t color)
+{
+  // smarter version
+  lcdDrawFillRect(x, y + r, w, h - r - r, color);
+
+  // draw four corners
+  lcdDrawFillCircleHelper(x + r, y + h - r - 1, r, 1, w - r - r - 1, color);
+  lcdDrawFillCircleHelper(x + r, y + r        , r, 2, w - r - r - 1, color);
+}
+
+LCD_OPT_DEF void lcdDrawTriangle(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3, uint32_t color)
+{
+  lcdDrawLine(x1, y1, x2, y2, color);
+  lcdDrawLine(x1, y1, x3, y3, color);
+  lcdDrawLine(x2, y2, x3, y3, color);
+}
+
+LCD_OPT_DEF void lcdDrawFillTriangle(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3, uint32_t color)
+{
+  uint16_t max_line_size_12 = max(abs(x1-x2), abs(y1-y2));
+  uint16_t max_line_size_13 = max(abs(x1-x3), abs(y1-y3));
+  uint16_t max_line_size_23 = max(abs(x2-x3), abs(y2-y3));
+  uint16_t max_line_size = max_line_size_12;
+  uint16_t i = 0;
+
+  if (max_line_size_13 > max_line_size)
+  {
+    max_line_size = max_line_size_13;
+  }
+  if (max_line_size_23 > max_line_size)
+  {
+    max_line_size = max_line_size_23;
+  }
+
+  lcd_pixel_t line[max_line_size];
+
+  lcdDrawLineBuffer(x1, y1, x2, y2, color, line);
+  for (i = 0; i < max_line_size_12; i++)
+  {
+    lcdDrawLine(x3, y3, line[i].x, line[i].y, color);
+  }
+  lcdDrawLineBuffer(x1, y1, x3, y3, color, line);
+  for (i = 0; i < max_line_size_13; i++)
+  {
+    lcdDrawLine(x2, y2, line[i].x, line[i].y, color);
+  }
+  lcdDrawLineBuffer(x2, y2, x3, y3, color, line);
+  for (i = 0; i < max_line_size_23; i++)
+  {
+    lcdDrawLine(x1, y1, line[i].x, line[i].y, color);
+  }
+}
+
 uint32_t lcdGetFps(void)
 {
   return fps_count;
@@ -386,6 +567,74 @@ void lcdDrawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint16_t color)
   }
 }
 
+void lcdDrawLineBuffer(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint16_t color, lcd_pixel_t *line)
+{
+  int16_t steep = abs(y1 - y0) > abs(x1 - x0);
+
+  if (x0 < 0) x0 = 0;
+  if (y0 < 0) y0 = 0;
+  if (x1 < 0) x1 = 0;
+  if (y1 < 0) y1 = 0;
+
+
+  if (steep)
+  {
+    _swap_int16_t(x0, y0);
+    _swap_int16_t(x1, y1);
+  }
+
+  if (x0 > x1)
+  {
+    _swap_int16_t(x0, x1);
+    _swap_int16_t(y0, y1);
+  }
+
+  int16_t dx, dy;
+  dx = x1 - x0;
+  dy = abs(y1 - y0);
+
+  int16_t err = dx / 2;
+  int16_t ystep;
+
+  if (y0 < y1)
+  {
+    ystep = 1;
+  } else {
+    ystep = -1;
+  }
+
+  for (; x0<=x1; x0++)
+  {
+    if (steep)
+    {
+      if (line != NULL)
+      {
+        line->x = y0;
+        line->y = x0;
+      }
+      lcdDrawPixel(y0, x0, color);
+    } else
+    {
+      if (line != NULL)
+      {
+        line->x = x0;
+        line->y = y0;
+      }
+      lcdDrawPixel(x0, y0, color);
+    }
+    if (line != NULL)
+    {
+      line++;
+    }
+    err -= dy;
+    if (err < 0)
+    {
+      y0 += ystep;
+      err += dx;
+    }
+  }
+}
+
 void lcdDrawVLine(int16_t x, int16_t y, int16_t h, uint16_t color)
 {
   lcdDrawLine(x, y, x, y+h-1, color);
@@ -426,6 +675,7 @@ void lcdPrintf(int x, int y, uint16_t color,  const char *fmt, ...)
   int Size_Char;
   int i, x_Pre = x;
   PHAN_FONT_OBJ FontBuf;
+  uint8_t font_width;
 
 
   len = vsnprintf(print_buffer, 255, fmt, arg);
@@ -441,17 +691,19 @@ void lcdPrintf(int x, int y, uint16_t color,  const char *fmt, ...)
     Size_Char = FontBuf.Size_Char;
     if (Size_Char >= 2)
     {
-        x += 2*8;
+      font_width = 16;
+      x += 2*8;
     }
     else
     {
-        x += 1*8;
+      font_width = 8;
+      x += 1*8;
     }
 
-    if( HW_LCD_WIDTH < x )
+    if ((x+font_width) > HW_LCD_WIDTH)
     {
-        x  = x_Pre;
-        y += 16;
+      x  = x_Pre;
+      y += 16;
     }
 
     if( FontBuf.Code_Type == PHAN_END_CODE ) break;

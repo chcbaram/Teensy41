@@ -74,7 +74,7 @@ void buttonCmdif(void);
 #endif
 
 static bool is_enable = true;
-static bool buttonGetPin(uint8_t ch);
+
 
 
 void button_isr(void *arg)
