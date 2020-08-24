@@ -101,19 +101,19 @@ bool audioInit(void)
 
   audioOpen(&audio_note);
 
-  osMessageQDef(msg_cmd_0, 2, uint32_t);
+  osMessageQDef(msg_cmd_0, 3, uint32_t);
   msg_cmd_0 = osMessageCreate(osMessageQ(msg_cmd_0), NULL);
   msg_cmd_q[0] = msg_cmd_0;
 
-  osMessageQDef(msg_cmd_1, 2, uint32_t);
+  osMessageQDef(msg_cmd_1, 3, uint32_t);
   msg_cmd_1 = osMessageCreate(osMessageQ(msg_cmd_1), NULL);
   msg_cmd_q[1] = msg_cmd_1;
 
-  osMessageQDef(msg_cmd_2, 2, uint32_t);
+  osMessageQDef(msg_cmd_2, 3, uint32_t);
   msg_cmd_2 = osMessageCreate(osMessageQ(msg_cmd_2), NULL);
   msg_cmd_q[2] = msg_cmd_2;
 
-  osMessageQDef(msg_cmd_3, 2, uint32_t);
+  osMessageQDef(msg_cmd_3, 3, uint32_t);
   msg_cmd_3 = osMessageCreate(osMessageQ(msg_cmd_3), NULL);
   msg_cmd_q[3] = msg_cmd_3;
 
