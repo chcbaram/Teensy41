@@ -31,4 +31,26 @@
 		<nature>com.nxp.mcuxpresso.core.datamodels.sdkNature</nature>
 		<nature>org.eclipse.xtext.ui.shared.xtextNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>src/bsp</name>
+			<type>2</type>
+			<locationURI>$%7BPARENT-1-PROJECT_LOC%7D/sdk_fw/bsp</locationURI>
+		</link>
+		<link>
+			<name>src/common</name>
+			<type>2</type>
+			<locationURI>$%7BPARENT-1-PROJECT_LOC%7D/sdk_fw/common</locationURI>
+		</link>
+		<link>
+			<name>src/hw</name>
+			<type>2</type>
+			<locationURI>$%7BPARENT-1-PROJECT_LOC%7D/sdk_fw/hw</locationURI>
+		</link>
+		<link>
+			<name>src/lib</name>
+			<type>2</type>
+			<locationURI>$%7BPARENT-1-PROJECT_LOC%7D/sdk_fw/lib</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>
