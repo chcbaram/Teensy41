@@ -53,7 +53,7 @@ bool ili9341Init(void)
 
 
   ili9341InitRegs();
-  illi9341SetRotation(4);
+  illi9341SetRotation(6);
 
   return true;
 }
@@ -210,7 +210,6 @@ void ili9341InitRegs(void)
 
 
   writecommand(ILI9341_SLPOUT);    //Exit Sleep
-
 
   delay(20);
 

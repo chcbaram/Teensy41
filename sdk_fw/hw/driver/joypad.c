@@ -60,7 +60,7 @@ void joypadUpdate(void)
   x_adc_value = adcRead(adc_ch_x);
   y_adc_value = adcRead(adc_ch_y);
 
-  value = constrain(x_adc_value-x_adc_offset, -2000, 2000);
+  value = -constrain(x_adc_value-x_adc_offset, -2000, 2000);
   if (value >  JOYPAD_DEAD_ZONE)      value -= JOYPAD_DEAD_ZONE;
   else if (value < -JOYPAD_DEAD_ZONE) value += JOYPAD_DEAD_ZONE;
   else                                value  = 0;
@@ -69,7 +69,7 @@ void joypadUpdate(void)
   x_value   = map(value_out, -JOYPAD_MAX_ADC_VALUE, JOYPAD_MAX_ADC_VALUE, -100, 100);
 
 
-  value = constrain(y_adc_value-y_adc_offset, -2000, 2000);
+  value = -constrain(y_adc_value-y_adc_offset, -2000, 2000);
   if (value >  JOYPAD_DEAD_ZONE)      value -= JOYPAD_DEAD_ZONE;
   else if (value < -JOYPAD_DEAD_ZONE) value += JOYPAD_DEAD_ZONE;
   else                                value  = 0;
