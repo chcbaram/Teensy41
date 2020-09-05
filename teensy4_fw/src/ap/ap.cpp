@@ -10,7 +10,7 @@
 
 #include "ap.h"
 #include "files/files.h"
-
+#include "launcher/launcher.h"
 
 
 static void testCmdif(void);
@@ -78,11 +78,15 @@ void apMain(void)
   audio_t audio;
 
 
-  audioOpen(&audio);
-  lcdSetResizeMode(LCD_RESIZE_BILINEAR);
 
   while(buttonGetPressed(_PIN_BUTTON_MENU));
 
+
+  launcher::main();
+
+
+  audioOpen(&audio);
+  lcdSetResizeMode(LCD_RESIZE_BILINEAR);
 
   pre_time = micros();
   while(1)

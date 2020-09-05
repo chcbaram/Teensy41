@@ -29,9 +29,7 @@
 #endif
 
 
-#define GETR(c) (((uint16_t)(c)) >> 11)
-#define GETG(c) (((c) & 0x07E0)>>5)
-#define GETB(c) ((c) & 0x1F)
+
 #define MAKECOL(r, g, b) ( ((r)<<11) | ((g)<<5) | (b))
 
 
@@ -919,7 +917,7 @@ void lcdPrintfRect(int x, int y, int w, int h, uint16_t color, float ratio, uint
   {
     if (align & LCD_ALIGN_V_CENTER)
     {
-      y_o += (h-r_dst.h)/2 + 2;
+      y_o += (h-r_dst.h)/2 + 0;
     }
     if (align & LCD_ALIGN_V_BOTTOM)
     {

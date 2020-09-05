@@ -22,6 +22,13 @@
 extern "C" {
 #endif
 
+#define GETR(c) (((uint16_t)(c)) >> 11)
+#define GETG(c) (((c) & 0x07E0)>>5)
+#define GETB(c) ((c) & 0x1F)
+#define RGB2COLOR(r, g, b) ((((r>>3)<<11) | ((g>>2)<<5) | (b>>3)))
+
+
+
 #if 1
 enum class_color {
  white     = 0xFFFF,
