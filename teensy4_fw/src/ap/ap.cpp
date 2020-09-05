@@ -12,7 +12,7 @@
 #include "launcher/launcher.h"
 
 
-static void testCmdif(void);
+static void bootCmdif(void);
 static void threadCmdif(void const *argument);
 static void threadUpdate(void const *argument);
 
@@ -21,7 +21,7 @@ void apInit(void)
   hwInit();
 
   cmdifOpen(_DEF_UART1, 57600);
-  cmdifAdd("test", testCmdif);
+  cmdifAdd("boot", bootCmdif);
 
   osThreadDef(threadCmdif, threadCmdif, _HW_DEF_RTOS_THREAD_PRI_CMDIF, 0, _HW_DEF_RTOS_THREAD_MEM_CMDIF);
   if (osThreadCreate(osThread(threadCmdif), NULL) != NULL)
@@ -43,6 +43,31 @@ void apInit(void)
   {
     logPrintf("threadUpdate \t\t: Fail\r\n");
     while(1);
+  }
+}
+
+void apMain(void)
+{
+  uint32_t pre_time;
+
+  i2sInit();
+  audioInit();
+  batteryInit();
+  lcdInit();
+
+
+  launcher::main();
+
+  pre_time = micros();
+  while(1)
+  {
+    if (micros()-pre_time >= 100*1000)
+    {
+      pre_time = micros();
+
+      ledToggle(_DEF_LED1);
+    }
+    osThreadYield();
   }
 }
 
@@ -69,73 +94,52 @@ static void threadUpdate(void const *argument)
 }
 
 
-void apMain(void)
+
+
+
+void bootCmdif(void)
 {
+  bool ret = true;
+  FRESULT res;
+  FIL file;
+  UINT len;
   uint32_t pre_time;
 
 
-  while(buttonGetPressed(_PIN_BUTTON_MENU));
-
-
-
-  launcher::main();
-
-  pre_time = micros();
-  while(1)
+  if (cmdifGetParamCnt() == 1 && cmdifHasString("jump", 0) == true)
   {
-    if (micros()-pre_time >= 100*1000)
+    //void (**jump_func)(void) = (void (**)(void))(FLASH_ADDR_FW + 4);
+    void (**jump_func)(void) = (void (**)(void))(0x70400000 + 4);
+
+    if ((uint32_t)(*jump_func) != 0xFFFFFFFF)
     {
-      pre_time = micros();
+      cmdifPrintf("jump 0x%X \n", (int)(*jump_func));
+      delay(100);
+      bspDeInit();
 
-      ledToggle(_DEF_LED1);
-    }
-    osThreadYield();
-  }
-}
-
-
-
-
-
-void testCmdif(void)
-{
-  bool ret = true;
-
-
-  if (cmdifGetParamCnt() == 1 && cmdifHasString("info", 0) == true)
-  {
-    cmdifPrintf("GPR16 0x%08X\n", IOMUXC_GPR->GPR16);
-    cmdifPrintf("GPR17 0x%08X\n", IOMUXC_GPR->GPR17);
-  }
-  else if (cmdifGetParamCnt() == 1 && cmdifHasString("mem", 0) == true)
-  {
-    uint32_t *p_buf;
-
-    p_buf = (uint32_t *)memMalloc(1*1024*1024);
-
-    if (p_buf)
-    {
-      cmdifPrintf("memMalloc OK\n");
-
-      for (uint32_t i=0; i<1*1024*1024/4; i++)
-      {
-        p_buf[i] = i;
-      }
-      for (uint32_t i=0; i<1*1024*1024/4; i++)
-      {
-        if (p_buf[i] != i)
-        {
-          cmdifPrintf("err %d \n", i);
-        }
-      }
-      cmdifPrintf("test finished\n");
+      //__set_MSP(*(uint32_t *)FLASH_ADDR_FW);
+      __set_MSP(*(uint32_t *)0x70400000);
+      (*jump_func)();
     }
     else
     {
-      cmdifPrintf("memMalloc Fail\n");
+      cmdifPrintf("firmware empty \n");
     }
+  }
+  else if (cmdifGetParamCnt() == 1 && cmdifHasString("load", 0) == true)
+  {
+    res = f_open(&file, "fw.bin", FA_OPEN_EXISTING | FA_READ);
+    if (res == FR_OK)
+    {
+      pre_time = millis();
+      f_read(&file, (void *)0x70400000, f_size(&file), &len);
+      SCB_CleanInvalidateDCache();
 
+      cmdifPrintf("copy_fw   \t\t: %dms, %dKB\n", (int)(millis()-pre_time), (int)f_size(&file)/1024);
 
+      cmdifPrintf("size %d \n", f_size(&file));
+      f_close(&file);
+    }
   }
   else
   {
@@ -144,7 +148,8 @@ void testCmdif(void)
 
   if (ret == false)
   {
-    cmdifPrintf( "test info \n");
-    cmdifPrintf( "test mem \n");
+    cmdifPrintf( "boot jump \n");
   }
 }
+
+

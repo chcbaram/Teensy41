@@ -97,6 +97,12 @@
 
 
 
+#define FLASH_ADDR_TAG                0x60200800
+#define FLASH_ADDR_FW                 0x60200000
+
+#define FLASH_ADDR_START              0x60200000
+#define FLASH_ADDR_END                (FLASH_ADDR_START + 2*1-24*1024)
+
 
 
 #define _PIN_BUTTON_A               0

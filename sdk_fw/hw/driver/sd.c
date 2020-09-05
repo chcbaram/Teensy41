@@ -65,6 +65,7 @@ bool sdInit(void)
     logPrintf("sdCard     \t\t: connected\r\n");
   }
 
+
   status = SD_HostInit(card);
   if (status != kStatus_Success)
   {

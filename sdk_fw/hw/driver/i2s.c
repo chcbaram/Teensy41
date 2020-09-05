@@ -103,7 +103,7 @@ static void i2sThreadProcess(void const *argument)
         mixerRead(send_frame, len);
         xfer.data     = (uint8_t *)send_frame;
         xfer.dataSize = len*2;
-        //SCB_InvalidateDCache_by_Addr ((uint32_t *)xfer.data, xfer.dataSize);
+        SCB_InvalidateDCache_by_Addr ((uint32_t *)xfer.data, xfer.dataSize);
         if (SAI_TransferSendEDMA(SAI1_PERIPHERAL, &SAI1_SAI_Tx_eDMA_Handle, &xfer) != kStatus_Success)
         {
           SAI_TransferTerminateSendEDMA(SAI1_PERIPHERAL, &SAI1_SAI_Tx_eDMA_Handle);

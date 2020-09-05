@@ -14,7 +14,7 @@
 
 
 static bool     is_used[8] = {0, };
-static __attribute__((section(".itc_buf"))) FIL      fil_buf[8];
+static FIL      fil_buf[8];
 
 
 void *ob_malloc(size_t size)
@@ -56,7 +56,7 @@ FILE *ob_fopen(const char *filename, const char *mode)
   fil = ob_malloc(sizeof(FIL));
   if (!fil)
   {
-    printf("malloc fail\n");
+    printf("ob_fopen malloc fail\n");
     return NULL;
   }
 
