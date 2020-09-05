@@ -15,7 +15,7 @@
 
 static void testCmdif(void);
 static void threadCmdif(void const *argument);
-
+static void threadUpdate(void const *argument);
 
 void apInit(void)
 {
@@ -34,6 +34,17 @@ void apInit(void)
     logPrintf("threadCmdif \t\t: Fail\r\n");
     while(1);
   }
+
+  osThreadDef(threadUpdate, threadUpdate, _HW_DEF_RTOS_THREAD_PRI_UPDATE, 0, _HW_DEF_RTOS_THREAD_MEM_UPDATE);
+  if (osThreadCreate(osThread(threadUpdate), NULL) != NULL)
+  {
+    logPrintf("threadUpdate \t\t: OK\r\n");
+  }
+  else
+  {
+    logPrintf("threadUpdate \t\t: Fail\r\n");
+    while(1);
+  }
 }
 
 static void threadCmdif(void const *argument)
@@ -47,15 +58,23 @@ static void threadCmdif(void const *argument)
   }
 }
 
-LV_IMG_DECLARE(image_src);
+static void threadUpdate(void const *argument)
+{
+  (void)argument;
+
+  while(1)
+  {
+    batteryUpdate();
+    delay(1);
+  }
+}
+
 
 void apMain(void)
 {
   uint32_t pre_time;
   uint32_t pre_time_draw;
   uint32_t time_draw;
-  uint16_t x = 0;
-  uint16_t y = 0;
   audio_t audio;
 
 
@@ -90,6 +109,17 @@ void apMain(void)
 
 
       lcdPrintf(0,16*2, white, "X %03d Y %03d", joypadGetX(), joypadGetY());
+      for (int i=0; i<BUTTON_MAX_CH; i++)
+      {
+        if (buttonGetPressed(i) == true)
+        {
+          lcdPrintf(120 + 8*i,16*2, white, "1");
+        }
+        else
+        {
+          lcdPrintf(120 + 8*i,16*2, white, "0");
+        }
+      }
       lcdPrintf(0,16*3, white, "밝  기  %d %%", lcdGetBackLight());
 
       lcdDrawFillRect(0 , 16*4, 30, 30, red);
@@ -99,11 +129,9 @@ void apMain(void)
       lcdPrintf(30+7,16*4+6, white, "G");
       lcdPrintf(60+7,16*4+6, white, "B");
 
-      uint16_t y_offset = 60;
+      lcdPrintf(0,16*5+12, white, "배터리  %d %%, %d.%02d V", batteryGetLevel(), batteryGetVoltage()/100, batteryGetVoltage()%100);
+      lcdPrintf(0,16*6+12, white, "충  전  %d", batteryIsCharging());
 
-      lcdDrawFillRect(x, y_offset+32, 30, 30, red);
-      lcdDrawFillRect(lcdGetWidth()-x, y_offset+62, 30, 30, green);
-      lcdDrawFillRect(x + 30, y_offset+92, 30, 30, blue);
 
       if (buttonGetPressed(_PIN_BUTTON_A))
       {
@@ -144,10 +172,6 @@ void apMain(void)
       time_draw = micros()-pre_time_draw;
 
 
-      x += 2;
-
-      x %= lcdGetWidth();
-      y %= lcdGetHeight();
 
       lcdRequestDraw();
     }

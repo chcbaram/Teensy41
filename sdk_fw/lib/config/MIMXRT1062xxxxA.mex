@@ -419,6 +419,18 @@
                         <pin_feature name="slew_rate" value="Fast"/>
                      </pin_features>
                   </pin>
+                  <pin peripheral="ADC2" signal="IN, 4" pin_num="J14" pin_signal="GPIO_AD_B1_15">
+                     <pin_features>
+                        <pin_feature name="pull_up_down_config" value="no_init"/>
+                     </pin_features>
+                  </pin>
+                  <pin peripheral="GPIO3" signal="gpio_io, 23" pin_num="E4" pin_signal="GPIO_EMC_37">
+                     <pin_features>
+                        <pin_feature name="direction" value="INPUT"/>
+                        <pin_feature name="pull_up_down_config" value="Pull_Up_47K_Ohm"/>
+                        <pin_feature name="pull_keeper_select" value="Pull"/>
+                     </pin_features>
+                  </pin>
                </pins>
             </function>
          </functions_list>
@@ -590,6 +602,16 @@
                   <data type="Version">2.0.0</data>
                </feature>
             </dependency>
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.edma" description="EDMA Driver not found in the toolchain/IDE project. Project will not compile!" problem_level="2" source="Peripherals">
+               <feature name="enabled" evaluation="equal">
+                  <data type="Boolean">true</data>
+               </feature>
+            </dependency>
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.edma" description="Unsupported version of the EDMA Driver in the toolchain/IDE project. Required: ${required_value}, actual: ${actual_value}. Project might not compile correctly." problem_level="1" source="Peripherals">
+               <feature name="version" evaluation="equivalent">
+                  <data type="Version">2.3.0</data>
+               </feature>
+            </dependency>
             <dependency resourceType="SWComponent" resourceId="platform.drivers.flexio_mculcd" description="FLEXIO MCULCD Driver not found in the toolchain/IDE project. Project will not compile!" problem_level="2" source="Peripherals">
                <feature name="enabled" evaluation="equal">
                   <data type="Boolean">true</data>
@@ -620,16 +642,6 @@
                   <data type="Version">2.2.1</data>
                </feature>
             </dependency>
-            <dependency resourceType="SWComponent" resourceId="platform.drivers.edma" description="EDMA Driver not found in the toolchain/IDE project. Project will not compile!" problem_level="2" source="Peripherals">
-               <feature name="enabled" evaluation="equal">
-                  <data type="Boolean">true</data>
-               </feature>
-            </dependency>
-            <dependency resourceType="SWComponent" resourceId="platform.drivers.edma" description="Unsupported version of the EDMA Driver in the toolchain/IDE project. Required: ${required_value}, actual: ${actual_value}. Project might not compile correctly." problem_level="1" source="Peripherals">
-               <feature name="version" evaluation="equivalent">
-                  <data type="Version">2.3.0</data>
-               </feature>
-            </dependency>
          </dependencies>
          <generated_project_files>
             <file path="board/peripherals.c" update_enabled="true"/>
@@ -651,6 +663,21 @@
                   <dependency resourceType="PeripheralUnifiedSignal" resourceId="ADC2.adc_in.2" description="Signal IN of the channel 2 of the peripheral ADC2 is not routed. Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
                      <feature name="routed" evaluation="">
                         <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="ADC2.adc_in.4" description="Signal IN of the channel 4 of the peripheral ADC2 is not routed. Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="SWComponent" resourceId="platform.drivers.dmamux" description="The fsl_dmamux driver is missing in the project (required for the eDMA). Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="enabled" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="SWComponent" resourceId="platform.drivers.dmamux" description="The compatible version of the fsl_dmamux driver is not available in the project (required for the eDMA). Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="version" evaluation="compatible">
+                        <data type="Version">2.0.2</data>
                      </feature>
                   </dependency>
                   <dependency resourceType="SWComponent" resourceId="platform.drivers.flexio" description="The fsl_flexio driver is missing in the project (required for the FlexIO I2C master). Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
@@ -788,6 +815,16 @@
                         <data type="Boolean">true</data>
                      </feature>
                   </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="SAI1.i2s_rclk" description="SAI1.RX BCLK pin needs to be routed Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="SAI1.i2s_rfs" description="SAI1.RX SYNC pin needs to be routed Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
                   <dependency resourceType="SWComponent" resourceId="platform.drivers.sai_edma" description="The fsl_sai_edma driver is missing in the project (required for the eDMA mode). Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
                      <feature name="enabled" evaluation="equal">
                         <data type="Boolean">true</data>
@@ -803,16 +840,6 @@
                         <data type="Frequency" unit="Hz">0</data>
                      </feature>
                   </dependency>
-                  <dependency resourceType="SWComponent" resourceId="platform.drivers.dmamux" description="The fsl_dmamux driver is missing in the project (required for the eDMA). Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
-                     <feature name="enabled" evaluation="equal">
-                        <data type="Boolean">true</data>
-                     </feature>
-                  </dependency>
-                  <dependency resourceType="SWComponent" resourceId="platform.drivers.dmamux" description="The compatible version of the fsl_dmamux driver is not available in the project (required for the eDMA). Problem must be resolved in another tool." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
-                     <feature name="version" evaluation="compatible">
-                        <data type="Version">2.0.2</data>
-                     </feature>
-                  </dependency>
                </dependencies>
                <instances>
                   <instance name="ADC2" uuid="87ed3c0a-148a-4a8d-b48b-57af206530bb" type="adc_12b1msps_sar" type_id="adc_12b1msps_sar_6a490e886349a7b2b07bed10ce7b299b" mode="ADC_GENERAL" peripheral="ADC2" enabled="true" comment="" custom_name_enabled="false">
@@ -826,7 +853,7 @@
                         </struct>
                         <struct name="conversionConfig">
                            <setting name="resolution" value="kADC_Resolution12Bit"/>
-                           <setting name="hardwareAverageMode" value="kADC_HardwareAverageCount8"/>
+                           <setting name="hardwareAverageMode" value="kADC_HardwareAverageCount16"/>
                            <setting name="enableHardwareTrigger" value="software"/>
                            <setting name="enableHighSpeed" value="false"/>
                            <setting name="enableLowPower" value="false"/>
@@ -866,7 +893,37 @@
                               <setting name="initializeChannel" value="false"/>
                               <setting name="enableInterruptOnConversionCompleted" value="false"/>
                            </struct>
+                           <struct name="2">
+                              <setting name="channelNumber" value="IN.4"/>
+                              <setting name="channelName" value=""/>
+                              <setting name="channelGroup" value="0"/>
+                              <setting name="initializeChannel" value="false"/>
+                              <setting name="enableInterruptOnConversionCompleted" value="false"/>
+                           </struct>
                         </array>
+                     </config_set>
+                  </instance>
+                  <instance name="DMA0" uuid="40fc011e-ec95-4088-b1b9-59089fb0393f" type="edma" type_id="edma_6d0dd4e17e2f179c7d42d98767129ede" mode="basic" peripheral="DMA0" enabled="true" comment="" custom_name_enabled="false">
+                     <config_set name="fsl_edma" quick_selection="default">
+                        <struct name="common_settings">
+                           <setting name="enableContinuousLinkMode" value="false"/>
+                           <setting name="enableHaltOnError" value="true"/>
+                           <setting name="enableRoundRobinArbitration" value="false"/>
+                           <setting name="enableDebugMode" value="false"/>
+                        </struct>
+                        <array name="dma_table">
+                           <struct name="0"/>
+                        </array>
+                        <array name="edma_channels"/>
+                        <struct name="errInterruptConfig">
+                           <setting name="enableErrInterrupt" value="false"/>
+                           <struct name="errorInterrupt">
+                              <setting name="IRQn" value="DMA_ERROR_IRQn"/>
+                              <setting name="enable_priority" value="false"/>
+                              <setting name="priority" value="0"/>
+                              <setting name="enable_custom_name" value="false"/>
+                           </struct>
+                        </struct>
                      </config_set>
                   </instance>
                   <instance name="FLEXIO3" uuid="8f1a6e7f-582c-439b-9be4-c2daf7e4634a" type="flexio_mculcd" type_id="flexio_mculcd_71c03477918e9bdca54eff5edc785168" mode="polling" peripheral="FLEXIO3" enabled="true" comment="" custom_name_enabled="false">
@@ -1132,29 +1189,6 @@
                         </struct>
                      </config_set>
                   </instance>
-                  <instance name="DMA0" uuid="40fc011e-ec95-4088-b1b9-59089fb0393f" type="edma" type_id="edma_6d0dd4e17e2f179c7d42d98767129ede" mode="basic" peripheral="DMA0" enabled="true" comment="" custom_name_enabled="false">
-                     <config_set name="fsl_edma" quick_selection="default">
-                        <struct name="common_settings">
-                           <setting name="enableContinuousLinkMode" value="false"/>
-                           <setting name="enableHaltOnError" value="true"/>
-                           <setting name="enableRoundRobinArbitration" value="false"/>
-                           <setting name="enableDebugMode" value="false"/>
-                        </struct>
-                        <array name="dma_table">
-                           <struct name="0"/>
-                        </array>
-                        <array name="edma_channels"/>
-                        <struct name="errInterruptConfig">
-                           <setting name="enableErrInterrupt" value="false"/>
-                           <struct name="errorInterrupt">
-                              <setting name="IRQn" value="DMA_ERROR_IRQn"/>
-                              <setting name="enable_priority" value="false"/>
-                              <setting name="priority" value="0"/>
-                              <setting name="enable_custom_name" value="false"/>
-                           </struct>
-                        </struct>
-                     </config_set>
-                  </instance>
                </instances>
             </functional_group>
          </functional_groups>
@@ -1162,7 +1196,7 @@
             <component name="system" uuid="b2527345-7aac-4585-b6ff-5a35e5c2a224" type_id="system_54b53072540eeeb8f8e9343e71f28176">
                <config_set_global name="global_system_definitions"/>
             </component>
-            <component name="msg" uuid="afb016b0-0277-4bb9-a3d8-9e710f421781" type_id="msg_6e2baaf3b97dbeef01c0043275f9a0e7">
+            <component name="msg" uuid="16906257-4325-44f7-a124-a1ec94b148fe" type_id="msg_6e2baaf3b97dbeef01c0043275f9a0e7">
                <config_set_global name="global_messages"/>
             </component>
          </components>

@@ -21,6 +21,7 @@
 #define _HW_DEF_RTOS_THREAD_PRI_LCD           osPriorityNormal
 #define _HW_DEF_RTOS_THREAD_PRI_I2S           osPriorityAboveNormal
 #define _HW_DEF_RTOS_THREAD_PRI_AUDIO         osPriorityNormal
+#define _HW_DEF_RTOS_THREAD_PRI_UPDATE        osPriorityNormal
 
 
 #define _HW_DEF_RTOS_THREAD_MEM_MAIN          _HW_DEF_RTOS_MEM_SIZE(12*1024)
@@ -28,6 +29,7 @@
 #define _HW_DEF_RTOS_THREAD_MEM_LCD           _HW_DEF_RTOS_MEM_SIZE( 1*1024)
 #define _HW_DEF_RTOS_THREAD_MEM_I2S           _HW_DEF_RTOS_MEM_SIZE( 1*1024)
 #define _HW_DEF_RTOS_THREAD_MEM_AUDIO         _HW_DEF_RTOS_MEM_SIZE( 1*1024)
+#define _HW_DEF_RTOS_THREAD_MEM_UPDATE        _HW_DEF_RTOS_MEM_SIZE( 1*1024)
 
 
 
@@ -40,6 +42,7 @@
 #define _USE_HW_FLASH
 #define _USE_HW_AUDIO
 #define _USE_HW_PXP
+#define _USE_HW_BATTERY
 
 
 #define _USE_HW_LED
@@ -57,7 +60,7 @@
 #define      HW_CMDIF_CMD_BUF_LENGTH        128
 
 #define _USE_HW_GPIO
-#define      HW_GPIO_MAX_CH         3
+#define      HW_GPIO_MAX_CH         4
 
 #define _USE_HW_PSRAM
 #define      HW_PSRAM_ADDR           0x70000000
@@ -78,7 +81,7 @@
 #define      HW_LCD_HEIGHT          240
 
 #define _USE_HW_ADC
-#define      HW_ADC_MAX_CH          2
+#define      HW_ADC_MAX_CH          3
 
 #define _USE_HW_PWM
 #define      HW_PWM_MAX_CH          1
@@ -88,7 +91,7 @@
 #define      HW_MIXER_MAX_BUF_LEN   (16*4*8)
 
 #define _USE_HW_MEM
-#define      HW_MEM_ADDR            0x70000000
+#define      HW_MEM_ADDR            0x70800000
 #define      HW_MEM_LENGTH          (8*1024*1024)
 
 
@@ -112,6 +115,7 @@
 
 #define _PIN_GPIO_LCD_BKT_EN        1
 #define _PIN_GPIO_LCD_RST           2
+#define _PIN_GPIO_BAT_CHG           3
 
 
 

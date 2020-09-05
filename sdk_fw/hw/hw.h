@@ -43,6 +43,7 @@ extern "C" {
 #include "audio.h"
 #include "resize.h"
 #include "pxp.h"
+#include "battery.h"
 #include "lvgl/lvgl.h"
 
 

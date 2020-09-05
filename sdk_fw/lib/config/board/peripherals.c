@@ -107,7 +107,7 @@ instance:
       - enableAsynchronousClockOutput: 'true'
     - conversionConfig:
       - resolution: 'kADC_Resolution12Bit'
-      - hardwareAverageMode: 'kADC_HardwareAverageCount8'
+      - hardwareAverageMode: 'kADC_HardwareAverageCount16'
       - enableHardwareTrigger: 'software'
       - enableHighSpeed: 'false'
       - enableLowPower: 'false'
@@ -141,6 +141,12 @@ instance:
         - channelGroup: '0'
         - initializeChannel: 'false'
         - enableInterruptOnConversionCompleted: 'false'
+      - 2:
+        - channelNumber: 'IN.4'
+        - channelName: ''
+        - channelGroup: '0'
+        - initializeChannel: 'false'
+        - enableInterruptOnConversionCompleted: 'false'
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 /* clang-format on */
 const adc_config_t ADC2_config = {
@@ -156,7 +162,7 @@ const adc_config_t ADC2_config = {
   .clockDriver = kADC_ClockDriver2,
   .resolution = kADC_Resolution12Bit
 };
-const adc_channel_config_t ADC2_channels_config[2] = {
+const adc_channel_config_t ADC2_channels_config[3] = {
   {
     .channelNumber = 3U,
     .enableInterruptOnConversionCompleted = false
@@ -164,13 +170,17 @@ const adc_channel_config_t ADC2_channels_config[2] = {
   {
     .channelNumber = 2U,
     .enableInterruptOnConversionCompleted = false
+  },
+  {
+    .channelNumber = 4U,
+    .enableInterruptOnConversionCompleted = false
   }
 };
 void ADC2_init(void) {
   /* Initialize ADC2 peripheral. */
   ADC_Init(ADC2_PERIPHERAL, &ADC2_config);
-  /* Configure ADC2 peripheral to average 8 conversions in one measurement. */
-  ADC_SetHardwareAverageConfig(ADC2_PERIPHERAL, kADC_HardwareAverageCount8);
+  /* Configure ADC2 peripheral to average 16 conversions in one measurement. */
+  ADC_SetHardwareAverageConfig(ADC2_PERIPHERAL, kADC_HardwareAverageCount16);
 }
 
 /***********************************************************************************************************************

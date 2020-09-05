@@ -64,6 +64,10 @@ bool adcInit(void)
   adc_tbl[ch].is_init     = true;
 
 
+  // BAT_ADC
+  ch = 2;
+  adc_tbl[ch].is_init     = true;
+
   h_adc_timer = swtimerGetHandle();
   swtimerSet(h_adc_timer, 5, LOOP_TIME, adcISR, NULL );
   swtimerStart(h_adc_timer);
@@ -118,7 +122,7 @@ uint32_t adcRead(uint8_t ch)
       adc_value = 4095 - adc_data[ch];
       break;
 
-    case 1:
+    default:
       adc_value = adc_data[ch];
       break;
   }
@@ -171,7 +175,7 @@ uint32_t adcConvVoltage(uint8_t ch, uint32_t adc_value)
       break;
 
     case 2:
-      ret  = (uint32_t)((adc_value * 3445 * 26) / (4095*10));
+      ret  = (uint32_t)((adc_value * 3510 * 26) / (4095*10));
       ret += 5;
       ret /= 10;
       break;
@@ -236,7 +240,7 @@ void adcCmdif(void)
 
           adc_data = adcReadVoltage(i);
 
-          cmdifPrintf("%d.%d ", adc_data/10, adc_data%10);
+          cmdifPrintf("%d.%d ", adc_data/100, adc_data%100);
         }
         cmdifPrintf("\r\n");
         delay(50);

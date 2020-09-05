@@ -60,6 +60,6 @@ void hwInit(void)
   lcdInit();
   i2sInit();
   audioInit();
-
+  batteryInit();
 
 }

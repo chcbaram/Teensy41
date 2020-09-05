@@ -99,7 +99,7 @@ extern "C" {
  **********************************************************************************************************************/
 extern const edma_config_t DMA0_config;
 extern const adc_config_t ADC2_config;
-extern const adc_channel_config_t ADC2_channels_config[2];
+extern const adc_channel_config_t ADC2_channels_config[3];
 /* FlexIO peripheral configuration */
 extern FLEXIO_MCULCD_Type FLEXIO3_peripheralConfig;
 /* FlexIO MCULCD configuration */

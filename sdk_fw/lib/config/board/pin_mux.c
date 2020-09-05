@@ -105,6 +105,8 @@ BOARD_InitPins:
   - {pin_num: B11, peripheral: SAI1, signal: sai_tx_data0, pin_signal: GPIO_B1_01, pull_up_down_config: Pull_Up_47K_Ohm, slew_rate: Fast}
   - {pin_num: D11, peripheral: SAI1, signal: sai_tx_sync, pin_signal: GPIO_B1_03, pull_up_down_config: Pull_Up_47K_Ohm, slew_rate: Fast}
   - {pin_num: C11, peripheral: SAI1, signal: sai_tx_bclk, pin_signal: GPIO_B1_02, pull_up_down_config: Pull_Up_47K_Ohm, slew_rate: Fast}
+  - {pin_num: J14, peripheral: ADC2, signal: 'IN, 4', pin_signal: GPIO_AD_B1_15, pull_up_down_config: no_init}
+  - {pin_num: E4, peripheral: GPIO3, signal: 'gpio_io, 23', pin_signal: GPIO_EMC_37, direction: INPUT, pull_up_down_config: Pull_Up_47K_Ohm, pull_keeper_select: Pull}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 
@@ -180,6 +182,15 @@ void BOARD_InitPins(void) {
   };
   /* Initialize GPIO functionality on GPIO_EMC_32 (pin D5) */
   GPIO_PinInit(GPIO3, 18U, &gpio3_pinD5_config);
+
+  /* GPIO configuration on GPIO_EMC_37 (pin E4) */
+  gpio_pin_config_t gpio3_pinE4_config = {
+      .direction = kGPIO_DigitalInput,
+      .outputLogic = 0U,
+      .interruptMode = kGPIO_NoIntmode
+  };
+  /* Initialize GPIO functionality on GPIO_EMC_37 (pin E4) */
+  GPIO_PinInit(GPIO3, 23U, &gpio3_pinE4_config);
 
   /* GPIO configuration on GPIO_EMC_05 (pin G5) */
   gpio_pin_config_t gpio4_pinG5_config = {
@@ -266,6 +277,9 @@ void BOARD_InitPins(void) {
       IOMUXC_GPIO_AD_B1_14_GPIO1_IO30,        /* GPIO_AD_B1_14 is configured as GPIO1_IO30 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
+      IOMUXC_GPIO_AD_B1_15_GPIO1_IO31,        /* GPIO_AD_B1_15 is configured as GPIO1_IO31 */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
       IOMUXC_GPIO_B0_00_GPIO2_IO00,           /* GPIO_B0_00 is configured as GPIO2_IO00 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
@@ -333,6 +347,9 @@ void BOARD_InitPins(void) {
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
       IOMUXC_GPIO_EMC_32_GPIO3_IO18,          /* GPIO_EMC_32 is configured as GPIO3_IO18 */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_EMC_37_GPIO3_IO23,          /* GPIO_EMC_37 is configured as GPIO3_IO23 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
       IOMUXC_GPIO_SD_B0_00_USDHC1_CMD,        /* GPIO_SD_B0_00 is configured as USDHC1_CMD */
@@ -684,6 +701,16 @@ void BOARD_InitPins(void) {
                                                  Hyst. Enable Field: Hysteresis Disabled */
   IOMUXC_SetPinConfig(
       IOMUXC_GPIO_EMC_32_GPIO3_IO18,          /* GPIO_EMC_32 PAD functional properties : */
+      0x70B0U);                               /* Slew Rate Field: Slow Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: medium(100MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Pull
+                                                 Pull Up / Down Config. Field: 47K Ohm Pull Up
+                                                 Hyst. Enable Field: Hysteresis Disabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_EMC_37_GPIO3_IO23,          /* GPIO_EMC_37 PAD functional properties : */
       0x70B0U);                               /* Slew Rate Field: Slow Slew Rate
                                                  Drive Strength Field: R0/6
                                                  Speed Field: medium(100MHz)
