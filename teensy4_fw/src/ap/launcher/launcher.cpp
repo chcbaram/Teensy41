@@ -10,6 +10,7 @@
 
 #include "launcher.h"
 #include "app/hw_info/hw_info.h"
+#include "app/files/files.h"
 
 
 namespace launcher
@@ -74,9 +75,9 @@ void main(void)
     menu.str_list[i].func = NULL;
   }
 
-  strcpy(menu.str_list[0].str, "H/W 정보");
-  strcpy(menu.str_list[1].str, "설정하기");
-  strcpy(menu.str_list[2].str, "테스트1");
+  strcpy(menu.str_list[0].str, "H/W  정보");
+  strcpy(menu.str_list[1].str, "파일 관리");
+  strcpy(menu.str_list[2].str, "설정 하기");
   strcpy(menu.str_list[3].str, "테스트2");
   strcpy(menu.str_list[4].str, "테스트3");
   strcpy(menu.str_list[5].str, "테스트4");
@@ -84,6 +85,7 @@ void main(void)
   strcpy(menu.str_list[7].str, "테스트6");
 
   menu.str_list[0].func = hw_info::main;
+  menu.str_list[1].func = filesMain;
 
 
   while(is_exit == false)

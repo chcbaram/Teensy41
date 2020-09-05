@@ -103,6 +103,7 @@ static void i2sThreadProcess(void const *argument)
         //SCB_InvalidateDCache_by_Addr ((uint32_t *)xfer.data, xfer.dataSize);
         if (SAI_TransferSendEDMA(SAI1_PERIPHERAL, &SAI1_SAI_Tx_eDMA_Handle, &xfer) != kStatus_Success)
         {
+          SAI_TransferTerminateSendEDMA(SAI1_PERIPHERAL, &SAI1_SAI_Tx_eDMA_Handle);
         }
       }
     }
