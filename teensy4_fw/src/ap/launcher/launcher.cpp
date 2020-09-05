@@ -20,29 +20,65 @@ namespace launcher
 #define BG_COLOR      RGB2COLOR(10, 0, 127)
 
 
+typedef struct menu_list_ menu_list_t;
+
+
+
+extern menu_list_t menu_main;
+extern menu_list_t menu_emul;
+
+
+
+
 
 typedef struct
 {
   char str[32];
   void (*func)(void);
+
+  menu_list_t *menu_list;
 } menu_node_t;
 
 
-
-typedef struct
+typedef struct menu_list_
 {
+  char title_str[32];
   int32_t list_max;
   int32_t list_max_scr;
   int32_t cursor_cur;
   int32_t cursor_scr;
   int32_t cursor_offset;
 
+  const menu_node_t *node_list;
 
-  menu_node_t str_list[32];
+  menu_list_ *menu_list_pre;
 } menu_list_t;
 
 
-menu_list_t menu;
+const menu_node_t main_node[] =
+    {
+        {"게임 하기",   NULL, &menu_emul},
+        {"H/W  정보", hw_info::main, NULL},
+        {"파일 관리",   filesMain, NULL},
+        {"설정 하기",   NULL, NULL},
+        {"테스트 1",   NULL, NULL},
+        {"테스트 2",   NULL, NULL},
+        {"테스트 3",   NULL, NULL},
+        {"테스트 4",   NULL, NULL},
+        {"테스트 5",   NULL, NULL},
+    };
+
+const menu_node_t emul_node[] =
+    {
+        {"GNUBOY", NULL, NULL},
+        {"DOOM",   NULL, NULL},
+    };
+
+
+menu_list_t menu_main;
+menu_list_t menu_emul;
+menu_list_t *p_menu;
+
 
 
 void update(void);
@@ -63,29 +99,29 @@ void main(void)
   audioOpen(&audio);
 
 
+  strcpy(menu_main.title_str, "메인메뉴");
+  menu_main.cursor_cur = 0;
+  menu_main.cursor_scr = 0;
+  menu_main.cursor_offset = 0;
+  menu_main.list_max_scr = 5;
+  menu_main.list_max = sizeof(main_node)/sizeof(menu_node_t);
+  menu_main.menu_list_pre = NULL;
+  menu_main.node_list = main_node;
 
-  menu.cursor_cur = 0;
-  menu.cursor_scr = 0;
-  menu.cursor_offset = 0;
-  menu.list_max_scr = 5;
-  menu.list_max = 8;
 
-  for (uint32_t i=0; i<sizeof(menu.str_list)/sizeof(menu_node_t); i++)
-  {
-    menu.str_list[i].func = NULL;
-  }
+  strcpy(menu_emul.title_str, "게임하기");
+  menu_emul.cursor_cur = 0;
+  menu_emul.cursor_scr = 0;
+  menu_emul.cursor_offset = 0;
+  menu_emul.list_max_scr = 5;
+  menu_emul.list_max = sizeof(emul_node)/sizeof(menu_node_t);
+  menu_emul.menu_list_pre = NULL;
+  menu_emul.node_list = emul_node;
 
-  strcpy(menu.str_list[0].str, "H/W  정보");
-  strcpy(menu.str_list[1].str, "파일 관리");
-  strcpy(menu.str_list[2].str, "설정 하기");
-  strcpy(menu.str_list[3].str, "테스트2");
-  strcpy(menu.str_list[4].str, "테스트3");
-  strcpy(menu.str_list[5].str, "테스트4");
-  strcpy(menu.str_list[6].str, "테스트5");
-  strcpy(menu.str_list[7].str, "테스트6");
 
-  menu.str_list[0].func = hw_info::main;
-  menu.str_list[1].func = filesMain;
+
+
+  p_menu = &menu_main;
 
 
   while(is_exit == false)
@@ -111,28 +147,40 @@ void update(void)
 {
   if (buttonGetRepeatEvent(_PIN_BUTTON_UP))
   {
-    menu.cursor_cur--;
-    if (menu.cursor_cur < 0)
+    p_menu->cursor_cur--;
+    if (p_menu->cursor_cur < 0)
     {
-      menu.cursor_cur = menu.list_max - 1;
+      p_menu->cursor_cur = p_menu->list_max - 1;
     }
     audioPlayNote(5, 1, 30);
   }
   if (buttonGetRepeatEvent(_PIN_BUTTON_DOWN))
   {
-    menu.cursor_cur++;
-    if (menu.cursor_cur >= menu.list_max)
+    p_menu->cursor_cur++;
+    if (p_menu->cursor_cur >= p_menu->list_max)
     {
-      menu.cursor_cur = 0;
+      p_menu->cursor_cur = 0;
     }
     audioPlayNote(5, 1, 30);
   }
 
   if (buttonGetRepeatEvent(_PIN_BUTTON_A))
   {
-    if (menu.str_list[menu.cursor_cur].func != NULL)
+    if (p_menu->node_list[p_menu->cursor_cur].func != NULL)
     {
-      menu.str_list[menu.cursor_cur].func();
+      p_menu->node_list[p_menu->cursor_cur].func();
+    }
+    else if (p_menu->node_list[p_menu->cursor_cur].menu_list != NULL)
+    {
+      p_menu->node_list[p_menu->cursor_cur].menu_list->menu_list_pre = p_menu;
+      p_menu = p_menu->node_list[p_menu->cursor_cur].menu_list;
+    }
+  }
+  if (buttonGetRepeatEvent(_PIN_BUTTON_B))
+  {
+    if (p_menu->menu_list_pre != NULL)
+    {
+      p_menu = p_menu->menu_list_pre;
     }
   }
 }
@@ -199,19 +247,19 @@ void drawMainMenu(void)
 
   drawBoxOut(title_box_x, title_box_y, title_box_w, title_box_h, BOX_COLOR);
   drawBoxOut(title_box_x, title_box_y, title_box_w, title_box_h, BOX_COLOR);
-  lcdPrintfRect(title_box_x, title_box_y, title_box_w, title_box_h, black, 1, LCD_ALIGN_H_CENTER|LCD_ALIGN_V_CENTER, "메인메뉴");
+  lcdPrintfRect(title_box_x, title_box_y, title_box_w, title_box_h, black, 1, LCD_ALIGN_H_CENTER|LCD_ALIGN_V_CENTER, p_menu->title_str);
 
 
   drawBoxIn(title_box_x, title_box_y+26, title_box_w, box_h-40, BG_COLOR);
 
-  menu.cursor_scr = menu.cursor_cur%menu.list_max_scr;
-  menu.cursor_offset = menu.cursor_cur - menu.cursor_scr;
+  p_menu->cursor_scr = p_menu->cursor_cur%p_menu->list_max_scr;
+  p_menu->cursor_offset = p_menu->cursor_cur - p_menu->cursor_scr;
 
-  for (int i=0; i<menu.list_max_scr; i++)
+  for (int i=0; i<p_menu->list_max_scr; i++)
   {
-    if ((menu.cursor_offset + i) < menu.list_max)
+    if ((p_menu->cursor_offset + i) < p_menu->list_max)
     {
-      if (i == menu.cursor_scr)
+      if (i == p_menu->cursor_scr)
       {
         lcdDrawFillRect(menu_x+5, menu_y + i*menu_h + 1, menu_w, menu_h-2, white);
         menu_color = black;
@@ -223,7 +271,7 @@ void drawMainMenu(void)
 
       lcdPrintfRect(menu_x, menu_y + i*menu_h, menu_w, menu_h, menu_color, 1,
                     LCD_ALIGN_H_CENTER|LCD_ALIGN_V_CENTER,
-                    menu.str_list[menu.cursor_offset+i].str);
+                    p_menu->node_list[p_menu->cursor_offset+i].str);
     }
   }
 }

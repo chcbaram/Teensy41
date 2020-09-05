@@ -13,7 +13,38 @@
 #include "FatFs/src/ff.h"
 
 
+static bool     is_used[8] = {0, };
+static __attribute__((section(".itc_buf"))) FIL      fil_buf[8];
 
+
+void *ob_malloc(size_t size)
+{
+  void *ret = NULL;
+
+  for (int i=0; i<8; i++)
+  {
+    if (is_used[i] == false)
+    {
+      is_used[i] = true;
+      ret = (void *)&fil_buf[i];
+      break;
+    }
+  }
+
+  return ret;
+}
+
+void ob_free(void *addr)
+{
+  for (int i=0; i<8; i++)
+  {
+    if (is_used[i] == true && addr == (void *)&fil_buf[i])
+    {
+      is_used[i] = false;
+      break;
+    }
+  }
+}
 
 FILE *ob_fopen(const char *filename, const char *mode)
 {
@@ -22,7 +53,7 @@ FILE *ob_fopen(const char *filename, const char *mode)
   FIL *fil;
   int i;
 
-  fil = malloc(sizeof(FIL));
+  fil = ob_malloc(sizeof(FIL));
   if (!fil)
   {
     printf("malloc fail\n");
@@ -46,7 +77,7 @@ FILE *ob_fopen(const char *filename, const char *mode)
 
   res = f_open(fil, filename, flags);
   if (res != FR_OK) {
-    free(fil);
+    ob_free(fil);
     return NULL;
   }
 
@@ -61,7 +92,7 @@ int ob_fclose(FILE *stream)
   if (res != FR_OK)
     return -1;
 
-  free(fil);
+  ob_free(fil);
   return 0;
 }
 size_t ob_fread(void *ptr, size_t size, size_t count, FILE *stream)

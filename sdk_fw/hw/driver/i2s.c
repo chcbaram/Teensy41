@@ -17,7 +17,11 @@
 
 #ifdef _USE_HW_I2S
 
-#ifdef _USE_HW_CMDIF
+
+//#define _USE_I2S_CMDIF
+
+
+#if defined(_USE_HW_CMDIF) && defined(_USE_I2S_CMDIF)
 static void i2sCmdif(void);
 #endif
 
@@ -31,7 +35,6 @@ static void i2sCmdif(void);
 static bool is_init = false;
 volatile static bool is_started = false;
 static int16_t send_frame[I2S_MAX_BUF_LEN] = {0, };
-static int16_t buf_frame[I2S_MAX_BUF_LEN];
 
 
 static bool i2sAvailableTxDMA(void);
@@ -66,7 +69,7 @@ bool i2sInit(void)
 
   is_init = true;
 
-#ifdef _USE_HW_CMDIF
+#if defined(_USE_HW_CMDIF) && defined(_USE_I2S_CMDIF)
   cmdifAdd("i2s", i2sCmdif);
 #endif
 
@@ -224,7 +227,7 @@ bool i2sPlayNote(int8_t octave, int8_t note, uint16_t volume, uint32_t time_ms)
 
 
 
-#ifdef _USE_HW_CMDIF
+#if defined(_USE_HW_CMDIF) && defined(_USE_I2S_CMDIF)
 
 typedef struct wavfile_header_s
 {
@@ -254,6 +257,9 @@ uint8_t read_buf [READBUF_SIZE*2];
 uint8_t *read_ptr;
 int16_t out_buf  [2 * 1152];
 int     bytes_left;
+
+static int16_t buf_frame[I2S_MAX_BUF_LEN];
+
 
 static int fillReadBuffer(uint8_t *read_buf, uint8_t *read_ptr, int buf_size, int bytes_left, FILE *infile)
 {
