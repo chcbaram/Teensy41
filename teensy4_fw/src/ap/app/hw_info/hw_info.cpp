@@ -32,7 +32,6 @@ void main(void)
 
   audioOpen(&audio);
 
-  lcdSetResizeMode(LCD_RESIZE_BILINEAR);
 
   pre_time = micros();
   while(1)

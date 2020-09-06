@@ -89,6 +89,7 @@ void drawMainMenu(void);
 void drawBox(int16_t x, int16_t y, int16_t w, int16_t h, int16_t thick, uint16_t color);
 void drawBoxOut(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
 void drawBoxIn(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
+void showTitle(void);
 
 
 void main(void)
@@ -119,10 +120,10 @@ void main(void)
   menu_emul.node_list = emul_node;
 
 
-
-
   p_menu = &menu_main;
 
+
+  showTitle();
 
   while(is_exit == false)
   {
@@ -338,10 +339,6 @@ void drawMsgBox(const char *str, uint16_t txt_color, uint32_t timeout)
   box_y = (LCD_HEIGHT - box_h)/2;
 
 
-  lcdDrawFillRect(box_x, box_y, box_w, box_h, gray);
-  lcdDrawFillRect(box_x, box_y, box_w, 30, lightblue);
-  lcdDrawRect(box_x, box_y, box_w, box_h, white);
-
   drawBox(box_x, box_y, box_w, box_h, 2, BG_COLOR);
   lcdPrintfRect(box_x, box_y, box_w, box_h, txt_color, 1, LCD_ALIGN_H_CENTER|LCD_ALIGN_V_CENTER, str);
 
@@ -357,6 +354,58 @@ void drawMsgBox(const char *str, uint16_t txt_color, uint32_t timeout)
     if (timeout > 0 && (millis()-pre_time) >= timeout)
     {
       break;
+    }
+  }
+}
+
+void showTitle(void)
+{
+  int16_t box_x;
+  int16_t box_y;
+  int16_t box_w = 240;
+  int16_t box_h = 120;
+  uint32_t pre_time;
+
+  box_x = (LCD_WIDTH  - box_w)/2;
+  box_y = (LCD_HEIGHT - box_h)/2;
+
+
+  lcdClearBuffer(BG_COLOR);
+
+
+  drawBox(box_x, box_y, box_w, box_h, 2, BG_COLOR);
+  drawBoxIn(box_x+4, box_y+4, box_w-8, 20, BG_COLOR);
+  lcdPrintfRect(box_x+4, box_y+4, box_w-8, 20, white, 1, LCD_ALIGN_H_CENTER|LCD_ALIGN_V_CENTER, "오픈로보틱스 커뮤니티");
+
+  drawBoxOut(box_x+6, box_y+6, 15, 15, BOX_COLOR);
+  drawBoxOut(box_x+box_w-22, box_y+6, 15, 15, BOX_COLOR);
+
+  drawBoxOut(box_x+10, box_y+28, box_w-20, 40, BOX_COLOR);
+  lcdPrintfRect(box_x, box_y+28, box_w, 40, red,   2, LCD_ALIGN_H_CENTER|LCD_ALIGN_V_CENTER, "        4");
+  lcdPrintfRect(box_x, box_y+28, box_w, 40, black, 2, LCD_ALIGN_H_CENTER|LCD_ALIGN_V_CENTER, "OROCABOY ");
+
+  lcdPrintfRect(box_x, box_y+15, box_w, box_h-40, white, 1, LCD_ALIGN_H_CENTER|LCD_ALIGN_V_BOTTOM, "OROCA.ORG");
+  lcdPrintfRect(box_x, box_y+15, box_w, box_h-20, black, 1, LCD_ALIGN_H_CENTER|LCD_ALIGN_V_BOTTOM, "정식사용자 입니다");
+
+  lcdPrintf(0, 200, white, "AT &C1 B0");
+  lcdPrintf(0, 216, white, "OK");
+
+  lcdRequestDraw();
+
+  pre_time = millis();
+  while(1)
+  {
+    if (buttonGetRepeatEvent(_PIN_BUTTON_A))
+    {
+      break;
+    }
+    if (buttonGetRepeatEvent(_PIN_BUTTON_B))
+    {
+      break;
+    }
+    if ((millis()-pre_time) >= 3000)
+    {
+      //break;
     }
   }
 }
