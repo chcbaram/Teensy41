@@ -97,10 +97,10 @@
 
 
 
-#define FLASH_ADDR_TAG                0x60200800
-#define FLASH_ADDR_FW                 0x60200000
+#define FLASH_ADDR_TAG                0x70400800
+#define FLASH_ADDR_FW                 0x70400000
 
-#define FLASH_ADDR_START              0x60200000
+#define FLASH_ADDR_START              0x70400000
 #define FLASH_ADDR_END                (FLASH_ADDR_START + 2*1-24*1024)
 
 

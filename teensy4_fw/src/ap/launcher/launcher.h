@@ -16,8 +16,8 @@ namespace launcher
 {
 
 void main(void);
-
-
+void drawBackground(const char *title_str);
+bool runFile(const char *file_name);
 }
 
 #endif /* SRC_AP_LAUNCHER_LAUNCHER_H_ */

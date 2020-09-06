@@ -58,8 +58,8 @@ typedef struct menu_list_
 const menu_node_t main_node[] =
     {
         {"게임 하기",   NULL, &menu_emul},
+        {"파일 실행",   files::main, NULL},
         {"H/W  정보", hw_info::main, NULL},
-        {"파일 관리",   filesMain, NULL},
         {"설정 하기",   NULL, NULL},
         {"테스트 1",   NULL, NULL},
         {"테스트 2",   NULL, NULL},
@@ -70,8 +70,8 @@ const menu_node_t main_node[] =
 
 const menu_node_t emul_node[] =
     {
-        {"GNUBOY", NULL, NULL},
-        {"DOOM",   NULL, NULL},
+        {"오로카 갤러그", NULL, NULL},
+        {"오로카 팩맨",   NULL, NULL},
     };
 
 
@@ -84,7 +84,7 @@ menu_list_t *p_menu;
 void update(void);
 bool render(void);
 
-void drawBackground(void);
+
 void drawMainMenu(void);
 void drawBox(int16_t x, int16_t y, int16_t w, int16_t h, int16_t thick, uint16_t color);
 void drawBoxOut(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
@@ -176,7 +176,7 @@ void update(void)
       p_menu = p_menu->node_list[p_menu->cursor_cur].menu_list;
     }
   }
-  if (buttonGetRepeatEvent(_PIN_BUTTON_B))
+  if (buttonGetRepeatEvent(_PIN_BUTTON_B) || buttonGetRepeatEvent(_PIN_BUTTON_HOME))
   {
     if (p_menu->menu_list_pre != NULL)
     {
@@ -187,13 +187,13 @@ void update(void)
 
 bool render(void)
 {
-  drawBackground();
+  drawBackground("OROCABOY");
   drawMainMenu();
 
   return true;
 }
 
-void drawBackground(void)
+void drawBackground(const char *title_str)
 {
   int16_t info_h = 30;
   int16_t info_y =  0;
@@ -206,7 +206,7 @@ void drawBackground(void)
 
   drawBox(2, info_y, LCD_WIDTH-4, info_h, 1, BOX_COLOR);
 
-  lcdPrintfRect(0, info_y, LCD_WIDTH, info_h, black, 1, LCD_ALIGN_H_CENTER|LCD_ALIGN_V_CENTER, "OROCABOY");
+  lcdPrintfRect(0, info_y, LCD_WIDTH, info_h, black, 1, LCD_ALIGN_H_CENTER|LCD_ALIGN_V_CENTER, title_str);
   lcdPrintfRect(0, info_y, LCD_WIDTH, info_h, black, 1, LCD_ALIGN_H_RIGHT|LCD_ALIGN_V_CENTER, "BAT %d%% ", batteryGetLevel());
 }
 
@@ -321,6 +321,36 @@ void drawBoxIn(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color)
   lcdDrawVLine(x+w, y  , h, white);
   lcdDrawHLine(x  , y+h, w, white);
 }
+
+bool runFile(const char *file_name)
+{
+  bool ret = false;
+  FRESULT res;
+  FIL file;
+  UINT len;
+
+
+  res = f_open(&file, file_name, FA_OPEN_EXISTING | FA_READ);
+  if (res == FR_OK)
+  {
+    void (**jump_func)(void) = (void (**)(void))(FLASH_ADDR_FW + 4);
+
+    f_read(&file, (void *)FLASH_ADDR_FW, f_size(&file), &len);
+    SCB_CleanInvalidateDCache();
+    f_close(&file);
+
+    if ((uint32_t)(*jump_func) != 0xFFFFFFFF)
+    {
+      bspDeInit();
+      __set_MSP(*(uint32_t *)FLASH_ADDR_FW);
+      (*jump_func)();
+    }
+  }
+
+  return ret;
+}
+
+
 
 }
 

@@ -12,7 +12,13 @@
 #include "hw.h"
 
 
-void filesMain(void);
+namespace files
+{
+
+void main(void);
+
+
+}
 
 
 #endif /* SRC_AP_FILES_FILES_H_ */

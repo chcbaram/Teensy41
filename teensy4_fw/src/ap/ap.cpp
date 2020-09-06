@@ -109,7 +109,7 @@ void bootCmdif(void)
   if (cmdifGetParamCnt() == 1 && cmdifHasString("jump", 0) == true)
   {
     //void (**jump_func)(void) = (void (**)(void))(FLASH_ADDR_FW + 4);
-    void (**jump_func)(void) = (void (**)(void))(0x70400000 + 4);
+    void (**jump_func)(void) = (void (**)(void))(FLASH_ADDR_FW + 4);
 
     if ((uint32_t)(*jump_func) != 0xFFFFFFFF)
     {
@@ -117,8 +117,7 @@ void bootCmdif(void)
       delay(100);
       bspDeInit();
 
-      //__set_MSP(*(uint32_t *)FLASH_ADDR_FW);
-      __set_MSP(*(uint32_t *)0x70400000);
+      __set_MSP(*(uint32_t *)FLASH_ADDR_FW);
       (*jump_func)();
     }
     else
@@ -132,7 +131,7 @@ void bootCmdif(void)
     if (res == FR_OK)
     {
       pre_time = millis();
-      f_read(&file, (void *)0x70400000, f_size(&file), &len);
+      f_read(&file, (void *)FLASH_ADDR_FW, f_size(&file), &len);
       SCB_CleanInvalidateDCache();
 
       cmdifPrintf("copy_fw   \t\t: %dms, %dKB\n", (int)(millis()-pre_time), (int)f_size(&file)/1024);
