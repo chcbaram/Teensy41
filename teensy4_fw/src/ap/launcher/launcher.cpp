@@ -175,6 +175,10 @@ void update(void)
       p_menu->node_list[p_menu->cursor_cur].menu_list->menu_list_pre = p_menu;
       p_menu = p_menu->node_list[p_menu->cursor_cur].menu_list;
     }
+    else
+    {
+      drawMsgBox("없     음", red, 500);
+    }
   }
   if (buttonGetRepeatEvent(_PIN_BUTTON_B) || buttonGetRepeatEvent(_PIN_BUTTON_HOME))
   {
@@ -320,6 +324,41 @@ void drawBoxIn(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color)
   lcdDrawHLine(x  , y  , w, black);
   lcdDrawVLine(x+w, y  , h, white);
   lcdDrawHLine(x  , y+h, w, white);
+}
+
+void drawMsgBox(const char *str, uint16_t txt_color, uint32_t timeout)
+{
+  int16_t box_x;
+  int16_t box_y;
+  int16_t box_w = 240;
+  int16_t box_h = 80;
+  uint32_t pre_time;
+
+  box_x = (LCD_WIDTH  - box_w)/2;
+  box_y = (LCD_HEIGHT - box_h)/2;
+
+
+  lcdDrawFillRect(box_x, box_y, box_w, box_h, gray);
+  lcdDrawFillRect(box_x, box_y, box_w, 30, lightblue);
+  lcdDrawRect(box_x, box_y, box_w, box_h, white);
+
+  drawBox(box_x, box_y, box_w, box_h, 2, BG_COLOR);
+  lcdPrintfRect(box_x, box_y, box_w, box_h, txt_color, 1, LCD_ALIGN_H_CENTER|LCD_ALIGN_V_CENTER, str);
+
+  lcdRequestDraw();
+
+  pre_time = millis();
+  while(1)
+  {
+    if (buttonGetRepeatEvent(_PIN_BUTTON_B))
+    {
+      break;
+    }
+    if (timeout > 0 && (millis()-pre_time) >= timeout)
+    {
+      break;
+    }
+  }
 }
 
 bool runFile(const char *file_name)
