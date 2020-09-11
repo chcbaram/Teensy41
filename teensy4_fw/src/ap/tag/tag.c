@@ -17,8 +17,8 @@ extern uint32_t _image_size;
 
 __attribute__((aligned(2048))) __attribute__((used, section(".tag"))) const boot_tag_t boot_tag =
     {
-        "OROCABOY4_FW",
-        "V2009205R1",
+        "OROCABOY4_LAUNCHER",
+        "V200912R1",
         0x5555AAAA,
         0x60000000,
         (uint32_t)&_image_start,
