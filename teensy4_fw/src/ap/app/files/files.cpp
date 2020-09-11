@@ -95,7 +95,10 @@ void main(void)
       if (buttonGetRepeatEvent(_PIN_BUTTON_A))
       {
         sprintf(file_str, "/%s/%s", FILES_DIR, file_list.file_node[file_list.cursor_cur].file_name);
-        launcher::runFile(file_str);
+        if (launcher::runFile(file_str) != true)
+        {
+          drawMsgBox("잘못된 파일");
+        }
       }
 
       drawFileList(&file_list);

@@ -11,6 +11,7 @@
 #include "launcher.h"
 #include "app/hw_info/hw_info.h"
 #include "app/files/files.h"
+#include "boot/boot.h"
 
 
 namespace launcher
@@ -421,17 +422,19 @@ bool runFile(const char *file_name)
   res = f_open(&file, file_name, FA_OPEN_EXISTING | FA_READ);
   if (res == FR_OK)
   {
-    void (**jump_func)(void) = (void (**)(void))(FLASH_ADDR_FW + 4);
-
-    f_read(&file, (void *)FLASH_ADDR_FW, f_size(&file), &len);
+    f_read(&file, (void *)FLASH_ADDR_TAG, f_size(&file), &len);
     SCB_CleanInvalidateDCache();
     f_close(&file);
 
-    if ((uint32_t)(*jump_func) != 0xFFFFFFFF)
+    if (bootVerifyFw(FLASH_ADDR_TAG) == true)
     {
-      bspDeInit();
-      __set_MSP(*(uint32_t *)FLASH_ADDR_FW);
-      (*jump_func)();
+      if (bootVerifyMagicNumber(FLASH_ADDR_TAG) == true)
+      {
+        if (bootVerifyCrc(FLASH_ADDR_TAG) == true)
+        {
+          bootJumpToFw(FLASH_ADDR_TAG);
+        }
+      }
     }
   }
 
