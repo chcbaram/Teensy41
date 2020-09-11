@@ -271,7 +271,10 @@ usb_status_t USB_DeviceCdcVcomCallback(class_handle_t handle, uint32_t event, vo
               }
 #endif
 #ifdef __APP_MODE
-              cdc_reset_delay_cnt = 100;
+              if (cdc_reset_mode == USB_CDC_RESET_MODE_TO_BOOT)
+              {
+                cdc_reset_delay_cnt = 100;
+              }
 #endif
                 s_recvSize = epCbParam->length;
 
