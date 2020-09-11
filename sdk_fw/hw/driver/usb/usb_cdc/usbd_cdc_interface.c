@@ -23,7 +23,7 @@
 #include "usbd_cdc_interface.h"
 #include "usb_composite.h"
 
-//#include "reset.h"
+#include "reset.h"
 
 
 #define APP_RX_DATA_SIZE  2048
@@ -173,7 +173,7 @@ void USB_SoF_IRQHandler(void)
 
     if (cdc_reset_delay_cnt == 0)
     {
-      //resetRunSoftReset();
+      resetRunSoftReset();
     }
   }
 }
@@ -270,7 +270,9 @@ usb_status_t USB_DeviceCdcVcomCallback(class_handle_t handle, uint32_t event, vo
                 cdc_reset_delay_cnt = 100;
               }
 #endif
-
+#ifdef __APP_MODE
+              cdc_reset_delay_cnt = 100;
+#endif
                 s_recvSize = epCbParam->length;
 
 

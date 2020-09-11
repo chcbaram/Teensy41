@@ -9,7 +9,12 @@
 
 
 #include "ap.h"
+#include "boot/boot.h"
 #include "launcher/launcher.h"
+
+
+static bool is_cmd = true;
+static cmd_t cmd_boot;
 
 
 static void bootCmdif(void);
@@ -22,6 +27,10 @@ void apInit(void)
 
   cmdifOpen(_DEF_UART1, 57600);
   cmdifAdd("boot", bootCmdif);
+
+  cmdInit(&cmd_boot);
+  cmdBegin(&cmd_boot, _DEF_UART1, 57600);
+
 
   osThreadDef(threadCmdif, threadCmdif, _HW_DEF_RTOS_THREAD_PRI_CMDIF, 0, _HW_DEF_RTOS_THREAD_MEM_CMDIF);
   if (osThreadCreate(osThread(threadCmdif), NULL) != NULL)
@@ -48,8 +57,6 @@ void apInit(void)
 
 void apMain(void)
 {
-  uint32_t pre_time;
-
   i2sInit();
   audioInit();
   batteryInit();
@@ -58,15 +65,8 @@ void apMain(void)
 
   launcher::main();
 
-  pre_time = micros();
   while(1)
   {
-    if (micros()-pre_time >= 100*1000)
-    {
-      pre_time = micros();
-
-      ledToggle(_DEF_LED1);
-    }
     osThreadYield();
   }
 }
@@ -74,11 +74,49 @@ void apMain(void)
 static void threadCmdif(void const *argument)
 {
   (void)argument;
+  uint32_t pre_time;
+  uint32_t led_period;
+
+
+  if (buttonGetPressed(_PIN_BUTTON_HOME) == true)
+  {
+    is_cmd = false;
+  }
 
   while(1)
   {
-    cmdifMain();
+    if (buttonGetRepeatEvent(_PIN_BUTTON_X) == true)
+    {
+      is_cmd ^= 1;
+    }
+
+    if (is_cmd == true)
+    {
+      if (cmdReceivePacket(&cmd_boot) == true)
+      {
+        bootProcessCmd(&cmd_boot);
+      }
+    }
+    else
+    {
+      cmdifMain();
+    }
     delay(1);
+
+    if (is_cmd == true)
+    {
+      led_period = 100;
+    }
+    else
+    {
+      led_period = 500;
+    }
+    if (millis()-pre_time >= led_period)
+    {
+      pre_time = millis();
+
+      ledToggle(_DEF_LED1);
+    }
   }
 }
 

@@ -13,7 +13,6 @@
 
 
 
-
 static void threadMain(void const *argument);
 
 

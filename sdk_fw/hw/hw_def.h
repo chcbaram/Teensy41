@@ -43,6 +43,7 @@
 #define _USE_HW_AUDIO
 #define _USE_HW_PXP
 #define _USE_HW_BATTERY
+#define _USE_HW_RESET
 
 
 #define _USE_HW_LED
@@ -94,14 +95,17 @@
 #define      HW_MEM_ADDR            0x70800000
 #define      HW_MEM_LENGTH          (8*1024*1024)
 
+#define _USE_HW_CMD
+#define      HW_CMD_MAX_DATA_LENGTH 2048
 
 
 
-#define FLASH_ADDR_TAG                0x70400800
-#define FLASH_ADDR_FW                 0x70400000
+
+#define FLASH_ADDR_TAG                0x70400000
+#define FLASH_ADDR_FW                 0x70400400
 
 #define FLASH_ADDR_START              0x70400000
-#define FLASH_ADDR_END                (FLASH_ADDR_START + 2*1-24*1024)
+#define FLASH_ADDR_END                (FLASH_ADDR_START + 4*1024*1024)
 
 
 

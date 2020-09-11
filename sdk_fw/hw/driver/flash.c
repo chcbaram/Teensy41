@@ -48,6 +48,28 @@ bool flashInit(void)
   return true;
 }
 
+bool flashIsRange(uint32_t addr_begin, uint32_t length)
+{
+  bool ret = false;
+  uint32_t addr_end;
+  uint32_t flash_start;
+  uint32_t flash_end;
+
+
+  addr_end = addr_begin + length - 1;
+
+
+  flash_start = FLASH_ADDR_START;
+  flash_end   = FLASH_ADDR_END;
+  if ((addr_begin >= flash_start) && (addr_begin < flash_end) &&
+      (addr_end   >= flash_start) && (addr_end   < flash_end))
+  {
+    ret = true;
+  }
+
+  return ret;
+}
+
 bool flashErase(uint32_t addr, uint32_t length)
 {
   bool ret = false;
@@ -64,6 +86,10 @@ bool flashErase(uint32_t addr, uint32_t length)
   }
 #endif
 
+  if (flashIsRange(addr, length) == true)
+  {
+    return true;
+  }
 
   if (addr < FLASH_ADDR_OFFSET) return false;
   if (addr >= (FLASH_ADDR_OFFSET + FLASH_MAX_SIZE)) return false;
@@ -141,6 +167,12 @@ bool flashWrite(uint32_t addr, uint8_t *p_data, uint32_t length)
 #endif
 
 
+  if (flashIsRange(addr, length) == true)
+  {
+    memcpy((void *)addr, (void *)p_data, length);
+    return true;
+  }
+
   index = 0;
   offset = addr%FLASH_PAGE_SIZE;
 
@@ -213,6 +245,11 @@ bool flashRead(uint32_t addr, uint8_t *p_data, uint32_t length)
   }
 #endif
 
+  if (flashIsRange(addr, length) == true)
+  {
+    memcpy((void *)p_data, (void *)addr, length);
+    return true;
+  }
 
   if (addr < FLASH_ADDR_OFFSET) return false;
   if (addr >= (FLASH_ADDR_OFFSET + FLASH_MAX_SIZE)) return false;

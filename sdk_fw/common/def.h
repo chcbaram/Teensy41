@@ -17,6 +17,10 @@
 #include <stdarg.h>
 
 
+#include "def_err.h"
+
+
+
 
 #define _DEF_LED1                   0
 #define _DEF_LED2                   1
@@ -42,6 +46,12 @@
 #define _DEF_OUTPUT_PULLDOWN        5
 
 
+#define _DEF_RESET_POWER            0
+#define _DEF_RESET_PIN              1
+#define _DEF_RESET_WDG              2
+#define _DEF_RESET_SOFT             3
+
+
 
 #define constrain(amt,low,high) ((amt)<(low)?(low):((amt)>(high)?(high):(amt)))
 
@@ -55,6 +65,9 @@
 #endif
 
 
+#define FLASH_MAGIC_NUMBER      0x5555AAAA
+
+
 typedef struct
 {
   uint8_t boot_name[32];
@@ -65,6 +78,36 @@ typedef struct
   uint32_t image_end;
   uint32_t image_size;
 } boot_tag_t;
+
+
+typedef struct
+{
+  uint32_t magic_number;
+
+  //-- fw info
+  //
+  uint8_t  version_str[32];
+  uint8_t  board_str  [32];
+  uint8_t  name_str   [32];
+  uint8_t  date_str   [32];
+  uint8_t  time_str   [32];
+  uint32_t addr_tag;
+  uint32_t addr_fw;
+  uint32_t load_start;
+  uint32_t load_size;
+  uint32_t reserved   [30];
+
+  //-- tag info
+  //
+  uint32_t tag_flash_type;
+  uint32_t tag_flash_start;
+  uint32_t tag_flash_end;
+  uint32_t tag_flash_length;
+  uint32_t tag_flash_crc;
+  uint32_t tag_length;
+  uint8_t  tag_date_str[32];
+  uint8_t  tag_time_str[32];
+} flash_tag_t;
 
 
 #endif /* SRC_COMMON_DEF_H_ */

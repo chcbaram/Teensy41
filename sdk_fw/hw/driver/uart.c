@@ -45,7 +45,7 @@ typedef struct
   uint8_t  rx_mode;
   uint8_t  hw_driver;
 
-  uint8_t  rx_buf[UART_RX_BUF_LENGTH];
+  //uint8_t  rx_buf[UART_RX_BUF_LENGTH];
 
   qbuffer_t qbuffer_rx;
 

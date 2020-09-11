@@ -44,6 +44,8 @@ extern "C" {
 #include "resize.h"
 #include "pxp.h"
 #include "battery.h"
+#include "cmd.h"
+#include "util.h"
 #include "lvgl/lvgl.h"
 
 

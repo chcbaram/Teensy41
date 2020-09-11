@@ -1,2 +1,3 @@
 *.bak
 emul_gnuboy/.settings/language.settings.xml
+teensy4_loader/.settings/org.eclipse.cdt.managedbuilder.core.prefs
