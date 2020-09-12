@@ -14,9 +14,7 @@
 
 
 
-__attribute__((aligned(2048))) __attribute__((used, section(".fw_tag"))) const uint8_t boot_name[32] = "GNUBOY";
-                               __attribute__((used, section(".fw_tag"))) const uint8_t boot_ver[32]  = "V200915R1";
-
+extern "C" void gnuboyMain(void);
 
 
 
@@ -65,6 +63,7 @@ void apMain(void)
   lcdInit();
 
 
+  gnuboyMain();
 
   audioOpen(&audio);
 

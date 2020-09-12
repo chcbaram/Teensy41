@@ -29,12 +29,12 @@ static void i2sCmdif(void);
 #define I2S_MAX_BUF_LEN         (16*4*8) // 32ms
 #define I2S_MAX_FRAME_LEN       (16*4)   // 4ms
 
-
+static uint32_t i2s_sample_rate = I2S_SAMPLERATE_HZ;
 
 
 static bool is_init = false;
 volatile static bool is_started = false;
-static int16_t send_frame[I2S_MAX_BUF_LEN] = {0, };
+static __attribute__((section("NonCacheable.init")))  int16_t send_frame[I2S_MAX_BUF_LEN] = {0, };
 
 
 static bool i2sAvailableTxDMA(void);
@@ -185,7 +185,7 @@ bool i2sPlayNote(int8_t octave, int8_t note, uint16_t volume, uint32_t time_ms)
 {
   uint32_t pre_time;
   int32_t sample_rate = I2S_SAMPLERATE_HZ;
-  int32_t num_samples = 4 * 16000 / 1000;
+  int32_t num_samples = 4 * I2S_SAMPLERATE_HZ / 1000;
   float sample_point;
   int16_t sample[num_samples];
   int16_t sample_index = 0;
@@ -225,7 +225,10 @@ bool i2sPlayNote(int8_t octave, int8_t note, uint16_t volume, uint32_t time_ms)
   return true;
 }
 
-
+void i2sSetSampleRate(uint32_t sample_rate)
+{
+  SAI_TxSetBitClockRate(SAI1_PERIPHERAL, SAI1_TX_BCLK_SOURCE_CLOCK_HZ, sample_rate, SAI1_TX_WORD_WIDTH, SAI1_TX_WORDS_PER_FRAME);
+}
 
 #if defined(_USE_HW_CMDIF) && defined(_USE_I2S_CMDIF)
 

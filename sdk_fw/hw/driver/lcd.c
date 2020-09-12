@@ -486,7 +486,10 @@ bool lcdRequestDraw(void)
 void lcdUpdateDraw(void)
 {
   lcdRequestDraw();
-  while(lcdDrawAvailable() != true);
+  while(lcdDrawAvailable() != true)
+  {
+    delay(1);
+  }
 }
 
 void lcdSetWindow(uint16_t x, uint16_t y, uint16_t w, uint16_t h)

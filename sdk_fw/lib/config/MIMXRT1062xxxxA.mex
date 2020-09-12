@@ -25,6 +25,7 @@
             <power_domains/>
             <pin_labels>
                <pin_label pin_num="A11" pin_signal="GPIO_B1_00" label="LCD_BKT_PWM" identifier="LCD_BKT_PWM"/>
+               <pin_label pin_num="C3" pin_signal="GPIO_EMC_36" label="SPK_EN"/>
             </pin_labels>
          </pins_profile>
          <functions_list>
@@ -1196,7 +1197,7 @@
             <component name="system" uuid="b2527345-7aac-4585-b6ff-5a35e5c2a224" type_id="system_54b53072540eeeb8f8e9343e71f28176">
                <config_set_global name="global_system_definitions"/>
             </component>
-            <component name="msg" uuid="16906257-4325-44f7-a124-a1ec94b148fe" type_id="msg_6e2baaf3b97dbeef01c0043275f9a0e7">
+            <component name="msg" uuid="ff5805e5-e194-4fb3-bb5d-ee3be9d0de51" type_id="msg_6e2baaf3b97dbeef01c0043275f9a0e7">
                <config_set_global name="global_messages"/>
             </component>
          </components>

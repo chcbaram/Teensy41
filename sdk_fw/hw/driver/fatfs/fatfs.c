@@ -11,6 +11,7 @@
 
 #include "fatfs.h"
 #include "sd.h"
+#include "cmdif.h"
 
 #ifdef _USE_HW_FATFS
 #include "FatFs/src/ff_gen_drv.h"

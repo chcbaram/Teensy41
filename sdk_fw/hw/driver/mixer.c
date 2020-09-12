@@ -22,7 +22,7 @@ typedef struct
 } mixer_buf_t;
 
 
-static mixer_buf_t mixer_buf[MIXER_MAX_CH];
+static  mixer_buf_t mixer_buf[MIXER_MAX_CH];
 
 
 

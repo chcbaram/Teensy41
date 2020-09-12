@@ -13,6 +13,7 @@ mcu_data: ksdk2_0
 processor_version: 7.0.1
 pin_labels:
 - {pin_num: A11, pin_signal: GPIO_B1_00, label: LCD_BKT_PWM, identifier: LCD_BKT_PWM}
+- {pin_num: C3, pin_signal: GPIO_EMC_36, label: SPK_EN}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 

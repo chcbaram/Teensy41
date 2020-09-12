@@ -584,7 +584,7 @@ sai_transceiver_t SAI1_Tx_config = {
   }
 };
 edma_handle_t SAI1_TX_Handle;
-sai_edma_handle_t SAI1_SAI_Tx_eDMA_Handle;
+AT_NONCACHEABLE_SECTION_INIT(sai_edma_handle_t SAI1_SAI_Tx_eDMA_Handle);
 
 void SAI1_init(void) {
   /* Set the source kDmaRequestMuxSai1Tx request in the DMAMUX */

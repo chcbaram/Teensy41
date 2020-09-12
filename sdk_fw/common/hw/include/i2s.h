@@ -30,6 +30,7 @@ uint32_t i2sAvailableForWrite(uint8_t ch);
 bool     i2sWrite(uint8_t ch, int16_t *p_data, uint32_t length);
 bool     i2sPlayNote(int8_t octave, int8_t note, uint16_t volume, uint32_t time_ms);
 uint32_t i2sGetFrameSize(void);
+void     i2sSetSampleRate(uint32_t sample_rate);
 
 #endif
 

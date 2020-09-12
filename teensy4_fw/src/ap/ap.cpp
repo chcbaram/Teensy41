@@ -57,9 +57,9 @@ void apInit(void)
 
 void apMain(void)
 {
-  i2sInit();
-  audioInit();
-  batteryInit();
+  //i2sInit();
+  //audioInit();
+  //batteryInit();
   lcdInit();
 
 

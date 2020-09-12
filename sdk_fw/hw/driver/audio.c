@@ -296,12 +296,25 @@ bool audioIsPlaying(audio_t *p_audio)
 
 uint32_t audioAvailableForWrite(audio_t *p_audio)
 {
-  return 0;
+  uint32_t ret;
+
+  ret = i2sAvailableForWrite(p_audio->ch);
+
+  return ret;
 }
 
 bool audioWrite(audio_t *p_audio, int16_t *p_wav_data, uint32_t wav_len)
 {
-  return true;
+  bool ret;
+
+  ret = i2sWrite(p_audio->ch, p_wav_data, wav_len);
+
+  return ret;
+}
+
+void audioSetSampleRate(uint32_t sample_rate)
+{
+  i2sSetSampleRate(sample_rate);
 }
 
 bool audioPlayNote(int8_t octave, int8_t note, uint32_t time_ms)

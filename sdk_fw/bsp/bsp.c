@@ -52,6 +52,7 @@ void bspInit(void)
   MPU->RBAR = ARM_MPU_RBAR(0, 0x70000000U);
   MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 0, 0, 1, 1, 0, ARM_MPU_REGION_SIZE_16MB);
 
+
   /* Enable MPU */
   ARM_MPU_Enable(MPU_CTRL_PRIVDEFENA_Msk);
 #endif
@@ -107,3 +108,10 @@ uint32_t millis(void)
   return systick_counter;
 }
 
+int _gettimeofday( struct timeval *tv, void *tzvp )
+{
+    uint64_t t = micros();  // get uptime in nanoseconds
+    tv->tv_sec = t / 1000000000;  // convert to seconds
+    tv->tv_usec = ( t % 1000000000 ) / 1000;  // get remaining microseconds
+    return 0;  // return non-zero for error
+} // end _gettimeofday()

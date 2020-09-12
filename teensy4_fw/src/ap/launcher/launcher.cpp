@@ -62,11 +62,6 @@ const menu_node_t main_node[] =
         {"파일 실행",   files::main, NULL},
         {"H/W  정보", hw_info::main, NULL},
         {"설정 하기",   NULL, NULL},
-        {"테스트 1",   NULL, NULL},
-        {"테스트 2",   NULL, NULL},
-        {"테스트 3",   NULL, NULL},
-        {"테스트 4",   NULL, NULL},
-        {"테스트 5",   NULL, NULL},
     };
 
 const menu_node_t emul_node[] =

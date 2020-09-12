@@ -44,6 +44,7 @@
 #define _USE_HW_PXP
 #define _USE_HW_BATTERY
 #define _USE_HW_RESET
+#define _USE_HW_SPEAKER
 
 
 #define _USE_HW_LED
@@ -126,6 +127,7 @@
 #define _PIN_GPIO_LCD_BKT_EN        1
 #define _PIN_GPIO_LCD_RST           2
 #define _PIN_GPIO_BAT_CHG           3
+#define _PIN_GPIO_SPK_EN            4
 
 
 

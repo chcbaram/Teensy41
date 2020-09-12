@@ -37,6 +37,7 @@ gpio_tbl_t gpio_tbl[GPIO_MAX_CH] =
   {NULL,  16, _DEF_OUTPUT,  _DEF_HIGH, _DEF_LOW},   // 1. LCD_BKT_EN
   {GPIO1,  2, _DEF_OUTPUT,  _DEF_HIGH, _DEF_HIGH},  // 2. LCD_RST
   {GPIO3, 23, _DEF_INPUT,   _DEF_LOW,  _DEF_HIGH},  // 3. BAT_CHG
+  //{GPIO3, 22, _DEF_OUTPUT,  _DEF_HIGH, _DEF_HIGH},   // 4. SPK_EN
 };
 
 

@@ -46,6 +46,7 @@ extern "C" {
 #include "battery.h"
 #include "cmd.h"
 #include "util.h"
+#include "speaker.h"
 #include "lvgl/lvgl.h"
 
 

@@ -52,5 +52,6 @@ void hwInit(void)
   i2sInit();
   audioInit();
   batteryInit();
+  speakerInit();
 }
 
